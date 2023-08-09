@@ -1,0 +1,39 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".Generated.cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Import Namespace="System.Linq" #>
+
+using System;
+using System.ComponentModel;
+
+namespace MockU.Language
+{
+	partial interface IRaise<T>
+	{ <#
+for (var typeCount = 1; typeCount <= GenericTypeMax; typeCount++)
+{
+	var typeList = GetGenericList(typeCount, GenericTypeFormat);
+#>
+
+		/// <summary>
+		/// Specifies the event that will be raised when the setup is matched.
+		/// </summary>
+		/// <param name="eventExpression">The expression that represents an event attach or detach action.</param>
+		/// <param name="func">The function that will build the <see cref="EventArgs"/> 
+		/// to pass when raising the event.</param>
+<#
+	for (var typeIndex = 1; typeIndex <= typeCount; typeIndex++)
+	{
+#>
+		/// <typeparam name="T<#= typeIndex #>">The type of the <#= ConvertToOrdinal(typeIndex) #> argument received by the expected invocation.</typeparam>
+<#
+	}
+#>
+		/// <seealso cref="Raises(Action{T}, EventArgs)"/>
+		IVerifies Raises<<#= typeList #>>(Action<T> eventExpression, Func<<#= typeList #>, EventArgs> func);
+<#
+}
+#>
+	}
+}
+<#@ Include File="GenericTypeParameters.tt" #>

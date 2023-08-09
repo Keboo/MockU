@@ -1,0 +1,59 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".Generated.cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Import Namespace="System.Linq" #>
+
+using System;
+using System.ComponentModel;
+using MockU.Language.Flow;
+
+namespace MockU.Language
+{
+	partial interface IReturns<TMock, TResult>
+	{ <#
+for (var typeCount = 2; typeCount <= GenericTypeMax; typeCount++)
+{
+	var typeList = GetGenericList(typeCount, GenericTypeFormat);
+#>
+
+		/// <summary>
+		/// Specifies a function that will calculate the value to return from the method, 
+		/// retrieving the arguments for the invocation.
+		/// </summary>
+<#
+	for (var typeIndex = 1; typeIndex <= typeCount; typeIndex++)
+	{
+#>
+		/// <typeparam name="T<#= typeIndex #>">The type of the <#= ConvertToOrdinal(typeIndex) #> argument of the invoked method.</typeparam>
+<#
+	}
+#>
+		/// <param name="valueFunction">The function that will calculate the return value.</param>
+		/// <return>Returns a calculated value which is evaluated lazily at the time of the invocation.</return>
+		/// <example>
+		/// <para>
+		/// The return value is calculated from the value of the actual method invocation arguments. 
+		/// Notice how the arguments are retrieved by simply declaring them as part of the lambda 
+		/// expression:
+		/// </para>
+		/// <code>
+		/// mock.Setup(x => x.Execute(
+<#
+	for (var typeIndex = 1; typeIndex < typeCount; typeIndex++)
+	{
+#>
+		///                      It.IsAny&lt;int&gt;(), 
+<#
+	}
+#>
+		///                      It.IsAny&lt;int&gt;()))
+		///     .Returns((<#= GetGenericList(typeCount, "int arg{0}") #>) => <#= GetGenericList(typeCount, "arg{0}", " + ") #>);
+		/// </code>
+		/// </example>
+		IReturnsResult<TMock> Returns<<#= typeList #>>(Func<<#= typeList #>, TResult> valueFunction);
+<#
+}
+#>
+	}
+}
+<#@ Include File="GenericTypeParameters.tt" #>

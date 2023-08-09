@@ -1,0 +1,107 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".Generated.cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Import Namespace="System.Linq" #>
+
+using System;
+using System.ComponentModel;
+using MockU.Language.Flow;
+
+namespace MockU.Language
+{
+	partial interface ICallback
+	{ <#
+for (var typeCount = 2; typeCount <= GenericTypeMax; typeCount++)
+{
+	var typeList = GetGenericList(typeCount, GenericTypeFormat);
+#>
+
+		/// <summary>
+		/// Specifies a callback to invoke when the method is called that receives the original arguments.
+		/// </summary>
+<#
+	for (var typeIndex = 1; typeIndex <= typeCount; typeIndex++)
+	{
+#>
+		/// <typeparam name="T<#= typeIndex #>">The type of the <#=  ConvertToOrdinal(typeIndex) #> argument of the invoked method.</typeparam>
+<#
+	}
+#>
+		/// <param name="action">The callback method to invoke.</param>
+		/// <returns>A reference to <see cref="ICallbackResult"/> interface.</returns>
+		/// <example>
+		/// Invokes the given callback with the concrete invocation arguments values. 
+		/// <para>
+		/// Notice how the specific arguments are retrieved by simply declaring 
+		/// them as part of the lambda expression for the callback:
+		/// </para>
+		/// <code>
+		/// mock.Setup(x => x.Execute(
+<#
+	for (var typeIndex = 1; typeIndex < typeCount; typeIndex++)
+	{
+#>
+		///                      It.IsAny&lt;string&gt;(),
+<#
+	}
+#>
+		///                      It.IsAny&lt;string&gt;()))
+		///     .Callback((<#= GetGenericList(typeCount, "string arg{0}") #>) => Console.WriteLine(<#= GetGenericList(typeCount, "arg{0}", " + ") #>));
+		/// </code>
+		/// </example>
+		ICallbackResult Callback<<#= typeList #>>(Action<<#= typeList #>> action);
+<#
+}
+#>
+	}
+
+	partial interface ICallback<TMock, TResult>
+		where TMock : class
+	{
+<#
+for (var typeCount = 2; typeCount <= GenericTypeMax; typeCount++)
+{
+	var typeList = GetGenericList(typeCount, GenericTypeFormat);
+#>
+
+		/// <summary>
+		/// Specifies a callback to invoke when the method is called that receives the original
+		/// arguments.
+		/// </summary>
+<#
+	for (var typeIndex = 1; typeIndex <= typeCount; typeIndex++)
+	{
+#>
+		/// <typeparam name="T<#= typeIndex #>">The type of the <#= ConvertToOrdinal(typeIndex) #> argument of the invoked method.</typeparam>
+<#
+	}
+#>
+		/// <param name="action">The callback method to invoke.</param>
+		/// <returns>A reference to <see cref="IReturnsThrows{TMock, TResult}"/> interface.</returns>
+		/// <example>
+		/// Invokes the given callback with the concrete invocation arguments values. 
+		/// <para>
+		/// Notice how the specific arguments are retrieved by simply declaring 
+		/// them as part of the lambda expression for the callback:
+		/// </para>
+		/// <code>
+		/// mock.Setup(x => x.Execute(
+<#
+	for (var typeIndex = 1; typeIndex < typeCount; typeIndex++)
+	{
+#>
+		///                      It.IsAny&lt;string&gt;(),
+<#
+	}
+#>
+		///                      It.IsAny&lt;string&gt;()))
+		///     .Callback((<#= GetGenericList(typeCount, "arg{0}") #>) => Console.WriteLine(<#= GetGenericList(typeCount, "arg{0}", " + ") #>));
+		/// </code>
+		/// </example>
+		IReturnsThrows<TMock, TResult> Callback<<#= typeList #>>(Action<<#= typeList #>> action);
+<#
+}
+#>
+	}
+}
+<#@ Include File="GenericTypeParameters.tt" #>

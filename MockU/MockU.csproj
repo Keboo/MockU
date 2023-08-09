@@ -17,5 +17,22 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="IFluentInterface" />
+    <PackageReference Include="TypeNameFormatter.Sources">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MockU" />
+    <Using Include="MockU.Async" />
+    <Using Include="MockU.Behaviors" />
+    <Using Include="MockU.Language" />
+    <Using Include="MockU.Language.Flow" />
+    <Using Include="MockU.Linq" />
+    <Using Include="MockU.Properties" />
+
+    <Using Include="TypeNameFormatter"/>
   </ItemGroup>
 </Project>
