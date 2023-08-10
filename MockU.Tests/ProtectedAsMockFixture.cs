@@ -301,11 +301,11 @@ After:
     [Fact]
     public void VerifySet_Should_Work()
     {
-        void VerifySet(Times? times = null, string failMessage = null)
+        void VerifySet(Times? times = null, string? failMessage = null)
         {
             protectedMock.VerifySet(
             o => o[
-                It.IsInRange(0, 5, Moq.Range.Inclusive),
+                It.IsInRange(0, 5, MockU.Range.Inclusive),
                 It.IsIn("Bad", "JustAsBad")
             ] = It.Is<int>(i => i > 10),
             times,

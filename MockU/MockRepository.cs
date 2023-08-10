@@ -99,12 +99,12 @@ public partial class MockRepository
     public MockRepository(MockBehavior defaultBehavior)
     {
         Behavior = defaultBehavior;
-        DefaultValueProvider = DefaultValueProvider.Empty;
+        defaultValueProvider = DefaultValueProvider.Empty;
         Switches = Switches.Default;
     }
     internal MockBehavior Behavior { get; }
-    List<Mock> mocks = new List<Mock>();
-    DefaultValueProvider defaultValueProvider;
+    private readonly List<Mock> mocks = new();
+    private DefaultValueProvider defaultValueProvider;
 
     /// <summary>
     /// A set of switches that influence how mocks created by this factory will operate.
@@ -199,7 +199,7 @@ public partial class MockRepository
     {
         // "fix" compiler picking this overload instead of 
         // the one receiving the mock behavior.
-        return args != null && args.Length > 0 && args[0] is MockBehavior behavior
+        return args.Length > 0 && args[0] is MockBehavior behavior
             ? CreateMock<T>(behavior, args.Skip(1).ToArray())
             : CreateMock<T>(Behavior, args);
     }
@@ -297,5 +297,67 @@ public partial class MockRepository
         mock.Switches = Switches;
 
         return mock;
+    }
+
+    /// <summary>
+    /// Verifies all verifiable setups on all mocks created by this factory.
+    /// </summary>
+    /// <seealso cref="Mock.Verify()"/>
+    /// <exception cref="MockException">One or more mocks had setups that were not satisfied.</exception>
+    public virtual void Verify()
+    {
+        VerifyMocks(verifiable => verifiable.Verify());
+    }
+
+    /// <summary>
+    /// Verifies all setups on all mocks created by this factory.
+    /// </summary>
+    /// <seealso cref="Mock.Verify()"/>
+    /// <exception cref="MockException">One or more mocks had setups that were not satisfied.</exception>
+    public virtual void VerifyAll()
+    {
+        VerifyMocks(verifiable => verifiable.VerifyAll());
+    }
+
+    /// <summary>
+    /// Calls <see cref="Mock{T}.VerifyNoOtherCalls()"/> on all mocks created by this factory.
+    /// </summary>
+    /// <seealso cref="Mock{T}.VerifyNoOtherCalls()"/>
+    /// <exception cref="MockException">One or more mocks had invocations that were not verified.</exception>
+    public void VerifyNoOtherCalls()
+    {
+        VerifyMocks(mock => Mock.VerifyNoOtherCalls(mock));
+    }
+
+    /// <summary>
+    /// Invokes <paramref name="verifyAction"/> for each mock
+    /// in <see cref="Mocks"/>, and accumulates the resulting
+    /// verification exceptions that might be
+    /// thrown from the action.
+    /// </summary>
+    /// <param name="verifyAction">The action to execute against 
+    /// each mock.</param>
+    protected virtual void VerifyMocks(Action<Mock> verifyAction)
+    {
+        Guard.NotNull(verifyAction, nameof(verifyAction));
+
+        var errors = new List<MockException>();
+
+        foreach (var mock in mocks)
+        {
+            try
+            {
+                verifyAction(mock);
+            }
+            catch (MockException error) when (error.IsVerificationError)
+            {
+                errors.Add(error);
+            }
+        }
+
+        if (errors.Count > 0)
+        {
+            throw MockException.Combined(errors, preamble: Resources.VerificationErrorsOfMockRepository);
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -55,31 +54,6 @@ public static class Mocks
     }
 
     /// <summary>
-    /// Creates a mock object of the indicated type.
-    /// </summary>
-    /// <typeparam name="T">The type of the mocked object.</typeparam>
-    /// <returns>The mocked object created.</returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Moved to Mock.Of<T>, as it's a single one, so no reason to be on Mocks.", true)]
-    public static T OneOf<T>() where T : class
-    {
-        throw new NotSupportedException();
-    }
-
-    /// <summary>
-    /// Creates a mock object of the indicated type.
-    /// </summary>
-    /// <param name="specification">The predicate with the setup expressions.</param>
-    /// <typeparam name="T">The type of the mocked object.</typeparam>
-    /// <returns>The mocked object created.</returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Moved to Mock.Of<T>, as it's a single one, so no reason to be on Mocks.", true)]
-    public static T OneOf<T>(Expression<Func<T, bool>> specification) where T : class
-    {
-        throw new NotSupportedException();
-    }
-
-    /// <summary>
     /// Creates the mock query with the underlying queryable implementation.
     /// </summary>
     internal static IQueryable<T> CreateMockQuery<T>(MockBehavior behavior) where T : class
@@ -94,12 +68,6 @@ public static class Mocks
     internal static IQueryable<T> CreateQueryable<T>(MockBehavior behavior) where T : class
     {
         return CreateMocks<T>(behavior).AsQueryable();
-
-        
-
-        
-
-        
     }
 
     /// <summary>

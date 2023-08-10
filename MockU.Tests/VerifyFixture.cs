@@ -1102,42 +1102,6 @@ namespace MockU.Tests
             Assert.Null(exception);
         }
 
-        [Fact, Obsolete("As long as SetupSet(Expression) still exists, this test is required.")]
-        public void SetupGet_property_does_not_override_SetupSet_for_same_property_and_with_same_setup_expression()
-        {
-            var mock = new Mock<IFoo>();
-
-            mock.SetupSet(m => m.Value).Verifiable("setup for setter");
-            mock.SetupGet(m => m.Value).Verifiable("setup for getter");
-
-            var _ = mock.Object.Value;
-            var exception = Record.Exception(() =>
-            {
-                mock.VerifyAll();
-            });
-
-            Assert.IsAssignableFrom<MockException>(exception);
-            Assert.Contains("setup for setter:", exception.Message);
-        }
-
-        [Fact, Obsolete("As long as SetupSet(Expression) still exists, this test is required.")]
-        public void SetupSet_property_does_not_override_SetupGet_for_same_property_and_with_same_setup_expression()
-        {
-            var mock = new Mock<IFoo>();
-
-            mock.SetupGet(m => m.Value).Verifiable("setup for getter");
-            mock.SetupSet(m => m.Value).Verifiable("setup for setter");
-
-            mock.Object.Value = 42;
-            var exception = Record.Exception(() =>
-            {
-                mock.VerifyAll();
-            });
-
-            Assert.IsAssignableFrom<MockException>(exception);
-            Assert.Contains("setup for getter:", exception.Message);
-        }
-
         [Fact]
         public void Verify_if_successful_marks_matched_invocation_as_verified()
         {

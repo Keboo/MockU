@@ -34,6 +34,7 @@
     <Using Include="MockU.Language" />
     <Using Include="MockU.Language.Flow" />
     <Using Include="MockU.Linq" />
+    <Using Include="MockU.Matchers" />
     <Using Include="MockU.Protected" />
   </ItemGroup>
 </Project>
