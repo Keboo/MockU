@@ -19,7 +19,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfSpecified()
     {
         var mock = new Mock<IFoo>();
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((string)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((string?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -28,7 +28,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfNullFunc()
     {
         var mock = new Mock<IFoo>();
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((Func<string>)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((Func<string>?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -37,7 +37,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfNullDelegate()
     {
         var mock = new Mock<IFoo>();
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((Delegate)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((Delegate?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -46,7 +46,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfSpecifiedForStrictMock()
     {
         var mock = new Mock<IFoo>(MockBehavior.Strict);
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((string)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((string?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -55,7 +55,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfNullFuncForStrictMock()
     {
         var mock = new Mock<IFoo>(MockBehavior.Strict);
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((Func<string>)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((Func<string>?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -64,7 +64,7 @@ public class ReturnsFixture
     public void ReturnsNullValueIfNullDelegateForStrictMock()
     {
         var mock = new Mock<IFoo>(MockBehavior.Strict);
-        mock.Setup(foo => foo.Execute("Whatever")).Returns((Delegate)null);
+        mock.Setup(foo => foo.Execute("Whatever")).Returns((Delegate?)null);
         Assert.Null(mock.Object.Execute("Whatever"));
         mock.VerifyAll();
     }
@@ -317,7 +317,7 @@ public class ReturnsFixture
     [Fact]
     public void ReturnsWithRefParameterCannotModifyNonRefParameter()
     {
-        var _ = default(string);
+        var _ = default(string?);
         var value = "input";
 
         var mock = new Mock<IFoo>();
@@ -337,14 +337,14 @@ public class ReturnsFixture
     public void Method_returning_a_Delegate_can_be_set_up_to_return_null()
     {
         var mock = new Mock<IFoo>();
-        mock.Setup(_ => _.ReturnDelegate()).Returns((Delegate)null);
+        mock.Setup(_ => _.ReturnDelegate()).Returns((Delegate?)null);
         Assert.Null(mock.Object.ReturnDelegate());
     }
 
     [Fact]
     public void Setting_up_method_returning_a_Delegate_to_return_a_Delegate_does_not_invoke_that_Delegate()
     {
-        Delegate expectedResult = new Func<Delegate>(() => null);
+        Delegate expectedResult = new Func<Delegate?>(() => null);
         var mock = new Mock<IFoo>();
         mock.Setup(_ => _.ReturnDelegate()).Returns(expectedResult);
 
@@ -355,7 +355,7 @@ public class ReturnsFixture
     }
 
     [Fact]
-    public void Given_a_loose_mock_Return_value_of_setup_without_Returns_nor_CallBase_equals_return_value_if_setup_werent_there_at_all()
+    public void Given_a_loose_mock_Return_value_of_setup_without_Returns_nor_CallBase_equals_return_value_if_setup_were_not_there_at_all()
     {
         const int expected = 42;
 
@@ -386,7 +386,7 @@ public class ReturnsFixture
     public interface IFoo
     {
         void Execute();
-        string Execute(string command);
+        string Execute(string? command);
         string Execute(string arg1, string arg2);
         string Execute(string arg1, string arg2, string arg3);
         string Execute(string arg1, string arg2, string arg3, string arg4);
@@ -395,8 +395,8 @@ public class ReturnsFixture
         string Execute(string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7);
         string Execute(string arg1, string arg2, string arg3, string arg4, string arg5, string arg6, string arg7, string arg8);
 
-        string Execute(ref string arg1);
-        string Execute(ref string arg1, string arg2);
+        string Execute(ref string? arg1);
+        string Execute(ref string? arg1, string arg2);
 
         bool ReturnBool();
         IList<int> ReturnIntList();
@@ -405,8 +405,8 @@ public class ReturnsFixture
         int Value { get; set; }
     }
 
-    public delegate string ExecuteRHandler(ref string arg1);
-    public delegate string ExecuteRVHandler(ref string arg1, string arg2);
+    public delegate string? ExecuteRHandler(ref string arg1);
+    public delegate string? ExecuteRVHandler(ref string arg1, string arg2);
     public delegate Delegate ReturnDelegateHandler();
 
     public class Foo

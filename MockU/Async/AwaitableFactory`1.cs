@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace MockU.Async;
@@ -13,7 +14,7 @@ internal abstract class AwaitableFactory<TAwaitable> : IAwaitableFactory
 
     public abstract TAwaitable CreateCompleted();
 
-    object? IAwaitableFactory.CreateCompleted(object result)
+    object? IAwaitableFactory.CreateCompleted(object? result)
     {
         Debug.Assert(result == null);
 
@@ -31,7 +32,7 @@ internal abstract class AwaitableFactory<TAwaitable> : IAwaitableFactory
 
     public abstract TAwaitable CreateFaulted(IEnumerable<Exception> exceptions);
 
-    object? IAwaitableFactory.CreateFaulted(IEnumerable<Exception> exceptions)
+    object IAwaitableFactory.CreateFaulted(IEnumerable<Exception> exceptions)
     {
         Debug.Assert(exceptions != null);
         Debug.Assert(exceptions.Any());
@@ -44,7 +45,7 @@ internal abstract class AwaitableFactory<TAwaitable> : IAwaitableFactory
         return new AwaitExpression(awaitableExpression, this);
     }
 
-    bool IAwaitableFactory.TryGetResult(object awaitable, out object? result)
+    bool IAwaitableFactory.TryGetResult(object awaitable, [NotNullWhen(true)] out object? result)
     {
         Debug.Assert(awaitable is TAwaitable);
 

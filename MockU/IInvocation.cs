@@ -15,7 +15,7 @@ public interface IInvocation
     /// <summary>
     /// Gets the arguments of the invocation.
     /// </summary>
-    IReadOnlyList<object> Arguments { get; }
+    IReadOnlyList<object?> Arguments { get; }
 
     /// <summary>
     ///   Gets the setup that matched this invocation (or <see langword="null"/> if there was no matching setup).
@@ -30,10 +30,10 @@ public interface IInvocation
     /// <summary>
     /// The value being returned for a non-void method if no exception was thrown.
     /// </summary>
-    object ReturnValue { get; }
+    object? ReturnValue { get; }
 
     /// <summary>
     /// Optional exception if the method invocation results in an exception being thrown.
     /// </summary>
-    Exception Exception { get; }
+    Exception? Exception { get; }
 }

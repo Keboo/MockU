@@ -30,6 +30,69 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Language\GenericTypeParameters.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GenericTypeParameters.cs</LastGenOutput>
+    </None>
+
+    <None Update="Language\ICallback.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ICallback.Generated.cs</LastGenOutput>
+    </None>
+
+    <Compile Update="Language\GenericTypeParameters.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenericTypeParameters.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Language\ICallback.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICallback.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Language\IRaise.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IRaise.Generated.cs</LastGenOutput>
+    </None>
+    <Compile Update="Language\IRaise.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IRaise.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Language\IReturns.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IReturns.Generated.cs</LastGenOutput>
+    </None>
+    <Compile Update="Language\IReturns.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IReturns.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Language\IThrows.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IThrows.Generated.cs</LastGenOutput>
+    </None>
+    <Compile Update="Language\IThrows.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IThrows.tt</DependentUpon>
+    </Compile>
+
+    <None Update="ReturnsExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ReturnsExtensions.Generated.cs</LastGenOutput>
+    </None>
+    <Compile Update="ReturnsExtensions.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReturnsExtensions.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="MockU" />
     <Using Include="MockU.Async" />
     <Using Include="MockU.Behaviors" />
@@ -38,6 +101,10 @@
     <Using Include="MockU.Linq" />
     <Using Include="MockU.Properties" />
 
-    <Using Include="TypeNameFormatter"/>
+    <Using Include="TypeNameFormatter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

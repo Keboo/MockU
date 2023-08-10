@@ -16,7 +16,7 @@ internal static class Evaluator
     /// <param name="fnCanBeEvaluated">A function that decides whether a given expression
     /// node can be part of the local function.</param>
     /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
-    public static Expression PartialEval(Expression expression, Func<Expression, bool> fnCanBeEvaluated)
+    public static Expression? PartialEval(Expression expression, Func<Expression, bool> fnCanBeEvaluated)
     {
         return new SubtreeEvaluator(new Nominator(fnCanBeEvaluated).Nominate(expression)).Eval(expression);
     }
@@ -26,43 +26,31 @@ internal static class Evaluator
     /// </summary>
     /// <param name="expression">The root of the expression tree.</param>
     /// <returns>A new tree with sub-trees evaluated and replaced.</returns>
-    public static Expression PartialEval(Expression expression)
+    public static Expression? PartialEval(Expression expression)
     {
-        return PartialEval(expression, e => e.NodeType != ExpressionType.Parameter && !(e is MatchExpression));
-
-        
-
-        
-
-        
+        return PartialEval(expression, e => e.NodeType != ExpressionType.Parameter && e is not MatchExpression);
     }
 
     /// <summary>
     /// Evaluates and replaces sub-trees when first candidate is reached (top-down)
     /// </summary>
     private class SubtreeEvaluator : ExpressionVisitor
-
-    
-
-    
-
-    
     {
-        private HashSet<Expression> candidates;
+        private readonly HashSet<Expression> candidates;
 
         internal SubtreeEvaluator(HashSet<Expression> candidates)
         {
             this.candidates = candidates;
         }
 
-        internal Expression Eval(Expression exp)
+        internal Expression? Eval(Expression? exp)
         {
             return Visit(exp);
         }
 
-        public override Expression Visit(Expression exp)
+        public override Expression? Visit(Expression? exp)
         {
-            if (exp == null)
+            if (exp is null)
             {
                 return null;
             }
@@ -71,12 +59,6 @@ internal static class Evaluator
                 return Evaluate(exp);
             }
             return base.Visit(exp);
-
-            
-
-            
-
-            
         }
 
         private static Expression Evaluate(Expression e)
@@ -88,12 +70,6 @@ internal static class Evaluator
             LambdaExpression lambda = Expression.Lambda(e);
             Delegate fn = lambda.CompileUsingExpressionCompiler();
             return Expression.Constant(fn.DynamicInvoke(null), e.Type);
-
-            
-
-            
-
-            
         }
     }
 
@@ -102,15 +78,9 @@ internal static class Evaluator
     /// be part of an evaluated sub-tree.
     /// </summary>
     private class Nominator : ExpressionVisitor
-
-    
-
-    
-
-    
     {
-        private Func<Expression, bool> fnCanBeEvaluated;
-        private HashSet<Expression> candidates;
+        private readonly Func<Expression, bool> fnCanBeEvaluated;
+        private HashSet<Expression>? candidates;
         private bool cannotBeEvaluated;
 
         internal Nominator(Func<Expression, bool> fnCanBeEvaluated)
@@ -125,7 +95,7 @@ internal static class Evaluator
             return candidates;
         }
 
-        public override Expression Visit(Expression expression)
+        public override Expression? Visit(Expression? expression)
         {
             if (expression != null && expression.NodeType != ExpressionType.Quote)
             {
@@ -146,7 +116,7 @@ internal static class Evaluator
 
                     if (canBeEvaluated)
                     {
-                        candidates.Add(expression);
+                        candidates?.Add(expression);
                     }
                     else
                     {

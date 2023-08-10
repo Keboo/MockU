@@ -5,11 +5,10 @@ using System.Reflection;
 namespace MockU;
 
 internal sealed class StubbedPropertySetup : Setup
-
 {
-    private object value;
+    private object? value;
 
-    public StubbedPropertySetup(Mock mock, LambdaExpression expression, MethodInfo getter, MethodInfo setter, object initialValue)
+    public StubbedPropertySetup(Mock mock, LambdaExpression expression, MethodInfo getter, MethodInfo setter, object? initialValue)
         : base(originalExpression: null, mock, new PropertyAccessorExpectation(expression, getter, setter))
     {
         // NOTE:

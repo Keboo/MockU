@@ -161,6 +161,6 @@ public class VerifiableSetupFixture
 
     public class MutableArg
     {
-        public object Value { get; set; }
+        public object? Value { get; set; }
     }
 }

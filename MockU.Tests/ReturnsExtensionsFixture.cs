@@ -232,7 +232,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.NoParametersNonGenericTaskReturnType();
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -245,7 +245,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.NoParametersRefReturnType();
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -258,7 +258,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.NoParametersValueReturnType();
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -271,7 +271,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.RefParameterRefReturnType("Param1");
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -284,7 +284,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.RefParameterValueReturnType("Param1");
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -297,7 +297,7 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.ValueParameterRefReturnType(36);
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
 
     [Fact]
@@ -310,33 +310,8 @@ public class ReturnsExtensionsFixture
         var task = mock.Object.ValueParameterValueReturnType(36);
 
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.Exception.InnerException);
+        Assert.Equal(exception, task.Exception?.InnerException);
     }
-
-    // The test below is dependent on the timings (too much of a 'works-on-my-machine' smell)
-    //[Theory]
-    //[InlineData(true)]
-    //[InlineData(false)]
-    //public async Task ReturnsAsyncWithDelayTriggersRealAsyncBehaviour(bool useDelay)
-    //{
-    //    var mock = new Mock<IAsyncInterface>();
-
-    //    var setup = mock.Setup(x => x.RefParameterValueReturnType("test"));
-
-    //    if (useDelay)
-    //        setup.ReturnsAsync(5, TimeSpan.FromMilliseconds(1));
-    //    else
-    //        setup.ReturnsAsync(5);
-
-    //    var thread1 = Thread.CurrentThread;
-    //    await mock.Object.RefParameterValueReturnType("test");
-    //    var thread2 = Thread.CurrentThread;
-
-    //    if (useDelay)
-    //        Assert.NotEqual(thread1, thread2);
-    //    else
-    //        Assert.Equal(thread1, thread2);
-    //}
 
     [Fact]
     public void ReturnsAsyncWithDelayDoesNotImmediatelyComplete()
@@ -409,7 +384,7 @@ public class ReturnsExtensionsFixture
 
         Action setup = () => mock
             .Setup(x => x.RefParameterValueReturnType("test"))
-            .ReturnsAsync(5, TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(2), null);
+            .ReturnsAsync(5, TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(2), null!);
 
         var paramName = Assert.Throws<ArgumentNullException>(setup).ParamName;
         Assert.Equal("random", paramName);
@@ -479,7 +454,7 @@ public class ReturnsExtensionsFixture
 
             mock
                 .Setup(x => x.RefParameterValueReturnType("test"))
-                .ThrowsAsync(anyException, minDelay, maxDelay, null);
+                .ThrowsAsync(anyException, minDelay, maxDelay, null!);
         };
 
         var paramName = Assert.Throws<ArgumentNullException>(setup).ParamName;
@@ -681,7 +656,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -695,7 +670,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<string>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -709,7 +684,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<int>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -723,7 +698,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<string>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -737,7 +712,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<int>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -751,7 +726,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<string>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -765,7 +740,7 @@ public class ReturnsExtensionsFixture
 
         Assert.IsType<ValueTask<int>>(task);
         Assert.True(task.IsFaulted);
-        Assert.Equal(exception, task.AsTask().Exception.InnerException);
+        Assert.Equal(exception, task.AsTask().Exception?.InnerException);
     }
 
     [Fact]
@@ -843,7 +818,7 @@ public class ReturnsExtensionsFixture
 
         Action setup = () => mock
             .Setup(x => x.RefParameterValueReturnType("test"))
-            .ReturnsAsync(5, TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(2), null);
+            .ReturnsAsync(5, TimeSpan.FromMilliseconds(1), TimeSpan.FromMilliseconds(2), null!);
 
         var paramName = Assert.Throws<ArgumentNullException>(setup).ParamName;
         Assert.Equal("random", paramName);
@@ -858,7 +833,7 @@ public class ReturnsExtensionsFixture
             .Setup(x => x.RefParameterValueReturnType("test"))
             .ThrowsAsync(new ArithmeticException("yikes"), TimeSpan.FromMilliseconds(1));
 
-        Func<ValueTask<int>> test = () => mock.Object.RefParameterValueReturnType("test");
+        ValueTask<int> test() => mock.Object.RefParameterValueReturnType("test");
 
         var exception = await Assert.ThrowsAsync<ArithmeticException>(() => test().AsTask());
         Assert.Equal("yikes", exception.Message);
@@ -876,7 +851,7 @@ public class ReturnsExtensionsFixture
             .Setup(x => x.RefParameterValueReturnType("test"))
             .ThrowsAsync(new ArithmeticException("yikes"), minDelay, maxDelay);
 
-        Func<ValueTask<int>> test = () => mock.Object.RefParameterValueReturnType("test");
+        ValueTask<int> test() => mock.Object.RefParameterValueReturnType("test");
 
         var exception = await Assert.ThrowsAsync<ArithmeticException>(() => test().AsTask());
         Assert.Equal("yikes", exception.Message);
@@ -894,7 +869,7 @@ public class ReturnsExtensionsFixture
             .Setup(x => x.RefParameterValueReturnType("test"))
             .ThrowsAsync(new ArithmeticException("yikes"), minDelay, maxDelay, new Random());
 
-        Func<ValueTask<int>> test = () => mock.Object.RefParameterValueReturnType("test");
+        ValueTask<int> test() => mock.Object.RefParameterValueReturnType("test");
 
         var exception = await Assert.ThrowsAsync<ArithmeticException>(() => test().AsTask());
         Assert.Equal("yikes", exception.Message);
@@ -913,7 +888,7 @@ public class ReturnsExtensionsFixture
 
             mock
                 .Setup(x => x.RefParameterValueReturnType("test"))
-                .ThrowsAsync(anyException, minDelay, maxDelay, null);
+                .ThrowsAsync(anyException, minDelay, maxDelay, null!);
         };
 
         var paramName = Assert.Throws<ArgumentNullException>(setup).ParamName;
@@ -924,7 +899,7 @@ public class ReturnsExtensionsFixture
     public async void No_parameters_object_return_type__ReturnsAsync_null__returns_completed_Task_with_null_result()
     {
         var mock = new Mock<IAsyncInterface>();
-        mock.Setup(m => m.NoParametersObjectReturnType()).ReturnsAsync(null);
+        mock.Setup(m => m.NoParametersObjectReturnType()).ReturnsAsync(null!);
 
         var result = await mock.Object.NoParametersObjectReturnType();
 
@@ -935,7 +910,7 @@ public class ReturnsExtensionsFixture
     public async void One_parameter_object_return_type__ReturnsAsync_null__returns_completed_Task_with_null_result()
     {
         var mock = new Mock<IAsyncInterface>();
-        mock.Setup(m => m.OneParameterObjectReturnType("")).ReturnsAsync(null);
+        mock.Setup(m => m.OneParameterObjectReturnType("")).ReturnsAsync(null!);
 
         var result = await mock.Object.OneParameterObjectReturnType("");
 
@@ -946,7 +921,7 @@ public class ReturnsExtensionsFixture
     public async void Many_parameters_object_return_type__ReturnsAsync_null__returns_completed_Task_with_null_result()
     {
         var mock = new Mock<IAsyncInterface>();
-        mock.Setup(m => m.ManyParametersObjectReturnType("", false, 0f)).ReturnsAsync(null);
+        mock.Setup(m => m.ManyParametersObjectReturnType("", false, 0f)).ReturnsAsync(null!);
 
         var result = await mock.Object.ManyParametersObjectReturnType("", false, 0f);
 
@@ -957,7 +932,7 @@ public class ReturnsExtensionsFixture
     public async void No_parameters_object_return_type__ReturnsAsync_null__returns_completed_ValueTask_with_null_result()
     {
         var mock = new Mock<IValueTaskAsyncInterface>();
-        mock.Setup(m => m.NoParametersObjectReturnType()).ReturnsAsync(null);
+        mock.Setup(m => m.NoParametersObjectReturnType()).ReturnsAsync(null!);
 
         var result = await mock.Object.NoParametersObjectReturnType();
 
@@ -968,7 +943,7 @@ public class ReturnsExtensionsFixture
     public async void One_parameter_object_return_type__ReturnsAsync_null__returns_completed_ValueTask_with_null_result()
     {
         var mock = new Mock<IValueTaskAsyncInterface>();
-        mock.Setup(m => m.OneParameterObjectReturnType("")).ReturnsAsync(null);
+        mock.Setup(m => m.OneParameterObjectReturnType("")).ReturnsAsync(null!);
 
         var result = await mock.Object.OneParameterObjectReturnType("");
 
@@ -979,7 +954,7 @@ public class ReturnsExtensionsFixture
     public async void Many_parameters_object_return_type__ReturnsAsync_null__returns_completed_ValueTask_with_null_result()
     {
         var mock = new Mock<IValueTaskAsyncInterface>();
-        mock.Setup(m => m.ManyParametersObjectReturnType("", false, 0f)).ReturnsAsync(null);
+        mock.Setup(m => m.ManyParametersObjectReturnType("", false, 0f)).ReturnsAsync(null!);
 
         var result = await mock.Object.ManyParametersObjectReturnType("", false, 0f);
 

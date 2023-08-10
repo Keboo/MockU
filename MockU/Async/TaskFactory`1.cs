@@ -27,10 +27,10 @@ internal sealed class TaskFactory<TResult> : AwaitableFactory<Task<TResult>, TRe
     {
         return Expression.MakeMemberAccess(
             awaitableExpression,
-            typeof(Task<TResult>).GetProperty(nameof(Task<TResult>.Result)));
+            typeof(Task<TResult>).GetProperty(nameof(Task<TResult>.Result))!);
     }
 
-    public override bool TryGetResult(Task<TResult> task, out TResult result)
+    public override bool TryGetResult(Task<TResult> task, out TResult? result)
     {
         if (task.Status == TaskStatus.RanToCompletion)
         {

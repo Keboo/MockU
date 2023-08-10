@@ -9,7 +9,7 @@ using Xunit;
 
 using static Moq.CastleProxyFactory;
 
-namespace Moq.Tests.ProxyFactories
+namespace MockU.Tests.ProxyFactories
 {
 	public class MostSpecificOverrideFixture
 	{

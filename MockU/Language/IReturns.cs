@@ -1,9 +1,6 @@
 using System.ComponentModel;
 
-using MockU;
-using MockU.Language.Flow;
-
-namespace Moq.Language;
+namespace MockU.Language;
 
 /// <summary>
 /// Defines the <c>Returns</c> verb.
@@ -25,7 +22,7 @@ public partial interface IReturns<TMock, TResult> : IFluentInterface
     ///     .Returns(true);
     /// </code>
     /// </example>
-    IReturnsResult<TMock> Returns(TResult value);
+    IReturnsResult<TMock> Returns(TResult? value);
 
     /// <summary>
     ///   Specifies a function that will calculate the value to return from the method.
@@ -70,7 +67,7 @@ public partial interface IReturns<TMock, TResult> : IFluentInterface
     ///     .Returns(new ExecuteFunc((ref Command command) => command.IsExecutable));
     /// </code>
     /// </example>
-    IReturnsResult<TMock> Returns(Delegate valueFunction);
+    IReturnsResult<TMock> Returns(Delegate? valueFunction);
 
     /// <summary>
     /// Specifies a function that will calculate the value to return from the method.
@@ -87,7 +84,7 @@ public partial interface IReturns<TMock, TResult> : IFluentInterface
     /// is executed and the value the <c>returnValues</c> array has at 
     /// that moment.
     /// </example>
-    IReturnsResult<TMock> Returns(Func<TResult> valueFunction);
+    IReturnsResult<TMock> Returns(Func<TResult?>? valueFunction);
 
     /// <summary>
     /// Specifies a function that will calculate the value to return from the method, 
@@ -108,7 +105,7 @@ public partial interface IReturns<TMock, TResult> : IFluentInterface
     ///     .Returns((string command) => returnValues[command]);
     /// </code>
     /// </example>
-    IReturnsResult<TMock> Returns<T>(Func<T, TResult> valueFunction);
+    IReturnsResult<TMock> Returns<T>(Func<T, TResult?> valueFunction);
 
     /// <summary>
     /// Calls the real method of the object and returns its return value.

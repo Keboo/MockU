@@ -105,7 +105,7 @@ internal sealed class ProtectedAsMock<T, TAnalog> : IProtectedAsMock<T, TAnalog>
         return new NonVoidSetupPhrase<T, TProperty>(setup);
     }
 
-    public Mock<T> SetupProperty<TProperty>(Expression<Func<TAnalog, TProperty>> expression, TProperty initialValue = default)
+    public Mock<T> SetupProperty<TProperty>(Expression<Func<TAnalog, TProperty>> expression, TProperty? initialValue = default)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -158,7 +158,7 @@ internal sealed class ProtectedAsMock<T, TAnalog> : IProtectedAsMock<T, TAnalog>
         return new SetupSequencePhrase(setup);
     }
 
-    public void Verify(Expression<Action<TAnalog>> expression, Times? times = null, string failMessage = null)
+    public void Verify(Expression<Action<TAnalog>> expression, Times? times = null, string? failMessage = null)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -175,7 +175,7 @@ internal sealed class ProtectedAsMock<T, TAnalog> : IProtectedAsMock<T, TAnalog>
         Mock.Verify(mock, rewrittenExpression, times ?? Times.AtLeastOnce(), failMessage);
     }
 
-    public void Verify<TResult>(Expression<Func<TAnalog, TResult>> expression, Times? times = null, string failMessage = null)
+    public void Verify<TResult>(Expression<Func<TAnalog, TResult>> expression, Times? times = null, string? failMessage = null)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -192,7 +192,7 @@ internal sealed class ProtectedAsMock<T, TAnalog> : IProtectedAsMock<T, TAnalog>
         Mock.Verify(mock, rewrittenExpression, times ?? Times.AtLeastOnce(), failMessage);
     }
 
-    public void VerifySet(Action<TAnalog> setterExpression, Times? times = null, string failMessage = null)
+    public void VerifySet(Action<TAnalog> setterExpression, Times? times = null, string? failMessage = null)
     {
         Guard.NotNull(setterExpression, nameof(setterExpression));
 
@@ -200,7 +200,7 @@ internal sealed class ProtectedAsMock<T, TAnalog> : IProtectedAsMock<T, TAnalog>
         Mock.VerifySet(mock, rewrittenExpression, times.HasValue ? times.Value : Times.AtLeastOnce(), failMessage);
     }
 
-    public void VerifyGet<TProperty>(Expression<Func<TAnalog, TProperty>> expression, Times? times = null, string failMessage = null)
+    public void VerifyGet<TProperty>(Expression<Func<TAnalog, TProperty>> expression, Times? times = null, string? failMessage = null)
     {
         Guard.NotNull(expression, nameof(expression));
 

@@ -1,12 +1,11 @@
 namespace MockU;
 
 internal sealed class Condition
-
 {
-    private Func<bool> condition;
-    private Action success;
+    private readonly Func<bool> condition;
+    private readonly Action? success;
 
-    public Condition(Func<bool> condition, Action success = null)
+    public Condition(Func<bool> condition, Action? success = null)
     {
         this.condition = condition;
         this.success = success;

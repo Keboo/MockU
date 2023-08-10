@@ -27,10 +27,10 @@ internal sealed class ValueTaskFactory<TResult> : AwaitableFactory<ValueTask<TRe
     {
         return Expression.MakeMemberAccess(
             awaitableExpression,
-            typeof(ValueTask<TResult>).GetProperty(nameof(ValueTask<TResult>.Result)));
+            typeof(ValueTask<TResult>).GetProperty(nameof(ValueTask<TResult>.Result))!);
     }
 
-    public override bool TryGetResult(ValueTask<TResult> valueTask, out TResult result)
+    public override bool TryGetResult(ValueTask<TResult> valueTask, out TResult? result)
     {
         if (valueTask.IsCompletedSuccessfully)
         {

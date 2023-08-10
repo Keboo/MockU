@@ -1,5 +1,3 @@
-
-
 using Xunit;
 
 namespace MockU.Tests;
@@ -8,7 +6,7 @@ public class HidePropertyFixture
 {
     public class A
     {
-        public string Prop { get; }
+        public string? Prop { get; }
     }
 
     public class B : A

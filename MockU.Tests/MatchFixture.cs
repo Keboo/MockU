@@ -12,7 +12,7 @@ public class MatchFixture
         public void RenderExpression_of_It_Is_includes_formatted_predicate_expression()
         {
             var match = GetMatch(() => It.Is<int>(i => i == 123));
-            Assert.Equal("It.Is<int>(i => i == 123)", match.RenderExpression.ToStringFixed());
+            Assert.Equal("It.Is<int>(i => i == 123)", match.RenderExpression?.ToStringFixed());
         }
 
         [Fact]

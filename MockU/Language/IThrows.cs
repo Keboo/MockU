@@ -1,8 +1,7 @@
 using System.ComponentModel;
 
-using MockU.Language.Flow;
 
-namespace Moq.Language;
+namespace MockU.Language;
 
 /// <summary>
 /// Defines the <c>Throws</c> verb.

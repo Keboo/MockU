@@ -223,13 +223,13 @@ public class MatchersFixture
     [Fact]
     public void RegexMustNotBeNull()
     {
-        Assert.Throws<ArgumentNullException>(() => It.IsRegex(null));
+        Assert.Throws<ArgumentNullException>(() => It.IsRegex(null!));
     }
 
     [Fact]
     public void RegexMustNotBeNullWithOptions()
     {
-        Assert.Throws<ArgumentNullException>(() => It.IsRegex(null, RegexOptions.None));
+        Assert.Throws<ArgumentNullException>(() => It.IsRegex(null!, RegexOptions.None));
     }
 
     [Fact]
@@ -332,7 +332,7 @@ public class MatchersFixture
     }
 
     [Fact]
-    public void MultipleMatchingSetupsWithMultiplValueTypeArgumentsReplaceEachOtherForVerify()
+    public void MultipleMatchingSetupsWithMultipleValueTypeArgumentsReplaceEachOtherForVerify()
     {
         var mock = new Mock<IFoo>();
 
@@ -405,7 +405,7 @@ public class MatchersFixture
     public interface IFoo
     {
         int Echo(int value);
-        string Execute(string command);
+        string Execute(string? command);
         bool DoTypeOverload(Bar bar);
         bool DoTypeOverload(Baz baz);
         int DoAddition(int[] numbers);

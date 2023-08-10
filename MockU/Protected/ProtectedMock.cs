@@ -2,15 +2,12 @@ using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 
-using MockU.Language;
-using MockU.Language.Flow;
-
 namespace MockU.Protected;
 
 internal class ProtectedMock<T> : IProtectedMock<T>
         where T : class
 {
-    private Mock<T> mock;
+    private readonly Mock<T> mock;
 
     public ProtectedMock(Mock<T> mock)
     {
@@ -25,24 +22,24 @@ internal class ProtectedMock<T> : IProtectedMock<T>
 
     #region Setup
 
-    public ISetup<T> Setup(string methodName, params object[] args)
+    public ISetup<T> Setup(string methodName, params object?[] args)
     {
         return InternalSetup(methodName, null, false, args);
     }
 
-    public ISetup<T> Setup(string methodName, bool exactParameterMatch, params object[] args)
+    public ISetup<T> Setup(string methodName, bool exactParameterMatch, params object?[] args)
     {
         return InternalSetup(methodName, null, exactParameterMatch, args);
     }
 
-    public ISetup<T> Setup(string methodName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    public ISetup<T> Setup(string methodName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
 
         return InternalSetup(methodName, genericTypeArguments, exactParameterMatch, args);
     }
 
-    private ISetup<T> InternalSetup(string methodName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    private ISetup<T> InternalSetup(string methodName, Type[]? genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(methodName, nameof(methodName));
 
@@ -54,25 +51,25 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return new VoidSetupPhrase<T>(setup);
     }
 
-    public ISetup<T, TResult> Setup<TResult>(string methodName, params object[] args)
+    public ISetup<T, TResult> Setup<TResult>(string methodName, params object?[] args)
     {
         return InternalSetup<TResult>(methodName, null, false, args);
     }
 
-    public ISetup<T, TResult> Setup<TResult>(string methodName, bool exactParameterMatch, params object[] args)
+    public ISetup<T, TResult> Setup<TResult>(string methodName, bool exactParameterMatch, params object?[] args)
     {
         return InternalSetup<TResult>(methodName, null, exactParameterMatch, args);
     }
 
-    public ISetup<T, TResult> Setup<TResult>(string methodName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    public ISetup<T, TResult> Setup<TResult>(string methodName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
 
         return InternalSetup<TResult>(methodName, genericTypeArguments, exactParameterMatch, args);
     }
 
-    private ISetup<T, TResult> InternalSetup<TResult>(string methodName, Type[] genericTypeArguments,
-        bool exactParameterMatch, params object[] args)
+    private ISetup<T, TResult> InternalSetup<TResult>(string methodName, Type[]? genericTypeArguments,
+        bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNullOrEmpty(methodName, nameof(methodName));
 
@@ -122,23 +119,23 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return new SetterSetupPhrase<T, TProperty>(setup);
     }
 
-    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, params object[] args)
+    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, params object?[] args)
     {
         return InternalSetupSequence(methodOrPropertyName, null, false, args);
     }
 
-    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, bool exactParameterMatch, params object[] args)
+    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, bool exactParameterMatch, params object?[] args)
     {
         return InternalSetupSequence(methodOrPropertyName, null, exactParameterMatch, args);
     }
 
-    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    public ISetupSequentialAction SetupSequence(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         return InternalSetupSequence(methodOrPropertyName, genericTypeArguments, exactParameterMatch, args);
     }
 
-    private ISetupSequentialAction InternalSetupSequence(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    private ISetupSequentialAction InternalSetupSequence(string methodOrPropertyName, Type[]? genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNullOrEmpty(methodOrPropertyName, nameof(methodOrPropertyName));
 
@@ -150,23 +147,23 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return new SetupSequencePhrase(setup);
     }
 
-    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, params object[] args)
+    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, params object?[] args)
     {
         return InternalSetupSequence<TResult>(methodOrPropertyName, null, false, args);
     }
 
-    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object[] args)
+    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object?[] args)
     {
         return InternalSetupSequence<TResult>(methodOrPropertyName, null, exactParameterMatch, args);
     }
 
-    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    public ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         return InternalSetupSequence<TResult>(methodOrPropertyName, genericTypeArguments, exactParameterMatch, args);
     }
 
-    private ISetupSequentialResult<TResult> InternalSetupSequence<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args)
+    private ISetupSequentialResult<TResult> InternalSetupSequence<TResult>(string methodOrPropertyName, Type[]? genericTypeArguments, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNullOrEmpty(methodOrPropertyName, nameof(methodOrPropertyName));
 
@@ -192,29 +189,29 @@ internal class ProtectedMock<T> : IProtectedMock<T>
 
     #region Verify
 
-    public void Verify(string methodName, Times times, object[] args)
+    public void Verify(string methodName, Times times, object?[] args)
     {
         InternalVerify(methodName, null, times, false, args);
     }
 
-    public void Verify(string methodName, Type[] genericTypeArguments, Times times, params object[] args)
+    public void Verify(string methodName, Type[] genericTypeArguments, Times times, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         InternalVerify(methodName, genericTypeArguments, times, false, args);
     }
 
-    public void Verify(string methodName, Times times, bool exactParameterMatch, object[] args)
+    public void Verify(string methodName, Times times, bool exactParameterMatch, object?[] args)
     {
         InternalVerify(methodName, null, times, exactParameterMatch, args);
     }
 
-    public void Verify(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args)
+    public void Verify(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         InternalVerify(methodName, genericTypeArguments, times, exactParameterMatch, args);
     }
 
-    private void InternalVerify(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args)
+    private void InternalVerify(string methodName, Type[]? genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNullOrEmpty(methodName, nameof(methodName));
 
@@ -225,29 +222,29 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         Mock.Verify(mock, GetMethodCall(method, args), times, null);
     }
 
-    public void Verify<TResult>(string methodName, Times times, object[] args)
+    public void Verify<TResult>(string methodName, Times times, object?[] args)
     {
         InternalVerify<TResult>(methodName, null, times, false, args);
     }
 
-    public void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, params object[] args)
+    public void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         InternalVerify<TResult>(methodName, genericTypeArguments, times, false, args);
     }
 
-    public void Verify<TResult>(string methodName, Times times, bool exactParameterMatch, object[] args)
+    public void Verify<TResult>(string methodName, Times times, bool exactParameterMatch, object?[] args)
     {
         InternalVerify<TResult>(methodName, null, times, exactParameterMatch, args);
     }
 
-    public void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args)
+    public void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNull(genericTypeArguments, nameof(genericTypeArguments));
         InternalVerify<TResult>(methodName, genericTypeArguments, times, exactParameterMatch, args);
     }
 
-    private void InternalVerify<TResult>(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args)
+    private void InternalVerify<TResult>(string methodName, Type[]? genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args)
     {
         Guard.NotNullOrEmpty(methodName, nameof(methodName));
 
@@ -282,7 +279,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
     }
 
     // TODO should receive args to support indexers
-    public void VerifySet<TProperty>(string propertyName, Times times, object value)
+    public void VerifySet<TProperty>(string propertyName, Times times, object? value)
     {
         Guard.NotNullOrEmpty(propertyName, nameof(propertyName));
 
@@ -305,7 +302,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return Expression.Lambda<Func<T, TResult>>(Expression.MakeMemberAccess(param, property), param);
     }
 
-    private static MethodInfo GetMethod(string methodName, Type[] genericTypeArguments, bool exact, params object[] args)
+    private static MethodInfo? GetMethod(string methodName, Type[]? genericTypeArguments, bool exact, params object?[] args)
     {
         var argTypes = ToArgTypes(args);
         var methods = typeof(T).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
@@ -321,20 +318,20 @@ internal class ProtectedMock<T> : IProtectedMock<T>
             .SingleOrDefault(m => m.GetParameterTypes().CompareTo(argTypes, exact, considerTypeMatchers: false));
     }
 
-    private static Expression<Func<T, TResult>> GetMethodCall<TResult>(MethodInfo method, object[] args)
+    private static Expression<Func<T, TResult>> GetMethodCall<TResult>(MethodInfo method, object?[] args)
     {
         var param = Expression.Parameter(typeof(T), "mock");
         return Expression.Lambda<Func<T, TResult>>(Expression.Call(param, method, ToExpressionArgs(method, args)), param);
     }
 
-    private static Expression<Action<T>> GetMethodCall(MethodInfo method, object[] args)
+    private static Expression<Action<T>> GetMethodCall(MethodInfo? method, object?[] args)
     {
         var param = Expression.Parameter(typeof(T), "mock");
         return Expression.Lambda<Action<T>>(Expression.Call(param, method, ToExpressionArgs(method, args)), param);
     }
 
     // TODO should support arguments for property indexers
-    private static PropertyInfo GetProperty(string propertyName)
+    private static PropertyInfo? GetProperty(string propertyName)
     {
         return typeof(T).GetProperty(
             propertyName,
@@ -350,9 +347,9 @@ internal class ProtectedMock<T> : IProtectedMock<T>
             param);
     }
 
-    private static void ThrowIfMemberMissing(string memberName, MemberInfo member)
+    private static void ThrowIfMemberMissing(string memberName, MemberInfo? member)
     {
-        if (member == null)
+        if (member is null)
         {
             throw new ArgumentException(string.Format(
                 CultureInfo.CurrentCulture,
@@ -362,12 +359,12 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         }
     }
 
-    private static void ThrowIfMethodMissing(string methodName, MethodInfo method, object[] args)
+    private static void ThrowIfMethodMissing(string? methodName, MethodInfo? method, object?[] args)
     {
-        if (method == null)
+        if (method is null)
         {
-            List<string> extractedTypeNames = new List<string>();
-            foreach (object o in args)
+            List<string> extractedTypeNames = new();
+            foreach (object? o in args)
             {
                 if (o is Expression expr)
                 {
@@ -375,7 +372,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
                 }
                 else
                 {
-                    extractedTypeNames.Add(o.GetType().GetFormattedName());
+                    extractedTypeNames.Add(o?.GetType().GetFormattedName());
                 }
             }
 
@@ -390,9 +387,9 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         }
     }
 
-    private static void ThrowIfPublicMethod(MethodInfo method, string reflectedTypeName)
+    private static void ThrowIfPublicMethod(MethodInfo? method, string reflectedTypeName)
     {
-        if (method.IsPublic)
+        if (method?.IsPublic == true)
         {
             throw new ArgumentException(string.Format(
                 CultureInfo.CurrentCulture,
@@ -426,32 +423,32 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         }
     }
 
-    private static void ThrowIfVoidMethod(MethodInfo method)
+    private static void ThrowIfVoidMethod(MethodInfo? method)
     {
-        if (method.ReturnType == typeof(void))
+        if (method?.ReturnType == typeof(void))
         {
             throw new ArgumentException(Resources.CantSetReturnValueForVoid);
         }
     }
 
-    private static Type[] ToArgTypes(object[] args)
+    private static Type?[] ToArgTypes(object?[] args)
     {
-        if (args == null)
+        if (args is null)
         {
             throw new ArgumentException(Resources.UseItExprIsNullRatherThanNullArgumentValue);
         }
 
-        var types = new Type[args.Length];
+        var types = new Type?[args.Length];
         for (int index = 0; index < args.Length; index++)
         {
-            if (args[index] == null)
+            if (args[index] is null)
             {
                 throw new ArgumentException(Resources.UseItExprIsNullRatherThanNullArgumentValue);
             }
 
             if (args[index] is not Expression expr)
             {
-                types[index] = args[index].GetType();
+                types[index] = args[index]?.GetType();
             }
             else if (expr.NodeType == ExpressionType.Call)
             {
@@ -494,9 +491,9 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return ItRefAnyField(expression) != null;
     }
 
-    private static FieldInfo ItRefAnyField(Expression expr)
+    private static FieldInfo? ItRefAnyField(Expression expr)
     {
-        FieldInfo itRefAnyField = null;
+        FieldInfo? itRefAnyField = null;
 
         if (expr.NodeType == ExpressionType.MemberAccess)
         {
@@ -506,7 +503,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
                 if (field.Name == nameof(It.Ref<object>.IsAny))
                 {
                     var fieldDeclaringType = field.DeclaringType;
-                    if (fieldDeclaringType.IsGenericType)
+                    if (fieldDeclaringType?.IsGenericType == true)
                     {
                         var fieldDeclaringTypeDefinition = fieldDeclaringType.GetGenericTypeDefinition();
                         if (fieldDeclaringTypeDefinition == typeof(It.Ref<>))
@@ -521,7 +518,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return itRefAnyField;
     }
 
-    private static Expression ToExpressionArg(Type type, object arg)
+    private static Expression ToExpressionArg(Type type, object? arg)
     {
         if (arg is Expression expression)
         {
@@ -549,12 +546,12 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         return Expression.Constant(arg, type);
     }
 
-    private static IEnumerable<Expression> ToExpressionArgs(MethodInfo method, object[] args)
+    private static IEnumerable<Expression> ToExpressionArgs(MethodInfo? method, object?[] args)
     {
-        ParameterInfo[] methodParams = method.GetParameters();
+        ParameterInfo[]? methodParams = method?.GetParameters();
         for (int i = 0; i < args.Length; i++)
         {
-            yield return ToExpressionArg(methodParams[i].ParameterType, args[i]);
+            yield return ToExpressionArg(methodParams?[i].ParameterType, args[i]);
         }
     }
 }

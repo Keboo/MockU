@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MockU;
 
@@ -15,7 +16,7 @@ namespace MockU;
 internal sealed class MatcherObserver : IDisposable
 {
     [ThreadStatic]
-    private static Stack<MatcherObserver> activations;
+    private static Stack<MatcherObserver>? activations;
 
     public static MatcherObserver Activate()
     {
@@ -31,11 +32,11 @@ internal sealed class MatcherObserver : IDisposable
         return activation;
     }
 
-    public static bool IsActive(out MatcherObserver observer)
+    public static bool IsActive(out MatcherObserver? observer)
     {
         var activations = MatcherObserver.activations;
 
-        if (activations != null && activations.Count > 0)
+        if (activations?.Count > 0)
         {
             observer = activations.Peek();
             return true;
@@ -44,22 +45,11 @@ internal sealed class MatcherObserver : IDisposable
         {
             observer = null;
             return false;
-
-            
-
-            
-
-            
         }
     }
 
     private int timestamp;
-    private List<Observation> observations;
-
-    
-
-    
-
+    private List<Observation>? observations;
     
     private MatcherObserver()
     {
@@ -86,10 +76,7 @@ internal sealed class MatcherObserver : IDisposable
     /// </summary>
     public void OnMatch(Match match)
     {
-        if (observations == null)
-        {
-            observations = new List<Observation>();
-        }
+        observations ??= new List<Observation>();
 
         observations.Add(new Observation(GetNextTimestamp(), match));
     }
@@ -99,7 +86,7 @@ internal sealed class MatcherObserver : IDisposable
     ///   and if so, returns the last one.
     /// </summary>
     /// <param name="match">The observed <see cref="Match"/> matcher observed last.</param>
-    public bool TryGetLastMatch(out Match match)
+    public bool TryGetLastMatch([NotNullWhen(true)] out Match? match)
     {
         if (observations != null && observations.Count > 0)
         {

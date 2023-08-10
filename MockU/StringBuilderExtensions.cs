@@ -88,7 +88,7 @@ internal static partial class StringBuilderExtensions
                 _ => "ref ",
             });
 
-            parameterType = parameterType.GetElementType();
+            parameterType = parameterType.GetElementType()!;
         }
 
         if (parameterType.IsArray && parameter.IsDefined(typeof(ParamArrayAttribute), true))

@@ -46,7 +46,7 @@ public class MockException : Exception
     internal static MockException NoMatchingCalls(
         Mock rootMock,
         LambdaExpression expression,
-        string failMessage,
+        string? failMessage,
         Times times,
         int callCount)
     {
@@ -249,7 +249,7 @@ public class MockException : Exception
       StreamingContext context)
         : base(info, context)
     {
-        reasons = (MockExceptionReasons)info.GetValue(nameof(reasons), typeof(MockExceptionReasons));
+        reasons = (MockExceptionReasons)info.GetValue(nameof(reasons), typeof(MockExceptionReasons))!;
     }
 
     /// <summary>

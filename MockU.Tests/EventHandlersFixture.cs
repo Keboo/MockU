@@ -140,7 +140,7 @@ public class EventHandlersFixture
 
     public class HasEvent
     {
-        public virtual event Action Event;
+        public virtual event Action? Event;
 
         public void RaiseEvent() => Event?.Invoke();
     }
@@ -175,7 +175,11 @@ public class EventHandlersFixture
 
     public class HasAsyncEvent
     {
-        public virtual event Func<Task> Event;
-        public virtual event Func<int, Task> ParameterizedEvent;
+#pragma warning disable CA1070 // Do not declare event fields as virtual
+#pragma warning disable CS0067 // The event 'EventHandlersFixture.HasAsyncEvent.Event' is never used
+        public virtual event Func<Task>? Event;
+        public virtual event Func<int, Task>? ParameterizedEvent;
+#pragma warning restore CS0067 // The event 'EventHandlersFixture.HasAsyncEvent.Event' is never used
+#pragma warning restore CA1070 // Do not declare event fields as virtual
     }
 }

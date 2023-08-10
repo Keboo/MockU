@@ -37,23 +37,16 @@ public class AnyMatcherFixture
     }
 
     [Fact]
-    public void DoesntMatchIfNotAssignableType()
+    public void DoesNotMatchIfNotAssignableType()
     {
         var expr = ToExpression(() => It.IsAny<IFormatProvider>()).Body;
 
         var (matcher, _) = MatcherFactory.CreateMatcher(expr);
 
         Assert.False(matcher.Matches("foo", typeof(IFormatProvider)));
-
-        /* Unmerged change from project 'Moq.Tests(net6.0)'
-        Before:
-                private LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
-        After:
-                LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
-        */
     }
 
-    LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
+    static LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
     {
         return expr;
     }

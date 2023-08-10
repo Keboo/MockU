@@ -1063,12 +1063,12 @@ public class MockFixture
 
     public class Bar : IBar
     {
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     public interface IBar
     {
-        string Value { get; set; }
+        string? Value { get; set; }
     }
 
     interface IDo { void Do(); }
@@ -1086,7 +1086,7 @@ public class MockFixture
 
     public class FooWithPrivateSetter
     {
-        public virtual string Foo { get; private set; }
+        public virtual string? Foo { get; private set; }
     }
 
     public class ClassWithNoDefaultConstructor
@@ -1113,20 +1113,15 @@ public class MockFixture
         {
         }
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        public string StringValue { get; set; }
+        public string? StringValue { get; set; }
         public int IntValue { get; set; }
     }
 
     public class FooOverrideEquals
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is FooOverrideEquals &&
                 ((FooOverrideEquals)obj).Name == Name;
@@ -1134,7 +1129,7 @@ public class MockFixture
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return Name?.GetHashCode() ?? 0;
         }
     }
 

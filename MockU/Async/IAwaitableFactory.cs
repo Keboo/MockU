@@ -6,7 +6,7 @@ internal interface IAwaitableFactory
 {
     Type ResultType { get; }
 
-    object CreateCompleted(object result = null);
+    object CreateCompleted(object? result = null);
 
     object CreateFaulted(Exception exception);
 
@@ -14,5 +14,5 @@ internal interface IAwaitableFactory
 
     Expression CreateResultExpression(Expression awaitableExpression);
 
-    bool TryGetResult(object awaitable, out object result);
+    bool TryGetResult(object awaitable, out object? result);
 }

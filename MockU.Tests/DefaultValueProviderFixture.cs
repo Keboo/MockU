@@ -8,33 +8,13 @@ namespace MockU.Tests;
 /// Tests for the <see cref="DefaultValueProvider"/> abstract base class.
 /// </summary>
 public class DefaultValueProviderFixture
-
-/* Unmerged change from project 'Moq.Tests(net6.0)'
-Before:
-        private static MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action));
-        private static ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action)).GetParameters()[0];
-        private static MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func));
-After:
-        static MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action));
-        static ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action)).GetParameters()[0];
-        static MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func));
-*/
 {
-    static MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action));
-    static ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action)).GetParameters()[0];
-    static MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func));
+    static readonly MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action))!;
+    static readonly ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action))!.GetParameters()[0];
+    static readonly MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func))!;
 
-
-    /* Unmerged change from project 'Moq.Tests(net6.0)'
-    Before:
-            private DefaultValueProvider defaultValueProvider;
-            private Mock<IFoo> fooMock;
-    After:
-            DefaultValueProvider defaultValueProvider;
-            Mock<IFoo> fooMock;
-    */
-    DefaultValueProvider defaultValueProvider;
-    Mock<IFoo> fooMock;
+    readonly DefaultValueProvider defaultValueProvider;
+    readonly Mock<IFoo> fooMock;
 
     public DefaultValueProviderFixture()
     {

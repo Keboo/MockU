@@ -1,8 +1,5 @@
 using System.ComponentModel;
-
-using MockU.Language.Flow;
-
-using Moq.Language;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MockU;
 
@@ -43,14 +40,14 @@ public static partial class ReturnsExtensions
     /// <typeparam name="TResult">Type of the return value.</typeparam>
     /// <param name="mock">Returns verb which represents the mocked type and the task of return type</param>
     /// <param name="valueFunction">The function that will calculate the return value.</param>
-    public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, Task<TResult>> mock, Func<TResult> valueFunction) where TMock : class
+    public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, Task<TResult>> mock, Func<TResult?> valueFunction) where TMock : class
     {
         if (IsNullResult(valueFunction, typeof(TResult)))
         {
             return mock.ReturnsAsync(() => default);
         }
 
-        return mock.Returns(() => Task.FromResult(valueFunction()));
+        return mock.Returns(() => Task.FromResult<TResult?>(valueFunction()));
     }
 
     /// <summary>
@@ -60,14 +57,14 @@ public static partial class ReturnsExtensions
     /// <typeparam name="TResult">Type of the return value.</typeparam>
     /// <param name="mock">Returns verb which represents the mocked type and the task of return type</param>
     /// <param name="valueFunction">The function that will calculate the return value.</param>
-    public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, ValueTask<TResult>> mock, Func<TResult> valueFunction) where TMock : class
+    public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, ValueTask<TResult>> mock, Func<TResult?> valueFunction) where TMock : class
     {
         if (IsNullResult(valueFunction, typeof(TResult)))
         {
             return mock.ReturnsAsync(() => default);
         }
 
-        return mock.Returns(() => new ValueTask<TResult>(valueFunction()));
+        return mock.Returns(() => new ValueTask<TResult?>(valueFunction()));
     }
 
     /// <summary>
@@ -134,15 +131,9 @@ public static partial class ReturnsExtensions
             tcs.SetException(exception);
             return new ValueTask<TResult>(tcs.Task);
         });
-
-        
-
-        
-
-        
     }
 
-    private static readonly Random Random = new Random();
+    private static readonly Random Random = new();
 
     /// <summary>
     /// Allows to specify the delayed return value of an asynchronous method.
@@ -191,7 +182,7 @@ public static partial class ReturnsExtensions
     public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, Task<TResult>> mock,
         TResult value, TimeSpan minDelay, TimeSpan maxDelay, Random random) where TMock : class
     {
-        if (random == null)
+        if (random is null)
             throw new ArgumentNullException(nameof(random));
 
         var delay = GetDelay(minDelay, maxDelay, random);
@@ -206,7 +197,7 @@ public static partial class ReturnsExtensions
     public static IReturnsResult<TMock> ReturnsAsync<TMock, TResult>(this IReturns<TMock, ValueTask<TResult>> mock,
         TResult value, TimeSpan minDelay, TimeSpan maxDelay, Random random) where TMock : class
     {
-        if (random == null)
+        if (random is null)
             throw new ArgumentNullException(nameof(random));
 
         var delay = GetDelay(minDelay, maxDelay, random);
@@ -261,7 +252,7 @@ public static partial class ReturnsExtensions
     public static IReturnsResult<TMock> ThrowsAsync<TMock, TResult>(this IReturns<TMock, Task<TResult>> mock,
         Exception exception, TimeSpan minDelay, TimeSpan maxDelay, Random random) where TMock : class
     {
-        if (random == null)
+        if (random is null)
             throw new ArgumentNullException(nameof(random));
 
         var delay = GetDelay(minDelay, maxDelay, random);
@@ -276,7 +267,7 @@ public static partial class ReturnsExtensions
     public static IReturnsResult<TMock> ThrowsAsync<TMock, TResult>(this IReturns<TMock, ValueTask<TResult>> mock,
         Exception exception, TimeSpan minDelay, TimeSpan maxDelay, Random random) where TMock : class
     {
-        if (random == null)
+        if (random is null)
             throw new ArgumentNullException(nameof(random));
 
         var delay = GetDelay(minDelay, maxDelay, random);
@@ -284,22 +275,9 @@ public static partial class ReturnsExtensions
         return DelayedException(mock, exception, delay);
     }
 
-    internal static bool IsNullResult(Delegate valueFunction, Type resultType)
+    internal static bool IsNullResult([NotNullWhen(true)] Delegate? valueFunction, Type resultType)
     {
-        if (valueFunction == null)
-        {
-            return !resultType.IsValueType || Nullable.GetUnderlyingType(resultType) != null;
-        }
-        else
-        {
-            return false;
-
-            
-
-            
-
-            
-        }
+        return valueFunction is null && (!resultType.IsValueType || Nullable.GetUnderlyingType(resultType) != null);
     }
 
     private static TimeSpan GetDelay(TimeSpan minDelay, TimeSpan maxDelay, Random random)
@@ -311,12 +289,6 @@ public static partial class ReturnsExtensions
         var max = (int)maxDelay.Ticks;
 
         return new TimeSpan(random.Next(min, max));
-
-        
-
-        
-
-        
     }
 
     private static IReturnsResult<TMock> DelayedResult<TMock, TResult>(IReturns<TMock, Task<TResult>> mock,

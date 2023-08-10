@@ -5,12 +5,11 @@ using System.Text;
 namespace MockU;
 
 internal abstract class Setup : ISetup
-
 {
     private readonly Mock mock;
     private Flags flags;
 
-    protected Setup(Expression originalExpression, Mock mock, Expectation expectation)
+    protected Setup(Expression? originalExpression, Mock mock, Expectation expectation)
     {
         Debug.Assert(mock != null);
         Debug.Assert(expectation != null);
@@ -20,13 +19,13 @@ internal abstract class Setup : ISetup
         this.mock = mock;
     }
 
-    public virtual Condition Condition => null;
+    public virtual Condition? Condition => null;
 
     public Expectation Expectation { get; }
 
     public LambdaExpression Expression => Expectation.Expression;
 
-    Mock ISetup.InnerMock => InnerMocks.SingleOrDefault();
+    Mock? ISetup.InnerMock => InnerMocks.SingleOrDefault();
 
     public virtual IEnumerable<Mock> InnerMocks => Enumerable.Empty<Mock>();
 
@@ -38,7 +37,7 @@ internal abstract class Setup : ISetup
 
     public Mock Mock => mock;
 
-    public Expression OriginalExpression { get; }
+    public Expression? OriginalExpression { get; }
 
     public bool IsMatched => (flags & Flags.Matched) != 0;
 
@@ -90,7 +89,7 @@ internal abstract class Setup : ISetup
         flags |= Flags.Verifiable;
     }
 
-    public bool Matches(Invocation invocation)
+    public bool Matches(Invocation? invocation)
     {
         return Expectation.IsMatch(invocation) && (Condition == null || Condition.IsTrue);
     }
@@ -181,12 +180,6 @@ internal abstract class Setup : ISetup
     public void VerifyAll()
     {
         Verify(recursive: true, setup => true);
-
-        
-
-        
-
-        
     }
 
     private void Verify(bool recursive, Func<ISetup, bool> predicate)
@@ -201,7 +194,7 @@ internal abstract class Setup : ISetup
         Verify(recursive, predicate, verifiedMocks);
     }
 
-    protected static Mock TryGetInnerMockFrom(object returnValue)
+    protected static Mock? TryGetInnerMockFrom(object? returnValue)
     {
         return (Awaitable.TryGetResultRecursive(returnValue) as IMocked)?.Mock;
     }

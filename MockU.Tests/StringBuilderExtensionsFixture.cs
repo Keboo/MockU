@@ -16,7 +16,7 @@ public class StringBuilderExtensionsFixture
             Expression.Lambda<Action<IFoo>>(
                 Expression.Call(
                     foo,
-                    typeof(IFoo).GetProperty("Item").SetMethod,
+                    typeof(IFoo).GetProperty("Item")!.SetMethod!,
                     Expression.Constant("index"),
                     Expression.Constant("value")),
                 foo);
@@ -43,11 +43,9 @@ public class StringBuilderExtensionsFixture
         var expression = Expression.TypeIs(Expression.Constant(1), typeof(string));
 
         Assert.Equal(@"1 is string", GetAppendExpressionResult(expression));
-
-        
     }
 
-    string GetAppendExpressionResult(Expression expression)
+    private static string GetAppendExpressionResult(Expression expression)
     {
         return new StringBuilder().AppendExpression(expression).ToString();
     }

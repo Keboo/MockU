@@ -1,8 +1,5 @@
 using System.ComponentModel;
 
-using MockU.Language;
-using MockU.Language.Flow;
-
 namespace MockU.Protected;
 
 /// <summary>
@@ -32,7 +29,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="voidMethodName">The name of the void method to be invoked.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetup<TMock> Setup(string voidMethodName, params object[] args);
+    ISetup<TMock> Setup(string voidMethodName, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for a void method invocation with the given
@@ -42,7 +39,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetup<TMock> Setup(string voidMethodName, bool exactParameterMatch, params object[] args);
+    ISetup<TMock> Setup(string voidMethodName, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for a void method invocation with the given
@@ -53,7 +50,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetup<TMock> Setup(string voidMethodName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args);
+    ISetup<TMock> Setup(string voidMethodName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for an invocation on a property or a non void method with the given 
@@ -63,7 +60,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <typeparam name="TResult">The return type of the method or property.</typeparam>
-    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, params object[] args);
+    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for an invocation on a property or a non void method with the given 
@@ -74,7 +71,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <typeparam name="TResult">The return type of the method or property.</typeparam>
-    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object[] args);
+    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for an invocation on a property or a non void method with the given 
@@ -86,7 +83,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <typeparam name="TResult">The return type of the method or property.</typeparam>
-    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args);
+    ISetup<TMock, TResult> Setup<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a setup for an invocation on a property getter with the given 
@@ -112,7 +109,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="methodOrPropertyName">Name of the method or property being set up.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetupSequentialAction SetupSequence(string methodOrPropertyName, params object[] args);
+    ISetupSequentialAction SetupSequence(string methodOrPropertyName, params object?[] args);
 
     /// <summary>
     /// Performs a sequence of actions, one per call.
@@ -121,7 +118,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Determines whether the parameter types should exactly match the types provided.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetupSequentialAction SetupSequence(string methodOrPropertyName, bool exactParameterMatch, params object[] args);
+    ISetupSequentialAction SetupSequence(string methodOrPropertyName, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Performs a sequence of actions, one per call.
@@ -131,7 +128,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Determines whether the parameter types should exactly match the types provided.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    ISetupSequentialAction SetupSequence(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args);
+    ISetupSequentialAction SetupSequence(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Return a sequence of values, once per call.
@@ -140,7 +137,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <typeparam name="TResult">Return type of the method or property being set up.</typeparam>
-    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, params object[] args);
+    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, params object?[] args);
 
     /// <summary>
     /// Return a sequence of values, once per call.
@@ -150,7 +147,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <typeparam name="TResult">Return type of the method or property being set up.</typeparam>
-    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object[] args);
+    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Return a sequence of values, once per call.
@@ -161,7 +158,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used,
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <typeparam name="TResult">Return type of the method or property being set up.</typeparam>
-    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object[] args);
+    ISetupSequentialResult<TResult> SetupSequence<TResult>(string methodOrPropertyName, Type[] genericTypeArguments, bool exactParameterMatch, params object?[] args);
 
     #endregion
 
@@ -178,7 +175,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    void Verify(string methodName, Times times, params object[] args);
+    void Verify(string methodName, Times times, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for a void method with the given <paramref name="methodName"/>,
@@ -192,7 +189,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    void Verify(string methodName, Type[] genericTypeArguments, Times times, params object[] args);
+    void Verify(string methodName, Type[] genericTypeArguments, Times times, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for a void method with the given <paramref name="methodName"/>,
@@ -206,7 +203,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    void Verify(string methodName, Times times, bool exactParameterMatch, params object[] args);
+    void Verify(string methodName, Times times, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for a void method with the given <paramref name="methodName"/>,
@@ -221,7 +218,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <param name="exactParameterMatch">Should the parameter types match exactly types that were provided</param>
     /// <param name="args">The optional arguments for the invocation. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
-    void Verify(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args);
+    void Verify(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for an invocation on a property or a non void method with the given 
@@ -234,7 +231,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <typeparam name="TResult">The type of return value from the expression.</typeparam>
-    void Verify<TResult>(string methodName, Times times, params object[] args);
+    void Verify<TResult>(string methodName, Times times, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for an invocation on a property or a non void method with the given 
@@ -248,7 +245,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <typeparam name="TResult">The type of return value from the expression.</typeparam>
-    void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, params object[] args);
+    void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for an invocation on a property or a non void method with the given 
@@ -262,7 +259,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <typeparam name="TResult">The type of return value from the expression.</typeparam>
-    void Verify<TResult>(string methodName, Times times, bool exactParameterMatch, params object[] args);
+    void Verify<TResult>(string methodName, Times times, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for an invocation on a property or a non void method with the given 
@@ -277,7 +274,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</param>
     /// <param name="times">The number of times a method is allowed to be called.</param>
     /// <typeparam name="TResult">The type of return value from the expression.</typeparam>
-    void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object[] args);
+    void Verify<TResult>(string methodName, Type[] genericTypeArguments, Times times, bool exactParameterMatch, params object?[] args);
 
     /// <summary>
     /// Specifies a verify for an invocation on a property getter with the given 
@@ -303,7 +300,7 @@ public interface IProtectedMock<TMock> : IFluentInterface
     /// <typeparam name="TProperty">The type of the property. If argument matchers are used, 
     /// remember to use <see cref="ItExpr"/> rather than <see cref="It"/>.</typeparam>
     // TODO should receive args to support indexers
-    void VerifySet<TProperty>(string propertyName, Times times, object value);
+    void VerifySet<TProperty>(string propertyName, Times times, object? value);
 
     #endregion
 }

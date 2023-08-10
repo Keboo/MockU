@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Moq.Language;
+namespace MockU.Language;
 
 /// <summary>
 /// Defines the <c>Raises</c> verb.

@@ -11,15 +11,12 @@ internal static class Awaitable
     ///   this method will return <c>42</c>.
     /// </remarks>
     /// <param name="obj">The (possibly awaitable) object to be "unwrapped".</param>
-    public static object TryGetResultRecursive(object obj)
+    public static object? TryGetResultRecursive(object? obj)
     {
-        if (obj != null
+        return obj != null
             && AwaitableFactory.TryGet(obj.GetType()) is { } awaitableFactory
-            && awaitableFactory.TryGetResult(obj, out var result))
-        {
-            return TryGetResultRecursive(result);
-        }
-
-        return obj;
+            && awaitableFactory.TryGetResult(obj, out var result)
+            ? TryGetResultRecursive(result)
+            : obj;
     }
 }

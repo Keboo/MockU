@@ -4,52 +4,13 @@ using System.Linq.Expressions;
 namespace MockU.Behaviors;
 
 internal sealed class RaiseEvent : Behavior
-
-/* Unmerged change from project 'Moq(netstandard2.0)'
-Before:
-        private Mock mock;
-        private LambdaExpression expression;
-        private Delegate eventArgsFunc;
-        private object[] eventArgsParams;
-After:
-        Mock mock;
-        LambdaExpression expression;
-        Delegate eventArgsFunc;
-        object[] eventArgsParams;
-*/
-
-/* Unmerged change from project 'Moq(netstandard2.1)'
-Before:
-        private Mock mock;
-        private LambdaExpression expression;
-        private Delegate eventArgsFunc;
-        private object[] eventArgsParams;
-After:
-        Mock mock;
-        LambdaExpression expression;
-        Delegate eventArgsFunc;
-        object[] eventArgsParams;
-*/
-
-/* Unmerged change from project 'Moq(net6.0)'
-Before:
-        private Mock mock;
-        private LambdaExpression expression;
-        private Delegate eventArgsFunc;
-        private object[] eventArgsParams;
-After:
-        Mock mock;
-        LambdaExpression expression;
-        Delegate eventArgsFunc;
-        object[] eventArgsParams;
-*/
 {
     private Mock mock;
     private LambdaExpression expression;
-    private Delegate eventArgsFunc;
-    private object[] eventArgsParams;
+    private Delegate? eventArgsFunc;
+    private object[]? eventArgsParams;
 
-    public RaiseEvent(Mock mock, LambdaExpression expression, Delegate eventArgsFunc, object[] eventArgsParams)
+    public RaiseEvent(Mock mock, LambdaExpression expression, Delegate? eventArgsFunc, object[]? eventArgsParams)
     {
         Debug.Assert(mock != null);
         Debug.Assert(expression != null);

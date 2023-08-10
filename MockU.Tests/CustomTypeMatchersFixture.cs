@@ -135,7 +135,7 @@ public class CustomTypeMatchersFixture
         mock.Object.Method(42);
         mock.Object.Method("42");
         mock.Object.Method(new Exception("42"));
-        mock.Object.Method((string)null);
+        mock.Object.Method((string?)null);
 
         Assert.Equal(3, invocationCount);
     }
@@ -151,7 +151,7 @@ public class CustomTypeMatchersFixture
         mock.Object.Method(42);
         mock.Object.Method("42");
         mock.Object.Method(new Exception("42"));
-        mock.Object.Method((string)null);
+        mock.Object.Method((string?)null);
 
         Assert.Equal(2, invocationCount);
     }
@@ -172,7 +172,7 @@ public class CustomTypeMatchersFixture
 
         mock.Object.Method("42");
         mock.Object.Method("7");
-        mock.Object.Method((string)null);
+        mock.Object.Method((string?)null);
         Assert.Equal(2, invocationCount);
     }
 
@@ -192,7 +192,7 @@ public class CustomTypeMatchersFixture
 
         mock.Object.Method("FOO");
         mock.Object.Method("foo");
-        mock.Object.Method((string)null);
+        mock.Object.Method((string?)null);
         Assert.Equal(3, invocationCount);
     }
 
@@ -212,7 +212,7 @@ public class CustomTypeMatchersFixture
 
         mock.Object.Method("FOO");
         mock.Object.Method("foo");
-        mock.Object.Method((string)null);
+        mock.Object.Method((string?)null);
         Assert.Equal(3, invocationCount);
     }
 
@@ -294,19 +294,12 @@ public class CustomTypeMatchersFixture
     }
 
     public class ObjectStringOrdinalIgnoreCaseComparer : IEqualityComparer<object>
-
-    /* Unmerged change from project 'Moq.Tests(net6.0)'
-    Before:
-                private static IEqualityComparer<string> InternalComparer => StringComparer.OrdinalIgnoreCase;
-    After:
-                static IEqualityComparer<string> InternalComparer => StringComparer.OrdinalIgnoreCase;
-    */
     {
         static IEqualityComparer<string> InternalComparer => StringComparer.OrdinalIgnoreCase;
 
-        public new bool Equals(object x, object y)
+        public new bool Equals(object? x, object? y)
         {
-            return InternalComparer.Equals((string)x, (string)y);
+            return InternalComparer.Equals((string?)x, (string?)y);
         }
 
         public int GetHashCode(object obj)

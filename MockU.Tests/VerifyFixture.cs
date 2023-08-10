@@ -926,7 +926,7 @@ namespace MockU.Tests
         }
 
         [Fact]
-        public void Should_not_verify_nongeneric_when_generic_invoked()
+        public void Should_not_verify_non_generic_when_generic_invoked()
         {
             //Arrange
             var mock = new Mock<IBaz>();
@@ -940,7 +940,7 @@ namespace MockU.Tests
         }
 
         [Fact]
-        public void Should_not_verify_generic_when_nongeneric_invoked()
+        public void Should_not_verify_generic_when_non_generic_invoked()
         {
             //Arrange
             var mock = new Mock<IBaz>();
@@ -954,9 +954,9 @@ namespace MockU.Tests
         }
 
         [Fact]
-        public void NullArrayValuesForActualInvocationArePrintedAsNullInMockExeptionMessage()
+        public void NullArrayValuesForActualInvocationArePrintedAsNullInMockExceptionMessage()
         {
-            var strings = new string[] { "1", null, "3" };
+            var strings = new string?[] { "1", null, "3" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(strings);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(null)));
@@ -967,7 +967,7 @@ namespace MockU.Tests
         [Fact]
         public void LargeEnumerablesInActualInvocationAreNotCutOffFor10Elements()
         {
-            var strings = new string[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10" };
+            var strings = new string?[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(strings);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(null)));
@@ -978,7 +978,7 @@ namespace MockU.Tests
         [Fact]
         public void LargeEnumerablesInActualInvocationAreCutOffAfter10Elements()
         {
-            var strings = new string[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10", "11" };
+            var strings = new string?[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10", "11" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(strings);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(null)));
@@ -987,9 +987,9 @@ namespace MockU.Tests
         }
 
         [Fact]
-        public void NullArrayValuesForExpectedInvocationArePrintedAsNullInMockExeptionMessage()
+        public void NullArrayValuesForExpectedInvocationArePrintedAsNullInMockExceptionMessage()
         {
-            var strings = new string[] { "1", null, "3" };
+            var strings = new string?[] { "1", null, "3" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(null);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(strings)));
@@ -999,7 +999,7 @@ namespace MockU.Tests
         [Fact]
         public void LargeEnumerablesInExpectedInvocationAreNotCutOffFor10Elements()
         {
-            var strings = new string[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10" };
+            var strings = new string?[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(null);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(strings)));
@@ -1009,7 +1009,7 @@ namespace MockU.Tests
         [Fact]
         public void LargeEnumerablesInExpectedInvocationAreCutOffAfter10Elements()
         {
-            var strings = new string[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10", "11" };
+            var strings = new string?[] { "1", null, "3", "4", "5", "6", "7", "8", "9", "10", "11" };
             var mock = new Mock<IArrays>();
             mock.Object.Method(null);
             var mex = Assert.Throws<MockException>(() => mock.Verify(_ => _.Method(strings)));
@@ -1293,33 +1293,6 @@ namespace MockU.Tests
             Assert.Throws<MockException>(() => mock.VerifyNoOtherCalls());
         }
 
-        [Fact(Skip = "Not yet implemented.")]
-        public void VerifyNoOtherCalls_can_tell_apart_transitive_and_nontransitive_usages_of_automocked_properties()
-        {
-            var mock = new Mock<IFoo>() { DefaultValue = DefaultValue.Mock };
-
-            object _;
-            _ = mock.Object.Bar;
-            _ = mock.Object.Bar.Value;
-
-            mock.Verify(m => m.Bar.Value);
-
-            // `Bar` was used both in a "transitive" and non-transitive way. We would expect that the former
-            // doesn't have to be explicitly verified (as it's implied by the verification of `Bar.Value`).
-            // However, the non-transitive call ought to be explicitly verified. Because we don't, a verific-
-            // ation exception is expected: (THIS DOES NOT WORK YET.)
-            Assert.Throws<MockException>(() => mock.VerifyNoOtherCalls());
-
-            // HINT TO IMPLEMENTERS: One relatively easy way to implement this, given the way Moq is currently
-            // build, would be to record all invocations with a globally unique, steadily increasing sequence
-            // number. This would make it possible to say, for any two invocations (regardless of the mock on
-            // which they occurred), which one happened earlier. Let's look at two calls of method X. The
-            // earlier invocation happens at "time" t0, the later invocation happens at "time" t1 (t0 < t1).
-            // If X returns a mock object, and that object has no invocations happening between t0 and t1,
-            // then the first invocation of X was non-transitive. Likewise, the very last invocation of method
-            // X is non-transitive if there are no invocations on the sub-object that occur later.
-        }
-
         // (This test is somewhat duplicate, but sets the stage for the test following right after it.)
         [Fact]
         public void VerifyNoOtherCalls_works_together_with_parameterized_Verify()
@@ -1374,7 +1347,7 @@ namespace MockU.Tests
         }
 
         [Fact]
-        public void VerifyNoOtherCalls_works_with_a_combination_of_parameterised_Verify_and_VerifyAll()
+        public void VerifyNoOtherCalls_works_with_a_combination_of_parameterized_Verify_and_VerifyAll()
         {
             var cat = new Mock<ICat>();
             cat.Setup(x => x.Purr(15)).Returns("happy");
@@ -1513,7 +1486,7 @@ namespace MockU.Tests
                 var xMock = new Mock<IX>();
 
                 // Set up a call that would fail verification:
-                xMock.Setup(x => x.Y.M()).Verifiable("M never called");
+                xMock.Setup(x => x.Y!.M()).Verifiable("M never called");
 
                 // Reset the root `.Y` of the above setup `.Y.M()` to something that'll pass verification:
                 xMock.Setup(x => x.Y).Verifiable();
@@ -1541,7 +1514,7 @@ namespace MockU.Tests
 
             public interface IX
             {
-                IY Y { get; set; }
+                IY? Y { get; set; }
             }
 
             public interface IY
@@ -1635,7 +1608,7 @@ namespace MockU.Tests
                 // That message should mention our mock only twice: once in the heading above
                 // the mock's invocations; and once for the invocation that returned it.
 
-                int SubstringCount(string str, string substring)
+                static int SubstringCount(string str, string substring)
                 {
                     int count = 0;
                     int index = -1;
@@ -1715,7 +1688,7 @@ namespace MockU.Tests
 
         public interface IArrays
         {
-            void Method(string[] strings);
+            void Method(string?[]? strings);
         }
 
         public interface IHaveMethodsNamedLikeEventAccessors

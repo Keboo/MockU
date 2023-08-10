@@ -409,7 +409,7 @@ After:
     [Fact]
     public async Task SetupSet__property_of__completed_Task__Callback()
     {
-        string setToValue = null;
+        string? setToValue = null;
         var person = new Mock<IPerson>();
         person.SetupSet(p => p.GetFriendTaskAsync().Result.Name = It.IsAny<string>()).Callback((string value) => setToValue = value);
         var friend = await person.Object.GetFriendTaskAsync();
@@ -421,7 +421,7 @@ After:
     [Fact]
     public async Task SetupSet__property_of__completed_ValueTask__Callback()
     {
-        string setToValue = null;
+        string? setToValue = null;
         var person = new Mock<IPerson>();
         person.SetupSet(p => p.GetFriendValueTaskAsync().Result.Name = It.IsAny<string>()).Callback((string value) => setToValue = value);
         var friend = await person.Object.GetFriendValueTaskAsync();

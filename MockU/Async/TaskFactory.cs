@@ -2,20 +2,15 @@ namespace MockU.Async;
 
 internal sealed class TaskFactory : AwaitableFactory<Task>
 {
-    public static readonly TaskFactory Instance = new TaskFactory();
+    public static readonly TaskFactory Instance = new();
 
-    
-
-    
-
-    
     private TaskFactory()
     {
     }
 
     public override Task CreateCompleted()
     {
-        return Task.FromResult<object>(default);
+        return Task.FromResult<object?>(default);
     }
 
     public override Task CreateFaulted(Exception exception)

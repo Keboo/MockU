@@ -6,7 +6,7 @@ using System;
 
 using Xunit;
 
-namespace Moq.Tests
+namespace MockU.Tests
 {
 	public class CallBaseDefaultInterfaceImplementationsFixture
 	{

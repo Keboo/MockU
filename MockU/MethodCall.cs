@@ -10,23 +10,16 @@ using MockU.Interception;
 namespace MockU;
 
 internal sealed partial class MethodCall : SetupWithOutParameterSupport
-
 {
-    private VerifyInvocationCount verifyInvocationCount;
-    private Behavior callback;
-    private Behavior raiseEvent;
-    private Behavior returnOrThrow;
-    private Behavior afterReturnCallback;
-    private Condition condition;
+    private VerifyInvocationCount? verifyInvocationCount;
+    private Behavior? callback;
+    private Behavior? raiseEvent;
+    private Behavior? returnOrThrow;
+    private Behavior? afterReturnCallback;
+    private readonly Condition? condition;
+    private readonly string? declarationSite;
 
-    
-
-    
-
-    
-    private string declarationSite;
-
-    public MethodCall(Expression originalExpression, Mock mock, Condition condition, MethodExpectation expectation)
+    public MethodCall(Expression originalExpression, Mock mock, Condition? condition, MethodExpectation expectation)
         : base(originalExpression, mock, expectation)
     {
         this.condition = condition;
@@ -37,9 +30,9 @@ internal sealed partial class MethodCall : SetupWithOutParameterSupport
         }
     }
 
-    public string FailMessage { get; private set; }
+    public string? FailMessage { get; private set; }
 
-    public override Condition Condition => condition;
+    public override Condition? Condition => condition;
 
     public override IEnumerable<Mock> InnerMocks
     {
@@ -49,17 +42,11 @@ internal sealed partial class MethodCall : SetupWithOutParameterSupport
             if (innerMock != null)
             {
                 yield return innerMock;
-
-                
-
-                
-
-                
             }
         }
     }
 
-    private static string GetUserCodeCallSite()
+    private static string? GetUserCodeCallSite()
     {
         try
         {
@@ -139,13 +126,12 @@ internal sealed partial class MethodCall : SetupWithOutParameterSupport
 
     public void SetCallbackBehavior(Delegate callback)
     {
-        if (callback == null)
+        if (callback is null)
         {
             throw new ArgumentNullException(nameof(callback));
         }
 
-        ref Behavior behavior = ref returnOrThrow == null ? ref this.callback
-                                                                 : ref afterReturnCallback;
+        ref Behavior? behavior = ref returnOrThrow is null ? ref this.callback : ref afterReturnCallback;
 
         if (callback is Action callbackWithoutArguments)
         {

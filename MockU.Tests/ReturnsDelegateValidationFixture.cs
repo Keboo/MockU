@@ -2,27 +2,20 @@ using System.Linq.Expressions;
 
 using Xunit;
 
-namespace Moq.Tests;
+namespace MockU.Tests;
 
 /// <summary>
 ///   This fixture targets the `Returns` delegate validation logic.
 /// </summary>
 /// <seealso cref="CallbackDelegateValidationFixture"/>
 public class ReturnsDelegateValidationFixture
-
-/* Unmerged change from project 'Moq.Tests(net6.0)'
-Before:
-        private ISetup<IFoo, bool> setup;
-After:
-        ISetup<IFoo, bool> setup;
-*/
 {
-    ISetup<IFoo, bool> setup;
+    private readonly ISetup<IFoo, bool> setup;
 
     public ReturnsDelegateValidationFixture()
     {
         var mock = new Mock<IFoo>();
-        this.setup = mock.Setup(m => m.Func(It.IsAny<int>()));
+        setup = mock.Setup(m => m.Func(It.IsAny<int>()));
     }
 
     // Nothing surprising here.
@@ -34,7 +27,7 @@ After:
         Assert.Single(callback.Method.GetParameters());
         Assert.Same(instance, callback.Target);
 
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     // Nothing surprising here.
@@ -45,7 +38,7 @@ After:
         Assert.Single(callback.Method.GetParameters());
         Assert.Null(callback.Target);
 
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     // This may seem surprising because the extension method has a different number
@@ -60,7 +53,7 @@ After:
         Assert.Equal(2, callback.Method.GetParameters().Length);
         Assert.Same(instance, callback.Target);
 
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     // This doesn't look suspicious at all, but it is very similar to the above test.
@@ -76,28 +69,28 @@ After:
         Assert.Equal(2, callback.Method.GetParameters().Length);
         Assert.NotNull(callback.Target);
 
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     [Fact]
     public void Returns_accepts_Func_of_IInvocation_and_assignable_return_type()
     {
         Func<IInvocation, bool> callback = invocation => true;
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     [Fact]
     public void Returns_accepts_Func_of_IInvocation_and_object()
     {
         Func<IInvocation, object> callback = invocation => true;
-        this.setup.Returns(callback);
+        setup.Returns(callback);
     }
 
     [Fact]
     public void Returns_does_not_accept_Func_of_IInvocation_and_incompatible_return_type()
     {
         Func<IInvocation, string> callback = invocation => "true";
-        Assert.Throws<ArgumentException>(() => this.setup.Returns(callback));
+        Assert.Throws<ArgumentException>(() => setup.Returns(callback));
     }
 
     public interface IFoo

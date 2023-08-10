@@ -124,62 +124,37 @@ public class CSharpCompilerExpressionsFixture
             void NullableInt(int? arg);
             void Object(object arg);
             void Short(long arg);
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                        private static void AssertConvert(Expression<Action<IX>> expression)
-            After:
-                        static void AssertConvert(Expression<Action<IX>> expression)
-            */
         }
 
         static void AssertConvert(Expression<Action<IX>> expression)
         {
-            var visitor = new FilteringVisitor(e => e.NodeType == ExpressionType.Convert);
+            var visitor = new FilteringVisitor(e => e?.NodeType == ExpressionType.Convert);
             visitor.Visit(expression.Body);
             Assert.True(visitor.Result.Any());
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                        private static void AssertNoConvert(Expression<Action<IX>> expression)
-            After:
-                        static void AssertNoConvert(Expression<Action<IX>> expression)
-            */
         }
 
         static void AssertNoConvert(Expression<Action<IX>> expression)
         {
-            var visitor = new FilteringVisitor(e => e.NodeType == ExpressionType.Convert);
+            var visitor = new FilteringVisitor(e => e?.NodeType == ExpressionType.Convert);
             visitor.Visit(expression.Body);
             Assert.False(visitor.Result.Any());
-
-            
         }
     }
 
     sealed class FilteringVisitor : ExpressionVisitor
-
-    /* Unmerged change from project 'Moq.Tests(net6.0)'
-    Before:
-                private readonly Func<Expression, bool> predicate;
-                private readonly List<Expression> result;
-    After:
-                readonly Func<Expression, bool> predicate;
-                readonly List<Expression> result;
-    */
     {
-        readonly Func<Expression, bool> predicate;
-        readonly List<Expression> result;
+        readonly Func<Expression?, bool> predicate;
+        readonly List<Expression?> result;
 
-        public FilteringVisitor(Func<Expression, bool> predicate)
+        public FilteringVisitor(Func<Expression?, bool> predicate)
         {
             this.predicate = predicate;
-            result = new List<Expression>();
+            result = new List<Expression?>();
         }
 
-        public IReadOnlyList<Expression> Result => result;
+        public IReadOnlyList<Expression?> Result => result;
 
-        public override Expression Visit(Expression node)
+        public override Expression? Visit(Expression? node)
         {
             if (predicate(node))
             {

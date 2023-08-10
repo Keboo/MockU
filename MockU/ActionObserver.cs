@@ -153,7 +153,7 @@ internal sealed class ActionObserver : ExpressionReconstructor
                     // If we get here, we can be almost certain that matchers weren't distributed properly
                     // across the invocation's parameters. We could hope for the best and just leave it
                     // at that; however, it's probably better to let client code know, so it can be either
-                    // adjusted or reported to Moq.
+                    // adjusted or reported to MockU.
                     throw new ArgumentException(
                         string.Format(
                             CultureInfo.CurrentCulture,

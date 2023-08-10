@@ -15,7 +15,7 @@ namespace MockU;
 public abstract partial class Mock : IFluentInterface
 {
     internal static readonly MethodInfo GetMethod =
-        typeof(Mock).GetMethod(nameof(Get), BindingFlags.Public | BindingFlags.Static);
+        typeof(Mock).GetMethod(nameof(Get), BindingFlags.Public | BindingFlags.Static)!;
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="Mock"/> class.
@@ -305,7 +305,7 @@ public abstract partial class Mock : IFluentInterface
         }
     }
 
-    internal static void Verify(Mock mock, LambdaExpression expression, Times times, string failMessage)
+    internal static void Verify(Mock mock, LambdaExpression expression, Times times, string? failMessage)
     {
         Guard.NotNull(times, nameof(times));
 
@@ -325,7 +325,7 @@ public abstract partial class Mock : IFluentInterface
         }
     }
 
-    internal static void VerifyGet(Mock mock, LambdaExpression expression, Times times, string failMessage)
+    internal static void VerifyGet(Mock mock, LambdaExpression expression, Times times, string? failMessage)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -338,7 +338,7 @@ public abstract partial class Mock : IFluentInterface
         Mock.Verify(mock, expression, times, failMessage);
     }
 
-    internal static void VerifySet(Mock mock, LambdaExpression expression, Times times, string failMessage)
+    internal static void VerifySet(Mock mock, LambdaExpression expression, Times times, string? failMessage)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsAssignmentToPropertyOrIndexer(expression, nameof(expression));
@@ -346,7 +346,7 @@ public abstract partial class Mock : IFluentInterface
         Mock.Verify(mock, expression, times, failMessage);
     }
 
-    internal static void VerifyAdd(Mock mock, LambdaExpression expression, Times times, string failMessage)
+    internal static void VerifyAdd(Mock mock, LambdaExpression expression, Times times, string? failMessage)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventAdd(expression, nameof(expression));
@@ -354,7 +354,7 @@ public abstract partial class Mock : IFluentInterface
         Mock.Verify(mock, expression, times, failMessage);
     }
 
-    internal static void VerifyRemove(Mock mock, LambdaExpression expression, Times times, string failMessage)
+    internal static void VerifyRemove(Mock mock, LambdaExpression expression, Times times, string? failMessage)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventRemove(expression, nameof(expression));
@@ -365,19 +365,13 @@ public abstract partial class Mock : IFluentInterface
     internal static void VerifyNoOtherCalls(Mock mock)
     {
         Mock.VerifyNoOtherCalls(mock, verifiedMocks: new HashSet<Mock>());
-
-        
-
-        
-
-        
     }
 
     private static void VerifyNoOtherCalls(Mock mock, HashSet<Mock> verifiedMocks)
     {
         if (!verifiedMocks.Add(mock)) return;
 
-        var unverifiedInvocations = mock.MutableInvocations.ToArray(invocation => !invocation.IsVerified);
+        Invocation?[] unverifiedInvocations = mock.MutableInvocations.ToArray(invocation => !invocation.IsVerified);
 
         var innerMocks = mock.MutableSetups.FindAllInnerMocks();
 
@@ -405,7 +399,7 @@ public abstract partial class Mock : IFluentInterface
             }
 
             // "Transitive" invocations have been nulled out. Let's see what's left:
-            var remainingUnverifiedInvocations = unverifiedInvocations.Where(i => i != null);
+            var remainingUnverifiedInvocations = unverifiedInvocations.OfType<Invocation>();
             if (remainingUnverifiedInvocations.Any())
             {
                 throw MockException.UnverifiedInvocations(mock, remainingUnverifiedInvocations);
@@ -417,12 +411,6 @@ public abstract partial class Mock : IFluentInterface
         foreach (var innerMock in innerMocks)
         {
             VerifyNoOtherCalls(innerMock, verifiedMocks);
-
-            
-
-            
-
-            
         }
     }
 
@@ -503,7 +491,7 @@ public abstract partial class Mock : IFluentInterface
 
     #region Setup
 
-    internal static MethodCall Setup(Mock mock, LambdaExpression expression, Condition condition)
+    internal static MethodCall Setup(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -515,7 +503,7 @@ public abstract partial class Mock : IFluentInterface
         });
     }
 
-    internal static MethodCall SetupGet(Mock mock, LambdaExpression expression, Condition condition)
+    internal static MethodCall SetupGet(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -528,7 +516,7 @@ public abstract partial class Mock : IFluentInterface
         return Mock.Setup(mock, expression, condition);
     }
 
-    internal static MethodCall SetupSet(Mock mock, LambdaExpression expression, Condition condition)
+    internal static MethodCall SetupSet(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsAssignmentToPropertyOrIndexer(expression, nameof(expression));
@@ -537,7 +525,7 @@ public abstract partial class Mock : IFluentInterface
     }
 
     internal static readonly MethodInfo SetupReturnsMethod =
-        typeof(Mock).GetMethod(nameof(SetupReturns), BindingFlags.NonPublic | BindingFlags.Static);
+        typeof(Mock).GetMethod(nameof(SetupReturns), BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // This specialized setup method is used to set up a single `Mock.Of` predicate.
     // Unlike other setup methods, LINQ to Mocks can set non-interceptable properties, which is handy when initializing DTOs.
@@ -593,7 +581,7 @@ public abstract partial class Mock : IFluentInterface
         return true;
     }
 
-    internal static MethodCall SetupAdd(Mock mock, LambdaExpression expression, Condition condition)
+    internal static MethodCall SetupAdd(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventAdd(expression, nameof(expression));
@@ -601,7 +589,7 @@ public abstract partial class Mock : IFluentInterface
         return Mock.Setup(mock, expression, condition);
     }
 
-    internal static MethodCall SetupRemove(Mock mock, LambdaExpression expression, Condition condition)
+    internal static MethodCall SetupRemove(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventRemove(expression, nameof(expression));
@@ -621,7 +609,7 @@ public abstract partial class Mock : IFluentInterface
         });
     }
 
-    internal static StubbedPropertySetup SetupProperty(Mock mock, LambdaExpression expression, object initialValue)
+    internal static StubbedPropertySetup SetupProperty(Mock mock, LambdaExpression expression, object? initialValue)
     {
         Guard.NotNull(expression, nameof(expression));
 

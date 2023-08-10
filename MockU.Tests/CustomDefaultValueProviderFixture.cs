@@ -102,14 +102,14 @@ public class CustomDefaultValueProviderFixture
 
     
     {
-        object value;
+        private readonly object? value;
 
-        public ConstantDefaultValueProvider(object value)
+        public ConstantDefaultValueProvider(object? value)
         {
             this.value = value;
         }
 
-        protected internal override object GetDefaultValue(Type type, Mock mock)
+        protected internal override object? GetDefaultValue(Type type, Mock mock)
         {
             return value;
         }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
@@ -13,12 +14,12 @@ internal static class Extensions
         return type.IsValueType || type.GetConstructor(Type.EmptyTypes) != null;
     }
 
-    public static bool CanRead(this PropertyInfo property, out MethodInfo getter)
+    public static bool CanRead(this PropertyInfo property, [NotNullWhen(true)] out MethodInfo? getter)
     {
         return property.CanRead(out getter, out _);
     }
 
-    public static bool CanRead(this PropertyInfo property, out MethodInfo getter, out PropertyInfo getterProperty)
+    public static bool CanRead(this PropertyInfo property, [NotNullWhen(true)]out MethodInfo? getter, out PropertyInfo? getterProperty)
     {
         if (property.CanRead)
         {
@@ -56,12 +57,12 @@ internal static class Extensions
         return false;
     }
 
-    public static bool CanWrite(this PropertyInfo property, out MethodInfo setter)
+    public static bool CanWrite(this PropertyInfo property, [NotNullWhen(true)] out MethodInfo? setter)
     {
         return property.CanWrite(out setter, out _);
     }
 
-    public static bool CanWrite(this PropertyInfo property, out MethodInfo setter, out PropertyInfo setterProperty)
+    public static bool CanWrite(this PropertyInfo property, out MethodInfo? setter, out PropertyInfo? setterProperty)
     {
         if (property.CanWrite)
         {
@@ -102,7 +103,7 @@ internal static class Extensions
     /// <summary>
     ///   Gets the default value for the specified type. This is the Reflection counterpart of C#'s <see langword="default"/> operator.
     /// </summary>
-    public static object GetDefaultValue(this Type type)
+    public static object? GetDefaultValue(this Type type)
     {
         return type.IsValueType ? Activator.CreateInstance(type) : null;
     }
@@ -111,7 +112,7 @@ internal static class Extensions
     ///   Gets the least-derived <see cref="MethodInfo"/> in the given type that provides
     ///   the implementation for the given <paramref name="method"/>.
     /// </summary>
-    public static MethodInfo GetImplementingMethod(this MethodInfo method, Type proxyType)
+    public static MethodInfo? GetImplementingMethod(this MethodInfo method, Type proxyType)
     {
         Debug.Assert(method != null);
         Debug.Assert(proxyType != null);
@@ -124,28 +125,28 @@ internal static class Extensions
 
         var declaringType = method.DeclaringType;
 
-        if (declaringType.IsInterface)
+        if (declaringType?.IsInterface == true)
         {
             Debug.Assert(declaringType.IsAssignableFrom(proxyType));
 
-            var map = proxyType.GetInterfaceMap(method.DeclaringType);
+            var map = proxyType.GetInterfaceMap(declaringType);
             var index = Array.IndexOf(map.InterfaceMethods, method);
             Debug.Assert(index >= 0);
             return map.TargetMethods[index].GetBaseDefinition();
         }
-        else if (declaringType.IsDelegateType())
+        else if (declaringType?.IsDelegateType() == true)
         {
             return proxyType.GetMethod("Invoke");
         }
         else
         {
-            Debug.Assert(declaringType.IsAssignableFrom(proxyType));
+            Debug.Assert(declaringType?.IsAssignableFrom(proxyType) == true);
 
             return method.GetBaseDefinition();
         }
     }
 
-    public static object InvokePreserveStack(this Delegate del, IReadOnlyList<object> args = null)
+    public static object? InvokePreserveStack(this Delegate del, IReadOnlyList<object?>? args = null)
     {
         try
         {
@@ -153,7 +154,7 @@ internal static class Extensions
         }
         catch (TargetInvocationException ex)
         {
-            ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+            ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
             throw;
         }
     }
@@ -230,12 +231,12 @@ internal static class Extensions
         return Attribute.IsDefined(type, typeof(TypeMatcherAttribute));
     }
 
-    public static bool IsTypeMatcher(this Type type, out Type typeMatcherType)
+    public static bool IsTypeMatcher(this Type type, [NotNullWhen(true)] out Type? typeMatcherType)
     {
         if (type.IsTypeMatcher())
         {
-            var attr = (TypeMatcherAttribute)Attribute.GetCustomAttribute(type, typeof(TypeMatcherAttribute));
-            typeMatcherType = attr.Type ?? type;
+            var attr = (TypeMatcherAttribute?)Attribute.GetCustomAttribute(type, typeof(TypeMatcherAttribute));
+            typeMatcherType = attr?.Type ?? type;
             Guard.ImplementsTypeMatcherProtocol(typeMatcherType);
             return true;
         }
@@ -254,7 +255,7 @@ internal static class Extensions
         }
         else if (type.HasElementType)
         {
-            return type.GetElementType().IsOrContainsTypeMatcher();
+            return type.GetElementType()!.IsOrContainsTypeMatcher();
         }
         else if (type.IsGenericType)
         {
@@ -372,7 +373,7 @@ internal static class Extensions
         
     }
 
-    private static MethodInfo GetInvokeMethodFromUntypedDelegateCallback(Delegate callback)
+    private static MethodInfo? GetInvokeMethodFromUntypedDelegateCallback(Delegate callback)
     {
         // Section 8.9.3 of 4th Ed ECMA 335 CLI spec requires delegates to have an 'Invoke' method.
         // However, there is not a requirement for 'public', or for it to be unambiguous.
@@ -405,9 +406,9 @@ internal static class Extensions
 
         if (type.IsTypeMatcher(out var typeMatcherType))
         {
-            var typeMatcher = (ITypeMatcher)Activator.CreateInstance(typeMatcherType);
+            var typeMatcher = (ITypeMatcher?)Activator.CreateInstance(typeMatcherType);
 
-            if (typeMatcher.Matches(other))
+            if (typeMatcher?.Matches(other) == true)
             {
                 return other;
             }
@@ -483,7 +484,7 @@ internal static class Extensions
                      .Where(innerMock => innerMock != null);
     }
 
-    public static Mock FindLastInnerMock(this SetupCollection setups, Func<Setup, bool> predicate)
+    public static Mock? FindLastInnerMock(this SetupCollection setups, Func<Setup, bool> predicate)
     {
         return setups.FindLast(setup => !setup.IsConditional && predicate(setup))?.InnerMocks.SingleOrDefault();
     }

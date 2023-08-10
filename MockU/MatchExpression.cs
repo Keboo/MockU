@@ -13,7 +13,7 @@ internal sealed class MatchExpression : Expression
 
     public override ExpressionType NodeType => ExpressionType.Extension;
 
-    public override Type Type => Match.RenderExpression.Type;
+    public override Type Type => Match.RenderExpression?.Type;
 
     // This node type is irreducible in order to prevent compilation.
     // The best possible reduction would involve `RenderExpression`,
@@ -22,5 +22,5 @@ internal sealed class MatchExpression : Expression
 
     protected override Expression VisitChildren(ExpressionVisitor visitor) => this;
 
-    public override string ToString() => Match.RenderExpression.ToString();
+    public override string ToString() => Match.RenderExpression?.ToString() ?? "";
 }

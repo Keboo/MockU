@@ -19,7 +19,7 @@ public abstract class DefaultValueProvider
 
     /// <summary>
     /// Gets the <see cref="DefaultValueProvider"/> corresponding to <see cref="DefaultValue.Mock"/>;
-    /// that is, a default value provider returning mocked objects or "empty" values for unmockable types.
+    /// that is, a default value provider returning mocked objects or "empty" values for un-mockable types.
     /// </summary>
     public static DefaultValueProvider Mock { get; } = new MockDefaultValueProvider();
 
@@ -32,7 +32,7 @@ public abstract class DefaultValueProvider
 
     /// <summary>
     /// Gets the <see cref="DefaultValue"/> enumeration value that corresponds to this default value provider.
-    /// Must be overridden by Moq's internal providers that have their own corresponding <see cref="DefaultValue"/>.
+    /// Must be overridden by MockU's internal providers that have their own corresponding <see cref="DefaultValue"/>.
     /// </summary>
     internal virtual DefaultValue Kind => DefaultValue.Custom;
 
@@ -45,7 +45,7 @@ public abstract class DefaultValueProvider
     /// <remarks>
     /// Implementations may assume that all parameters have valid, non-<see langword="null"/>, non-<see langword="void"/> values.
     /// </remarks>
-    protected internal abstract object GetDefaultValue(Type type, Mock mock);
+    protected internal abstract object? GetDefaultValue(Type type, Mock mock);
 
     /// <summary>
     ///   <para>
@@ -61,7 +61,7 @@ public abstract class DefaultValueProvider
     /// <remarks>
     /// Implementations may assume that all parameters have valid, non-<see langword="null"/>, non-<see langword="void"/> values.
     /// </remarks>
-    protected internal virtual object GetDefaultParameterValue(ParameterInfo parameter, Mock mock)
+    protected internal virtual object? GetDefaultParameterValue(ParameterInfo parameter, Mock mock)
     {
         Debug.Assert(parameter != null);
         Debug.Assert(parameter.ParameterType != typeof(void));
@@ -84,7 +84,7 @@ public abstract class DefaultValueProvider
     /// <remarks>
     /// Implementations may assume that all parameters have valid, non-<see langword="null"/>, non-<see langword="void"/> values.
     /// </remarks>
-    protected internal virtual object GetDefaultReturnValue(MethodInfo method, Mock mock)
+    protected internal virtual object? GetDefaultReturnValue(MethodInfo method, Mock mock)
     {
         Debug.Assert(method != null);
         Debug.Assert(method.ReturnType != typeof(void));

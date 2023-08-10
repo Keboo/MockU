@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace MockU;
@@ -10,22 +11,22 @@ internal abstract class Expectation : IEquatable<Expectation>
 {
     public abstract LambdaExpression Expression { get; }
 
-    public virtual bool HasResultExpression(out IAwaitableFactory awaitableFactory)
+    public virtual bool HasResultExpression([NotNullWhen(true)] out IAwaitableFactory? awaitableFactory)
     {
         awaitableFactory = null;
         return false;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is Expectation other && Equals(other);
     }
 
-    public abstract bool Equals(Expectation other);
+    public abstract bool Equals(Expectation? other);
 
     public abstract override int GetHashCode();
 
-    public abstract bool IsMatch(Invocation invocation);
+    public abstract bool IsMatch(Invocation? invocation);
 
     public virtual void SetupEvaluatedSuccessfully(Invocation invocation)
     {

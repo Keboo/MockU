@@ -3,33 +3,6 @@ using System.Diagnostics;
 namespace MockU;
 
 internal readonly struct ImmutablePopOnlyStack<T>
-
-/* Unmerged change from project 'Moq(netstandard2.0)'
-Before:
-        private readonly T[] items;
-        private readonly int index;
-After:
-        readonly T[] items;
-        readonly int index;
-*/
-
-/* Unmerged change from project 'Moq(netstandard2.1)'
-Before:
-        private readonly T[] items;
-        private readonly int index;
-After:
-        readonly T[] items;
-        readonly int index;
-*/
-
-/* Unmerged change from project 'Moq(net6.0)'
-Before:
-        private readonly T[] items;
-        private readonly int index;
-After:
-        readonly T[] items;
-        readonly int index;
-*/
 {
     private readonly T[] items;
     private readonly int index;
@@ -40,27 +13,6 @@ After:
 
         this.items = items.ToArray();
         index = 0;
-
-        /* Unmerged change from project 'Moq(netstandard2.0)'
-        Before:
-                private ImmutablePopOnlyStack(T[] items, int index)
-        After:
-                ImmutablePopOnlyStack(T[] items, int index)
-        */
-
-        /* Unmerged change from project 'Moq(netstandard2.1)'
-        Before:
-                private ImmutablePopOnlyStack(T[] items, int index)
-        After:
-                ImmutablePopOnlyStack(T[] items, int index)
-        */
-
-        /* Unmerged change from project 'Moq(net6.0)'
-        Before:
-                private ImmutablePopOnlyStack(T[] items, int index)
-        After:
-                ImmutablePopOnlyStack(T[] items, int index)
-        */
     }
 
     private ImmutablePopOnlyStack(T[] items, int index)

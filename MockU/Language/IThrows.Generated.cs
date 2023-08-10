@@ -1,13 +1,11 @@
 ﻿
-
 using System;
 using System.ComponentModel;
-
 using MockU.Language.Flow;
 
-namespace Moq.Language;
-
-partial interface IThrows
+namespace MockU.Language
+{
+	partial interface IThrows
 	{ 
 		/// <summary>
 		/// Specifies a function that will calculate the exception to throw when the method is invoked, 
@@ -564,3 +562,4 @@ partial interface IThrows
 		/// </example>
 		IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException> exceptionFunction) where TException : Exception;
 	}
+}

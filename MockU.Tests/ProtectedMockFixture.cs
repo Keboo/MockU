@@ -9,14 +9,14 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfNullMock()
     {
-        Assert.Throws<ArgumentNullException>(() => ProtectedExtension.Protected((Mock<string>)null));
+        Assert.Throws<ArgumentNullException>(() => ProtectedExtension.Protected((Mock<string>)null!));
     }
 
     [Fact]
     public void ThrowsIfSetupNullVoidMethodName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup(null));
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup<int>(null));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup(null!));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup<int>(null!));
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfSetupResultNullMethodName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup<int>(null));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Setup<int>(null!));
     }
 
     [Fact]
@@ -218,7 +218,7 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfSetupGetNullPropertyName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().SetupGet<string>(null));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().SetupGet<string>(null!));
     }
 
     [Fact]
@@ -277,7 +277,7 @@ public partial class ProtectedMockFixture
     public void ThrowsIfSetupSetNullPropertyName()
     {
         Assert.Throws<ArgumentNullException>(
-            () => new Mock<FooBase>().Protected().SetupSet<string>(null, ItExpr.IsAny<string>()));
+            () => new Mock<FooBase>().Protected().SetupSet<string>(null!, ItExpr.IsAny<string>()));
     }
 
     [Fact]
@@ -363,7 +363,7 @@ public partial class ProtectedMockFixture
     public void ThrowsIfNullArgs()
     {
         Assert.Throws<ArgumentException>(() => new Mock<FooBase>().Protected()
-            .Setup<string>("StringArg", null)
+            .Setup<string>("StringArg", null!)
             .Returns("null"));
     }
 
@@ -470,7 +470,7 @@ public partial class ProtectedMockFixture
     }
 
     [Fact]
-    public void SetupResultDefaulTwoOverloadsWithDerivedClassThrowsInvalidOperationException()
+    public void SetupResultDefaultTwoOverloadsWithDerivedClassThrowsInvalidOperationException()
     {
         var mock = new Mock<MethodOverloads>();
         Assert.Throws<InvalidOperationException>(() => mock.Protected()
@@ -491,7 +491,7 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfVerifyNullVoidMethodName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Verify(null, Times.Once()));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Verify(null!, Times.Once()));
     }
 
     [Fact]
@@ -503,7 +503,7 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfVerifyNullResultMethodName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Verify<int>(null, Times.Once()));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().Verify<int>(null!, Times.Once()));
     }
 
     [Fact]
@@ -697,7 +697,7 @@ public partial class ProtectedMockFixture
     [Fact]
     public void ThrowsIfVerifyGetNullPropertyName()
     {
-        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().VerifyGet<int>(null, Times.Once()));
+        Assert.Throws<ArgumentNullException>(() => new Mock<FooBase>().Protected().VerifyGet<int>(null!, Times.Once()));
     }
 
     [Fact]
@@ -729,7 +729,7 @@ public partial class ProtectedMockFixture
     public void VerifyGetAllowsProtectedInternalPropertyGet()
     {
         var mock = new Mock<FooBase>();
-        var value = mock.Object.ProtectedInternalValue;
+        var _ = mock.Object.ProtectedInternalValue;
 
         mock.Protected().VerifyGet<string>("ProtectedInternalValue", Times.Once());
     }
@@ -773,7 +773,7 @@ public partial class ProtectedMockFixture
     public void ThrowsIfVerifySetNullPropertyName()
     {
         Assert.Throws<ArgumentNullException>(
-            () => new Mock<FooBase>().Protected().VerifySet<string>(null, Times.Once(), ItExpr.IsAny<string>()));
+            () => new Mock<FooBase>().Protected().VerifySet<string>(null!, Times.Once(), ItExpr.IsAny<string>()));
     }
 
     [Fact]
@@ -858,50 +858,50 @@ public partial class ProtectedMockFixture
         var protectedMock = mock.Protected();
 
         var expression = Expression.Constant(1);
-        Expression setExpression1 = null;
+        Expression? setExpression1 = null;
         protectedMock.SetupSet<Expression>("ExpressionProperty", expression).Callback(expr => setExpression1 = expr);
         mocked.SetExpressionProperty(expression);
         Assert.Same(expression, setExpression1);
 
         var expression2 = Expression.Constant(2);
-        Expression setExpression2 = null;
-        protectedMock.SetupSet<Expression>("ExpressionProperty", ItExpr.Is<ConstantExpression>(e => (int)e.Value == 2)).Callback(expr => setExpression2 = expr);
+        Expression? setExpression2 = null;
+        protectedMock.SetupSet<Expression>("ExpressionProperty", ItExpr.Is<ConstantExpression>(e => (int)e.Value! == 2)).Callback(expr => setExpression2 = expr);
         mocked.SetExpressionProperty(expression2);
         Assert.Same(expression2, setExpression2);
 
         var constantExpression = Expression.Constant(1);
-        ConstantExpression setConstantExpression = null;
+        ConstantExpression? setConstantExpression = null;
         protectedMock.SetupSet<ConstantExpression>("NotAMatcherExpressionProperty", constantExpression).Callback(expr => setConstantExpression = expr);
         mocked.SetNotAMatcherExpressionProperty(constantExpression);
         Assert.Same(constantExpression, setConstantExpression);
 
         var constantExpression2 = Expression.Constant(2);
-        ConstantExpression setConstantExpression2 = null;
-        protectedMock.SetupSet<ConstantExpression>("NotAMatcherExpressionProperty", ItExpr.Is<ConstantExpression>(e => (int)e.Value == 2)).Callback(expr => setConstantExpression2 = expr);
+        ConstantExpression? setConstantExpression2 = null;
+        protectedMock.SetupSet<ConstantExpression>("NotAMatcherExpressionProperty", ItExpr.Is<ConstantExpression>(e => (int)e.Value! == 2)).Callback(expr => setConstantExpression2 = expr);
         mocked.SetNotAMatcherExpressionProperty(constantExpression2);
         Assert.Same(constantExpression2, setConstantExpression2);
 
         var method = typeof(FooBase).GetMethod(nameof(FooBase.MethodForReflection));
-        var methodCallExpression = Expression.Call(method);
-        MethodCallExpression setMethodCallExpression = null;
+        var methodCallExpression = Expression.Call(method!);
+        MethodCallExpression? setMethodCallExpression = null;
         protectedMock.SetupSet<MethodCallExpression>("MatcherExpressionProperty", methodCallExpression).Callback(expr => setMethodCallExpression = expr);
         mocked.SetMatcherExpressionProperty(methodCallExpression);
         Assert.Same(methodCallExpression, setMethodCallExpression);
 
-        var methodCallExpression2 = Expression.Call(typeof(FooBase).GetMethod(nameof(FooBase.MethodForReflection2)));
-        MethodCallExpression setMethodCallExpression2 = null;
+        var methodCallExpression2 = Expression.Call(typeof(FooBase).GetMethod(nameof(FooBase.MethodForReflection2))!);
+        MethodCallExpression? setMethodCallExpression2 = null;
         protectedMock.SetupSet<MethodCallExpression>("MatcherExpressionProperty", ItExpr.Is<MethodCallExpression>(e => e.Method != method)).Callback(expr => setMethodCallExpression2 = expr);
         mocked.SetMatcherExpressionProperty(methodCallExpression2);
         Assert.Same(methodCallExpression2, setMethodCallExpression2);
 
         Expression<Func<int, bool>> lambdaExpression = i => i < 5;
-        LambdaExpression setLambdaExpression = null;
+        LambdaExpression? setLambdaExpression = null;
         protectedMock.SetupSet<LambdaExpression>("LambdaExpressionProperty", lambdaExpression).Callback(expr => setLambdaExpression = expr);
         mocked.SetLambdaExpressionProperty(lambdaExpression);
         Assert.Same(lambdaExpression, setLambdaExpression);
 
         Expression<Func<int, int>> lambdaExpression2 = i => i;
-        LambdaExpression setLambdaExpression2 = null;
+        LambdaExpression? setLambdaExpression2 = null;
         protectedMock.SetupSet<LambdaExpression>("LambdaExpressionProperty", ItExpr.Is<LambdaExpression>(e => e == lambdaExpression2)).Callback(expr => setLambdaExpression2 = expr);
         mocked.SetLambdaExpressionProperty(lambdaExpression2);
         Assert.Same(lambdaExpression2, setLambdaExpression2);
@@ -909,16 +909,8 @@ public partial class ProtectedMockFixture
     }
 
     public class ExpectedException : Exception
-
-    /* Unmerged change from project 'Moq.Tests(net6.0)'
-    Before:
-                private static ExpectedException instance = new ExpectedException();
-    After:
-                static ExpectedException instance = new ExpectedException();
-    */
     {
-        static ExpectedException instance = new ExpectedException();
-        public static ExpectedException Instance => instance;
+        public static ExpectedException Instance { get; } = new ExpectedException();
     }
 
     public class MethodOverloads
@@ -1005,12 +997,12 @@ public partial class ProtectedMockFixture
 
         protected virtual void SameFirstParameter(object a, object b) { }
 
-        protected virtual FooBase Overloaded(MyBase myBase)
+        protected virtual FooBase? Overloaded(MyBase myBase)
         {
             return null;
         }
 
-        protected virtual FooBase Overloaded(MyDerived myBase)
+        protected virtual FooBase? Overloaded(MyDerived myBase)
         {
             return null;
         }
@@ -1020,51 +1012,48 @@ public partial class ProtectedMockFixture
     {
         public static void MethodForReflection() { }
         public static void MethodForReflection2() { }
-        protected virtual Expression ExpressionProperty { get; set; }
+        protected virtual Expression? ExpressionProperty { get; set; }
 
         public void SetExpressionProperty(Expression expression)
         {
             ExpressionProperty = expression;
         }
 
-        protected virtual ConstantExpression NotAMatcherExpressionProperty { get; set; }
+        protected virtual ConstantExpression? NotAMatcherExpressionProperty { get; set; }
 
         public void SetNotAMatcherExpressionProperty(ConstantExpression expression)
         {
             NotAMatcherExpressionProperty = expression;
         }
 
-        protected virtual MethodCallExpression MatcherExpressionProperty { get; set; }
+        protected virtual MethodCallExpression? MatcherExpressionProperty { get; set; }
 
         public void SetMatcherExpressionProperty(MethodCallExpression expression)
         {
             MatcherExpressionProperty = expression;
         }
 
-        protected virtual LambdaExpression LambdaExpressionProperty { get; set; }
+        protected virtual LambdaExpression? LambdaExpressionProperty { get; set; }
 
         public void SetLambdaExpressionProperty(LambdaExpression expression)
         {
             LambdaExpressionProperty = expression;
         }
 
-        public virtual string PublicValue { get; set; }
+        public virtual string? PublicValue { get; set; }
 
-        protected internal virtual string ProtectedInternalValue { get; set; }
+        protected internal virtual string? ProtectedInternalValue { get; set; }
 
-        protected string NonVirtualValue { get; set; }
+        protected string? NonVirtualValue { get; set; }
 
-        protected virtual int OnlyGet
-        {
-            get { return 0; }
-        }
+        protected virtual int OnlyGet => 0;
 
         protected virtual int OnlySet
         {
             set { }
         }
 
-        protected virtual string ProtectedValue { get; set; }
+        protected virtual string? ProtectedValue { get; set; }
 
         protected virtual int this[int index]
         {
@@ -1087,7 +1076,7 @@ public partial class ProtectedMockFixture
             return ProtectedInt();
         }
 
-        public T DoProtectedReturnGeneric<T>()
+        public T? DoProtectedReturnGeneric<T>()
         {
             return ProtectedReturnGeneric<T>();
         }
@@ -1102,7 +1091,7 @@ public partial class ProtectedMockFixture
             return ProtectedWithGenericParam(value);
         }
 
-        public string DoStringArg(string arg)
+        public string? DoStringArg(string? arg)
         {
             return StringArg(arg);
         }
@@ -1112,7 +1101,7 @@ public partial class ProtectedMockFixture
             return TwoArgs(arg, arg1);
         }
 
-        public string GetProtectedValue()
+        public string? GetProtectedValue()
         {
             return ProtectedValue;
         }
@@ -1144,7 +1133,7 @@ public partial class ProtectedMockFixture
             return 0;
         }
 
-        internal protected virtual T ProtectedInternalReturnGeneric<T>()
+        internal protected virtual T? ProtectedInternalReturnGeneric<T>()
         {
             return default;
         }
@@ -1162,7 +1151,7 @@ public partial class ProtectedMockFixture
             return 2;
         }
 
-        protected virtual T ProtectedReturnGeneric<T>()
+        protected virtual T? ProtectedReturnGeneric<T>()
         {
             return default;
         }
@@ -1186,7 +1175,7 @@ public partial class ProtectedMockFixture
             return 2;
         }
 
-        protected virtual string StringArg(string arg)
+        protected virtual string? StringArg(string? arg)
         {
             return arg;
         }

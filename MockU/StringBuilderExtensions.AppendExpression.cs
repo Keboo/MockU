@@ -4,16 +4,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-using MockU;
-
 namespace MockU;
 
 // These methods are intended to create more readable string representations for use in failure messages.
 internal partial class StringBuilderExtensions
 {
-    public static StringBuilder AppendExpression(this StringBuilder builder, Expression expression)
+    public static StringBuilder AppendExpression(this StringBuilder builder, Expression? expression)
     {
-        if (expression == null)
+        if (expression is null)
         {
             return builder.Append("null");
         }
@@ -307,19 +305,13 @@ internal partial class StringBuilderExtensions
                 builder.AppendExpression(expression.Expression);
             }
         }
-        else
+        else if (expression.Member.DeclaringType is { } declaringType)
         {
-            builder.AppendNameOf(expression.Member.DeclaringType);
+            builder.AppendNameOf(declaringType);
         }
 
         return builder.Append('.')
                       .Append(expression.Member.Name);
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, MethodCallExpression expression)
@@ -338,11 +330,11 @@ internal partial class StringBuilderExtensions
         {
             builder.AppendExpression(instance);
         }
-        else
+        else if (method.DeclaringType is { } declaringType)
         {
             Debug.Assert(method.IsStatic);
 
-            builder.AppendNameOf(method.DeclaringType);
+            builder.AppendNameOf(declaringType);
         }
 
         if (method.IsGetAccessor())
@@ -430,26 +422,14 @@ internal partial class StringBuilderExtensions
         }
         return builder.Append(" => ")
                       .AppendExpression(expression.Body);
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, NewExpression expression)
     {
-        Type type = (expression.Constructor == null) ? expression.Type : expression.Constructor.DeclaringType;
+        Type? type = (expression.Constructor is null) ? expression.Type : expression.Constructor.DeclaringType;
         return builder.Append("new ")
                       .AppendNameOf(type)
                       .AppendCommaSeparated("(", expression.Arguments, AppendExpression, ")");
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, NewArrayExpression expression)
@@ -466,24 +446,12 @@ internal partial class StringBuilderExtensions
         }
 
         return builder;  // TODO: check whether this should be unreachable
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, InvocationExpression expression)
     {
         return builder.AppendExpression(expression.Expression)
                       .AppendCommaSeparated("(", expression.Arguments, AppendExpression, ")");
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, MemberInitExpression expression)
@@ -514,12 +482,6 @@ internal partial class StringBuilderExtensions
 
                 default:
                     throw new Exception(string.Format(Resources.UnhandledBindingType, binding.BindingType));
-
-                    
-
-                    
-
-                    
             }
         }
     }
@@ -528,12 +490,6 @@ internal partial class StringBuilderExtensions
     {
         return builder.AppendExpression(expression.NewExpression)
                       .AppendCommaSeparated(" { ", expression.Initializers, AppendElementInit, " }");
-
-        
-
-        
-
-        
     }
 
     private static StringBuilder AppendExpression(this StringBuilder builder, MatchExpression expression)

@@ -13,7 +13,7 @@ internal abstract class AwaitableFactory<TAwaitable, TResult> : IAwaitableFactor
 
     public abstract TAwaitable CreateCompleted(TResult result);
 
-    object IAwaitableFactory.CreateCompleted(object result)
+    object IAwaitableFactory.CreateCompleted(object? result)
     {
         Debug.Assert(result is TResult || result == null);
 
@@ -39,7 +39,7 @@ internal abstract class AwaitableFactory<TAwaitable, TResult> : IAwaitableFactor
         return CreateFaulted(exceptions);
     }
 
-    public abstract bool TryGetResult(TAwaitable awaitable, out TResult result);
+    public abstract bool TryGetResult(TAwaitable awaitable, out TResult? result);
 
     public abstract Expression CreateResultExpression(Expression awaitableExpression);
 

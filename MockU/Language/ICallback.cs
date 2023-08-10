@@ -1,9 +1,6 @@
 using System.ComponentModel;
 
-using MockU;
-using MockU.Language.Flow;
-
-namespace Moq.Language;
+namespace MockU.Language;
 
 /// <summary>
 /// Defines the <c>Callback</c> verb and overloads.

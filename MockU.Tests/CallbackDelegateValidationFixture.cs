@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 using Xunit;
 
-namespace Moq.Tests;
+namespace MockU.Tests;
 
 /// <summary>
 ///   This fixture targets the `Callback` delegate validation logic.

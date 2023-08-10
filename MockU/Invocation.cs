@@ -63,8 +63,8 @@ After:
         bool verified;
 */
 {
-    private MethodInfo methodImplementation;
-    private object result;
+    private MethodInfo? methodImplementation;
+    private object? result;
     private Setup matchingSetup;
 
     /// <summary>
@@ -73,7 +73,7 @@ After:
     /// <param name="proxyType">The <see cref="Type"/> of the concrete proxy object on which a method is being invoked.</param>
     /// <param name="method">The method being invoked.</param>
     /// <param name="arguments">The arguments with which the specified <paramref name="method"/> is being invoked.</param>
-    protected Invocation(Type proxyType, MethodInfo method, params object[] arguments)
+    protected Invocation(Type proxyType, MethodInfo method, params object?[] arguments)
     {
         Debug.Assert(proxyType != null);
         Debug.Assert(arguments != null);
@@ -109,15 +109,15 @@ After:
     /// Arguments may be modified. Derived classes must ensure that by-reference parameters are written back
     /// when the invocation is ended by a call to any of the three <c>Returns</c> methods.
     /// </remarks>
-    public object[] Arguments { get; }
+    public object?[] Arguments { get; }
 
-    IReadOnlyList<object> IInvocation.Arguments => Arguments;
+    IReadOnlyList<object?> IInvocation.Arguments => Arguments;
 
     public ISetup MatchingSetup => matchingSetup;
 
     public Type ProxyType { get; }
 
-    public object ReturnValue
+    public object? ReturnValue
     {
         get => result is ExceptionResult ? null : result;
         set
@@ -127,7 +127,7 @@ After:
         }
     }
 
-    public Exception Exception
+    public Exception? Exception
     {
         get => result is ExceptionResult r ? r.Exception : null;
         set
@@ -212,12 +212,6 @@ After:
         }
 
         return builder.ToString();
-
-        
-
-        
-
-        
     }
 
     /// <summary>
@@ -227,11 +221,11 @@ After:
     /// </summary>
     private readonly struct ExceptionResult
     {
-        public ExceptionResult(Exception exception)
+        public ExceptionResult(Exception? exception)
         {
             Exception = exception;
         }
 
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
     }
 }

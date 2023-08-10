@@ -12,47 +12,14 @@ namespace MockU.Interception;
 // to make this type accessible. Therefore we need to declare it as public.
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class InterfaceProxy
-
-/* Unmerged change from project 'Moq(netstandard2.0)'
-Before:
-        private static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-After:
-        static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-*/
-
-/* Unmerged change from project 'Moq(netstandard2.1)'
-Before:
-        private static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-After:
-        static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-*/
-
-/* Unmerged change from project 'Moq(net6.0)'
-Before:
-        private static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        private static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-After:
-        static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-        static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
-*/
 {
-    private static MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-    private static MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-    private static MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
+    private static readonly MethodInfo equalsMethod = typeof(object).GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance)!;
+    private static readonly MethodInfo getHashCodeMethod = typeof(object).GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance)!;
+    private static readonly MethodInfo toStringMethod = typeof(object).GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance)!;
 
     /// <summary/>
     [DebuggerHidden]
-    public sealed override bool Equals(object obj)
+    public sealed override bool Equals(object? obj)
     {
         // Forward this call to the interceptor, so that `object.Equals` can be set up.
         var interceptor = (IInterceptor)((IProxy)this).Interceptor;
@@ -81,40 +48,13 @@ After:
         var invocation = new Invocation(GetType(), toStringMethod);
         interceptor.Intercept(invocation);
         return (string)invocation.ReturnValue;
-
-        
-
-        
-
-        
     }
 
     private sealed class Invocation : MockU.Invocation
-
-    /* Unmerged change from project 'Moq(netstandard2.0)'
-    Before:
-                private static object[] noArguments = new object[0];
-    After:
-                static object[] noArguments = new object[0];
-    */
-
-    /* Unmerged change from project 'Moq(netstandard2.1)'
-    Before:
-                private static object[] noArguments = new object[0];
-    After:
-                static object[] noArguments = new object[0];
-    */
-
-    /* Unmerged change from project 'Moq(net6.0)'
-    Before:
-                private static object[] noArguments = new object[0];
-    After:
-                static object[] noArguments = new object[0];
-    */
     {
-        private static object[] noArguments = new object[0];
+        private static readonly object[] noArguments = Array.Empty<object>();
 
-        public Invocation(Type proxyType, MethodInfo method, params object[] arguments)
+        public Invocation(Type proxyType, MethodInfo method, params object?[] arguments)
             : base(proxyType, method, arguments)
         {
         }

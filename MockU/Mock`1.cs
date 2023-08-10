@@ -3,10 +3,6 @@ using System.Text;
 
 using MockU.Expressions.Visitors;
 using MockU.Interception;
-using MockU.Language;
-using MockU.Language.Flow;
-
-using Moq;
 
 namespace MockU;
 
@@ -65,7 +61,7 @@ namespace MockU;
 /// </example>
 public partial class Mock<T> : Mock, IMock<T> where T : class
 {
-    private static Type[] inheritedInterfaces;
+    private static readonly Type[] inheritedInterfaces;
     private static int serialNumberCounter;
 
     static Mock()
@@ -79,16 +75,16 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
         serialNumberCounter = 0;
     }
 
-    private T instance;
-    private List<Type> additionalInterfaces;
-    private Dictionary<Type, object> configuredDefaultValues;
-    private object[] constructorArguments;
+    private T? instance;
+    private readonly List<Type>? additionalInterfaces;
+    private readonly Dictionary<Type, object> configuredDefaultValues;
+    private readonly object?[] constructorArguments;
     private DefaultValueProvider defaultValueProvider;
-    private EventHandlerCollection eventHandlers;
-    private InvocationCollection invocations;
-    private SetupCollection setups;
+    private readonly EventHandlerCollection eventHandlers;
+    private readonly InvocationCollection invocations;
+    private readonly SetupCollection setups;
 
-    private MockBehavior behavior;
+    private readonly MockBehavior behavior;
     private bool callBase;
     private Switches switches;
 
@@ -134,7 +130,7 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///     var mock = new Mock&lt;MyProvider&gt;(someArgument, 25);
     ///   </code>
     /// </example>
-    public Mock(params object[] args)
+    public Mock(params object?[] args)
         : this(MockBehavior.Default, args)
     {
     }
@@ -149,7 +145,7 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///   </code>
     /// </example>
     public Mock(MockBehavior behavior)
-        : this(behavior, new object[0])
+        : this(behavior, Array.Empty<object>())
     {
     }
 
@@ -163,14 +159,11 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///   The mock will try to find the best match constructor given the constructor arguments,
     ///   and invoke that to initialize the instance. This applies only to classes, not interfaces.
     /// </remarks>
-    public Mock(MockBehavior behavior, params object[] args)
+    public Mock(MockBehavior behavior, params object?[]? args)
     {
         Guard.IsMockable(typeof(T));
 
-        if (args == null)
-        {
-            args = new object[] { null };
-        }
+        args ??= new object?[1] { null };
 
         additionalInterfaces = new List<Type>();
         this.behavior = behavior;
@@ -197,12 +190,6 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     /// </example>
     public Mock(Expression<Func<T>> newExpression, MockBehavior behavior = MockBehavior.Default)
         : this(behavior, ConstructorCallVisitor.ExtractArgumentValues(newExpression))
-
-    
-
-    
-
-    
     {
     }
 
@@ -213,12 +200,6 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
         var name = new StringBuilder();
         name.Append("Mock<").AppendNameOf(typeof(T)).Append(':').Append(serialNumber).Append('>');
         return name.ToString();
-
-        
-
-        
-
-        
     }
 
     private void CheckParameters()
@@ -635,7 +616,7 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///     Assert.Equal(6, v.Value);
     ///   </code>
     /// </example>
-    public Mock<T> SetupProperty<TProperty>(Expression<Func<T, TProperty>> property, TProperty initialValue)
+    public Mock<T> SetupProperty<TProperty>(Expression<Func<T, TProperty>> property, TProperty? initialValue)
     {
         SetupProperty(this, property, initialValue);
         return this;

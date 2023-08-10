@@ -4,16 +4,15 @@ using System.Diagnostics;
 namespace MockU.Matchers;
 
 internal class ConstantMatcher : IMatcher
-
 {
-    private object constantValue;
+    private readonly object constantValue;
 
     public ConstantMatcher(object constantValue)
     {
         this.constantValue = constantValue;
     }
 
-    public bool Matches(object argument, Type parameterType)
+    public bool Matches(object? argument, Type parameterType)
     {
         if (Equals(argument, constantValue))
         {
@@ -21,7 +20,7 @@ internal class ConstantMatcher : IMatcher
         }
 
         if (constantValue is IEnumerable && argument is IEnumerable enumerable &&
-            !(constantValue is IMocked) && !(argument is IMocked))
+            constantValue is not IMocked && argument is not IMocked)
         // the above checks on the second line are necessary to ensure we have usable
         // implementations of IEnumerable, which might very well not be the case for
         // mocked objects.
@@ -35,12 +34,6 @@ internal class ConstantMatcher : IMatcher
     public void SetupEvaluatedSuccessfully(object argument, Type parameterType)
     {
         Debug.Assert(Matches(argument, parameterType));
-
-        
-
-        
-
-        
     }
 
     private bool MatchesEnumerable(IEnumerable enumerable)

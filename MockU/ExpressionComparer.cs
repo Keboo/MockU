@@ -5,30 +5,25 @@ using MockU.Expressions.Visitors;
 
 namespace MockU;
 
-internal sealed class ExpressionComparer : IEqualityComparer<Expression>
+internal sealed class ExpressionComparer : IEqualityComparer<Expression?>
 {
-    public static readonly ExpressionComparer Default = new ExpressionComparer();
+    public static readonly ExpressionComparer Default = new();
 
     [ThreadStatic]
     private static int quoteDepth = 0;
 
-    
-
-    
-
-    
     private ExpressionComparer()
     {
     }
 
-    public bool Equals(Expression x, Expression y)
+    public bool Equals(Expression? x, Expression? y)
     {
         if (ReferenceEquals(x, y))
         {
             return true;
         }
 
-        if (x == null || y == null)
+        if (x is null || y is null)
         {
             return false;
         }
@@ -135,15 +130,9 @@ internal sealed class ExpressionComparer : IEqualityComparer<Expression>
         return false;
     }
 
-    public int GetHashCode(Expression obj)
+    public int GetHashCode(Expression? obj)
     {
-        return obj == null ? 0 : obj.GetHashCode();
-
-        
-
-        
-
-        
+        return obj is null ? 0 : obj.GetHashCode();
     }
 
     private static bool Equals<T>(ReadOnlyCollection<T> x, ReadOnlyCollection<T> y, Func<T, T, bool> comparer)
@@ -162,57 +151,27 @@ internal sealed class ExpressionComparer : IEqualityComparer<Expression>
         }
 
         return true;
-
-        
-
-        
-
-        
     }
 
     private bool EqualsBinary(BinaryExpression x, BinaryExpression y)
     {
         return x.Method == y.Method && Equals(x.Left, y.Left) && Equals(x.Right, y.Right) &&
             Equals(x.Conversion, y.Conversion);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsConditional(ConditionalExpression x, ConditionalExpression y)
     {
         return Equals(x.Test, y.Test) && Equals(x.IfTrue, y.IfTrue) && Equals(x.IfFalse, y.IfFalse);
-
-        
-
-        
-
-        
     }
 
     private static bool EqualsConstant(ConstantExpression x, ConstantExpression y)
     {
         return Equals(x.Value, y.Value);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsElementInit(ElementInit x, ElementInit y)
     {
         return x.AddMethod == y.AddMethod && Equals(x.Arguments, y.Arguments, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsIndex(IndexExpression x, IndexExpression y)
@@ -220,58 +179,28 @@ internal sealed class ExpressionComparer : IEqualityComparer<Expression>
         return Equals(x.Object, y.Object)
             && Equals(x.Indexer, y.Indexer)
             && Equals(x.Arguments, y.Arguments, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsInvocation(InvocationExpression x, InvocationExpression y)
     {
         return Equals(x.Expression, y.Expression) && Equals(x.Arguments, y.Arguments, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsLambda(LambdaExpression x, LambdaExpression y)
     {
         return x.GetType() == y.GetType() && Equals(x.Body, y.Body) &&
             Equals(x.Parameters, y.Parameters, EqualsParameter);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsListInit(ListInitExpression x, ListInitExpression y)
     {
         return EqualsNew(x.NewExpression, y.NewExpression) &&
             Equals(x.Initializers, y.Initializers, EqualsElementInit);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMemberAssignment(MemberAssignment x, MemberAssignment y)
     {
         return Equals(x.Expression, y.Expression);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMemberBinding(MemberBinding x, MemberBinding y)
@@ -288,127 +217,61 @@ internal sealed class ExpressionComparer : IEqualityComparer<Expression>
         }
 
         return false;
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMember(MemberExpression x, MemberExpression y)
     {
         return x.Member == y.Member && Equals(x.Expression, y.Expression);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMemberInit(MemberInitExpression x, MemberInitExpression y)
     {
         return EqualsNew(x.NewExpression, y.NewExpression) &&
             Equals(x.Bindings, y.Bindings, EqualsMemberBinding);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMemberListBinding(MemberListBinding x, MemberListBinding y)
     {
         return Equals(x.Initializers, y.Initializers, EqualsElementInit);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMemberMemberBinding(MemberMemberBinding x, MemberMemberBinding y)
     {
         return Equals(x.Bindings, y.Bindings, EqualsMemberBinding);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsMethodCall(MethodCallExpression x, MethodCallExpression y)
     {
         return x.Method == y.Method && Equals(x.Object, y.Object) &&
             Equals(x.Arguments, y.Arguments, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsNewArray(NewArrayExpression x, NewArrayExpression y)
     {
         return x.Type == y.Type && Equals(x.Expressions, y.Expressions, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsNew(NewExpression x, NewExpression y)
     {
         return x.Constructor == y.Constructor && Equals(x.Arguments, y.Arguments, Equals);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsParameter(ParameterExpression x, ParameterExpression y)
     {
         return x.Type == y.Type;
-
-        
-
-        
-
-        
     }
 
     private bool EqualsTypeBinary(TypeBinaryExpression x, TypeBinaryExpression y)
     {
         return x.TypeOperand == y.TypeOperand && Equals(x.Expression, y.Expression);
-
-        
-
-        
-
-        
     }
 
     private bool EqualsUnary(UnaryExpression x, UnaryExpression y)
     {
         return x.Method == y.Method && Equals(x.Operand, y.Operand);
-
-        
-
-        
-
-        
     }
 
-    private bool EqualsExtension(Expression x, Expression y)
+    private static bool EqualsExtension(Expression x, Expression y)
     {
         // For now, we only care about our own `MatchExpression` extension;
         // if we wanted to be more thorough, we'd try to reduce `x` and `y`,

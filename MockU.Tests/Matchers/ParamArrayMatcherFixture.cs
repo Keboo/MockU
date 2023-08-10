@@ -16,7 +16,7 @@ public class ParamArrayMatcherFixture
         var seconds = new List<string>();
         var methodCallExpr = (MethodCallExpression)ToExpression<IX>(x => x.Method(It.IsAny<int>(), Capture.In(seconds))).Body;
         var expr = methodCallExpr.Arguments.Single();
-        var parameter = typeof(IX).GetMethod("Method").GetParameters().Single();
+        var parameter = typeof(IX).GetMethod("Method")!.GetParameters().Single();
 
         var (matcher, _) = MatcherFactory.CreateMatcher(expr, parameter);
 
@@ -29,7 +29,7 @@ public class ParamArrayMatcherFixture
         var seconds = new List<string>();
         var methodCallExpr = (MethodCallExpression)ToExpression<IX>(x => x.Method(It.IsAny<int>(), Capture.In(seconds))).Body;
         var expr = methodCallExpr.Arguments.Single();
-        var parameter = typeof(IX).GetMethod("Method").GetParameters().Single();
+        var parameter = typeof(IX).GetMethod("Method")!.GetParameters().Single();
 
         var (matcher, _) = MatcherFactory.CreateMatcher(expr, parameter);
 
