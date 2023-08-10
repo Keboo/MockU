@@ -13,6 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
@@ -23,5 +24,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MockU\MockU.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MockU" />
+    <Using Include="MockU.Async" />
+    <Using Include="MockU.Behaviors" />
+    <Using Include="MockU.Interception" />
+    <Using Include="MockU.Language" />
+    <Using Include="MockU.Language.Flow" />
+    <Using Include="MockU.Linq" />
+    <Using Include="MockU.Protected" />
   </ItemGroup>
 </Project>
