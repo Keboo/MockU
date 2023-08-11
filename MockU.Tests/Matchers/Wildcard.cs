@@ -34,7 +34,7 @@ public class AnyValue : ISomeService
         throw new NotImplementedException();
     }
 
-    int ISomeService.DoSomething(ISomeService a, GearId b, int c)
+    int ISomeService.DoSomething(ISomeService? a, GearId b, int c)
     {
         throw new NotImplementedException();
     }
@@ -44,17 +44,17 @@ public class AnyValue : ISomeService
         throw new NotImplementedException();
     }
 
-    int ISomeService.UseAnimal(Animal a)
+    int ISomeService.UseAnimal(Animal? a)
     {
         throw new NotImplementedException();
     }
 
-    int ISomeService.UseDolphin(Dolphin a)
+    int ISomeService.UseDolphin(Dolphin? a)
     {
         throw new NotImplementedException();
     }
 
-    int ISomeService.UseInterface(ISomeService a)
+    int ISomeService.UseInterface(ISomeService? a)
     {
         throw new NotImplementedException();
     }
@@ -62,15 +62,15 @@ public class AnyValue : ISomeService
     public static implicit operator int(AnyValue _) => default;
     public static implicit operator byte(AnyValue _) => default;
     public static implicit operator GearId(AnyValue _) => default;
-    public static implicit operator Animal(AnyValue _) => default;
-    public static implicit operator Dolphin(AnyValue _) => default;
+    public static implicit operator Animal?(AnyValue _) => default;
+    public static implicit operator Dolphin?(AnyValue _) => default;
 }
 
 
 public class Tests
 {
-    Mock<ISomeService> mock;
-    ISomeService obj;
+    private readonly Mock<ISomeService> mock;
+    private readonly ISomeService obj;
 
     public Tests()
     {
@@ -144,10 +144,10 @@ public interface ISomeService
 {
     int Echo(int a);
     int Calc(int a, int b, int c, int d);
-    int UseInterface(ISomeService a);
-    int DoSomething(ISomeService a, GearId b, int c);
-    int UseAnimal(Animal a);
-    int UseDolphin(Dolphin a);
+    int UseInterface(ISomeService? a);
+    int DoSomething(ISomeService? a, GearId b, int c);
+    int UseAnimal(Animal? a);
+    int UseDolphin(Dolphin? a);
 }
 
 
@@ -161,7 +161,7 @@ public class SomeService : ISomeService
         throw new NotImplementedException();
     }
 
-    public int DoSomething(ISomeService a, GearId b, int c)
+    public int DoSomething(ISomeService? a, GearId b, int c)
     {
         throw new NotImplementedException();
     }
@@ -171,17 +171,17 @@ public class SomeService : ISomeService
         throw new NotImplementedException();
     }
 
-    public int UseAnimal(Animal a)
+    public int UseAnimal(Animal? a)
     {
         throw new NotImplementedException();
     }
 
-    public int UseDolphin(Dolphin a)
+    public int UseDolphin(Dolphin? a)
     {
         throw new NotImplementedException();
     }
 
-    public int UseInterface(ISomeService a)
+    public int UseInterface(ISomeService? a)
     {
         throw new NotImplementedException();
     }

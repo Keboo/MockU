@@ -46,12 +46,12 @@ public class AnyMatcherFixture
         Assert.False(matcher.Matches("foo", typeof(IFormatProvider)));
     }
 
-    static LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
+    private static LambdaExpression ToExpression<TResult>(Expression<Func<TResult>> expr)
     {
         return expr;
     }
 
-    class Disposable : IDisposable
+    private class Disposable : IDisposable
     {
         public void Dispose()
         {

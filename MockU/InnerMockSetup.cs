@@ -4,11 +4,10 @@ using System.Linq.Expressions;
 namespace MockU;
 
 internal sealed class InnerMockSetup : SetupWithOutParameterSupport
-
 {
-    private readonly object returnValue;
+    private readonly object? returnValue;
 
-    public InnerMockSetup(Expression originalExpression, Mock mock, MethodExpectation expectation, object returnValue)
+    public InnerMockSetup(Expression originalExpression, Mock mock, MethodExpectation expectation, object? returnValue)
         : base(originalExpression, mock, expectation)
     {
         Debug.Assert(Awaitable.TryGetResultRecursive(returnValue) is IMocked);

@@ -162,7 +162,7 @@ public class MockedDelegatesFixture
         */
     }
 
-    static void Use(Action<int> action, int valueToPass)
+    private static void Use(Action<int> action, int valueToPass)
     {
         action(valueToPass);
 
@@ -174,20 +174,18 @@ public class MockedDelegatesFixture
         */
     }
 
-    static string UseAndGetReturn(Func<int, string> func, int valueToPass)
+    private static string UseAndGetReturn(Func<int, string> func, int valueToPass)
     {
         return func(valueToPass);
 
         
     }
 
-    class NotifyingObject : INotifyPropertyChanged
+    private class NotifyingObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-        
-        int value;
+        private int value;
         public int Value
         {
             get { return value; }

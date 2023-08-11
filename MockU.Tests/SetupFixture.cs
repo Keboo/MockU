@@ -154,7 +154,7 @@ public class SetupFixture
     [Fact]
     public void OriginalExpression_returns_whole_multi_dot_expression()
     {
-        Expression<Func<IX, string>> originalExpression = m => m.Inner[1].ToString();
+        Expression<Func<IX, string?>> originalExpression = m => m.Inner[1].ToString();
         var mock = new Mock<IX>();
         mock.Setup(originalExpression);
         var setup = mock.Setups.First();
@@ -165,7 +165,7 @@ public class SetupFixture
     [Fact]
     public void OriginalExpression_same_for_all_partial_setups_resulting_from_it()
     {
-        Expression<Func<IX, string>> originalExpression = m => m.Inner[1].ToString();
+        Expression<Func<IX, string?>> originalExpression = m => m.Inner[1].ToString();
         var mock = new Mock<IX>();
         mock.Setup(originalExpression);
 
@@ -176,7 +176,7 @@ public class SetupFixture
         }
 
         // (using `HashSet` to automatically filter out duplicates:)
-        var originalExpressions = new HashSet<Expression>(setups.Select(s => s.OriginalExpression));
+        var originalExpressions = new HashSet<Expression?>(setups.Select(s => s.OriginalExpression));
         Assert.Single(originalExpressions);
     }
 
@@ -216,7 +216,7 @@ public class SetupFixture
     public void InnerMock_is_null_if_return_value_can_be_determined_but_is_not_a_mock()
     {
         var mock = new Mock<IX>();
-        mock.Setup(m => m.Inner).Returns((IX)null);
+        mock.Setup(m => m.Inner).Returns((IX?)null);
         var setup = mock.Setups.First();
 
         Assert.Null(setup.InnerMock);
@@ -457,8 +457,8 @@ public class SetupFixture
     {
         IX this[int index] { get; }
         IX Inner { get; }
-        object Property { get; set; }
-        object OtherProperty { get; set; }
+        object? Property { get; set; }
+        object? OtherProperty { get; set; }
         Task<IX> GetInnerTaskAsync();
         ValueTask<IX> GetInnerValueTaskAsync();
     }

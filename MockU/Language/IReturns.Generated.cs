@@ -1,4 +1,5 @@
 
+#nullable enable
 using System;
 using System.ComponentModel;
 using MockU.Language.Flow;
@@ -28,7 +29,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2) => arg1 + arg2);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2>(Func<T1, T2, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2>(Func<T1, T2, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -53,7 +54,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3) => arg1 + arg2 + arg3);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3>(Func<T1, T2, T3, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3>(Func<T1, T2, T3, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -80,7 +81,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4) => arg1 + arg2 + arg3 + arg4);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4>(Func<T1, T2, T3, T4, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4>(Func<T1, T2, T3, T4, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -109,7 +110,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5) => arg1 + arg2 + arg3 + arg4 + arg5);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -140,7 +141,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -173,7 +174,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7>(Func<T1, T2, T3, T4, T5, T6, T7, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -208,7 +209,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -245,7 +246,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -284,7 +285,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -325,7 +326,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -368,7 +369,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11, int arg12) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11 + arg12);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -413,7 +414,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11, int arg12, int arg13) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11 + arg12 + arg13);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -460,7 +461,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11, int arg12, int arg13, int arg14) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11 + arg12 + arg13 + arg14);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -509,7 +510,7 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11, int arg12, int arg13, int arg14, int arg15) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11 + arg12 + arg13 + arg14 + arg15);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult?> valueFunction);
 
 		/// <summary>
 		/// Specifies a function that will calculate the value to return from the method, 
@@ -560,6 +561,6 @@ namespace MockU.Language
 		///     .Returns((int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11, int arg12, int arg13, int arg14, int arg15, int arg16) => arg1 + arg2 + arg3 + arg4 + arg5 + arg6 + arg7 + arg8 + arg9 + arg10 + arg11 + arg12 + arg13 + arg14 + arg15 + arg16);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult?> valueFunction);
 	}
 }

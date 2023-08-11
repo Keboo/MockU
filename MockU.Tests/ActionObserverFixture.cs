@@ -202,7 +202,7 @@ public class ActionObserverFixture
         }
 
         [Fact]
-        public void Widening_and_narrowing_and_enum_convertions()
+        public void Widening_and_narrowing_and_enum_conversions()
         {
             ushort arg = 123;
             AssertReconstructable(
@@ -245,32 +245,18 @@ public class ActionObserverFixture
             AssertReconstructable(
                 x => x.VoidWithInt(It.IsAny<short>()),
                 x => x.VoidWithInt(It.IsAny<short>()));
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                        private void AssertReconstructable(string expected, Action<IX> action)
-            After:
-                        void AssertReconstructable(string expected, Action<IX> action)
-            */
         }
 
-        void AssertReconstructable(string expected, Action<IX> action)
+        private static void AssertReconstructable(string expected, Action<IX> action)
         {
-            Expression actual = ActionObserver.Instance.ReconstructExpression(action);
+            Expression actual = ExpressionReconstructor.Instance.ReconstructExpression(action);
             actual = PrepareForComparison.Instance.Visit(actual);
             Assert.Equal(expected, actual.ToStringFixed());
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                        private void AssertReconstructable(Expression<Action<IX>> expected, Action<IX> action)
-            After:
-                        void AssertReconstructable(Expression<Action<IX>> expected, Action<IX> action)
-            */
         }
 
-        void AssertReconstructable(Expression<Action<IX>> expected, Action<IX> action)
+        private static void AssertReconstructable(Expression<Action<IX>> expected, Action<IX> action)
         {
-            Expression actual = ActionObserver.Instance.ReconstructExpression(action);
+            Expression actual = ExpressionReconstructor.Instance.ReconstructExpression(action);
             expected = (Expression<Action<IX>>)PrepareForComparison.Instance.Visit(expected);
             actual = PrepareForComparison.Instance.Visit(actual);
             Assert.Equal(expected, actual, ExpressionComparer.Default);
@@ -278,7 +264,7 @@ public class ActionObserverFixture
 
         public interface IX
         {
-            IY this[int index] { get; set; }
+            IY? this[int index] { get; set; }
             int this[int index1, int index2] { get; set; }
             IY GetY();
             IY GetY(int arg);
@@ -332,16 +318,9 @@ public class ActionObserverFixture
         public void Stops_after_non_interceptable_return_type()
         {
             AssertFailsAfter<IX>("x => x.SealedY...", x => x.SealedY.Method());
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                        private void AssertFailsAfter<TRoot>(string expectedPartial, Action<TRoot> action)
-            After:
-                        void AssertFailsAfter<TRoot>(string expectedPartial, Action<TRoot> action)
-            */
         }
 
-        void AssertFailsAfter<TRoot>(string expectedPartial, Action<TRoot> action)
+        private static void AssertFailsAfter<TRoot>(string expectedPartial, Action<TRoot> action)
         {
             var error = Assert.Throws<ArgumentException>(() => ActionObserver.Instance.ReconstructExpression(action));
             Assert.Contains($": {expectedPartial}", error.Message);
@@ -355,7 +334,7 @@ public class ActionObserverFixture
 
         public class X
         {
-            public IY NonVirtualProperty { get; set; }
+            public IY? NonVirtualProperty { get; set; }
             public void NonVirtual() { }
         }
 
@@ -399,7 +378,7 @@ public class ActionObserverFixture
             */
         }
 
-        void AssertIncorrectlyReconstructsAs(string expected, Action<IX> action)
+        private void AssertIncorrectlyReconstructsAs(string expected, Action<IX> action)
         {
             Expression actual = ActionObserver.Instance.ReconstructExpression(action);
             actual = PrepareForComparison.Instance.Visit(actual);
@@ -413,7 +392,7 @@ public class ActionObserverFixture
             */
         }
 
-        void AssertIncorrectlyReconstructsAs(Expression<Action<IX>> expected, Action<IX> action)
+        private void AssertIncorrectlyReconstructsAs(Expression<Action<IX>> expected, Action<IX> action)
         {
             Expression actual = ActionObserver.Instance.ReconstructExpression(action);
             expected = (Expression<Action<IX>>)PrepareForComparison.Instance.Visit(expected);
@@ -436,16 +415,16 @@ public class ActionObserverFixture
     // differences, making above tests fail. Because of this, we try to "equalize"
     // expressions created by the Roslyn compilers (`expected`) and those produced
     // by `ActionObserver` (`actual`) using this expression visitor:
-    sealed class PrepareForComparison : ExpressionVisitor
+    private sealed class PrepareForComparison : ExpressionVisitor
     {
-        public static readonly PrepareForComparison Instance = new PrepareForComparison();
+        public static readonly PrepareForComparison Instance = new ();
 
         protected override Expression VisitExtension(Expression node)
         {
-            if (node is MatchExpression me)
+            if (node is MatchExpression me && me.Match.RenderExpression is { } renderExpression)
             {
                 // Resolve `MatchExpression`s to their matcher's `RenderExpression`:
-                return me.Match.RenderExpression;
+                return renderExpression;
             }
             else
             {

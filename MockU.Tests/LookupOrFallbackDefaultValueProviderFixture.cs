@@ -67,7 +67,7 @@ public class LookupOrFallbackDefaultValueProviderFixture
         provider.Register(typeof(Array), (type, __) =>
         {
             var elementType = type.GetElementType();
-            return Array.CreateInstance(elementType, 0);
+            return Array.CreateInstance(elementType!, 0);
         });
 
         var actual = provider.GetDefaultValue(typeof(int[]));
@@ -81,9 +81,9 @@ public class LookupOrFallbackDefaultValueProviderFixture
     {
         var provider = new Provider();
 
-        var actual = (Task)provider.GetDefaultValue(typeof(Task));
+        var actual = (Task?)provider.GetDefaultValue(typeof(Task));
 
-        Assert.True(actual.IsCompleted);
+        Assert.True(actual?.IsCompleted);
     }
 
     [Fact]
@@ -104,10 +104,10 @@ public class LookupOrFallbackDefaultValueProviderFixture
         var provider = new Provider();
         provider.Register(typeof(int), (_, __) => expected);
 
-        var actual = (Task<int>)provider.GetDefaultValue(typeof(Task<int>));
+        var actual = (Task<int>?)provider.GetDefaultValue(typeof(Task<int>));
 
-        Assert.True(actual.IsCompleted);
-        Assert.Equal(42, actual.Result);
+        Assert.True(actual?.IsCompleted);
+        Assert.Equal(42, actual!.Result);
     }
 
     [Fact]
@@ -128,10 +128,10 @@ public class LookupOrFallbackDefaultValueProviderFixture
         var provider = new Provider();
         provider.Register(typeof(int), (_, __) => expectedResult);
 
-        var actual = (ValueTask<int>)provider.GetDefaultValue(typeof(ValueTask<int>));
+        var actual = (ValueTask<int>?)provider.GetDefaultValue(typeof(ValueTask<int>));
 
-        Assert.True(actual.IsCompleted);
-        Assert.Equal(42, actual.Result);
+        Assert.True(actual?.IsCompleted);
+        Assert.Equal(42, actual?.Result);
     }
 
     [Fact]
@@ -150,10 +150,10 @@ public class LookupOrFallbackDefaultValueProviderFixture
         provider.Register(typeof(int), (_, __) => unexpected);
         provider.Deregister(typeof(ValueTask<>));
 
-        var actual = (ValueTask<int>)provider.GetDefaultValue(typeof(ValueTask<int>));
+        var actual = (ValueTask<int>?)provider.GetDefaultValue(typeof(ValueTask<int>));
 
         Assert.Equal(default, actual);
-        Assert.NotEqual(unexpected, actual.Result);
+        Assert.NotEqual(unexpected, actual?.Result);
     }
 
     [Fact]
@@ -165,10 +165,10 @@ public class LookupOrFallbackDefaultValueProviderFixture
         provider.Register(typeof(int), (_, __) => expectedIntResult);
         provider.Register(typeof(string), (_, __) => expectedStringResult);
 
-        var actual = ((int, string))provider.GetDefaultValue(typeof(ValueTuple<int, string>));
+        var actual = ((int, string)?)provider.GetDefaultValue(typeof(ValueTuple<int, string>));
 
-        Assert.Equal(expectedIntResult, actual.Item1);
-        Assert.Equal(expectedStringResult, actual.Item2);
+        Assert.Equal(expectedIntResult, actual?.Item1);
+        Assert.Equal(expectedStringResult, actual?.Item2);
     }
 
     [Fact]
@@ -182,11 +182,11 @@ public class LookupOrFallbackDefaultValueProviderFixture
         provider.Register(typeof(float), (_, __) => expectedFloatResult);
         provider.Register(typeof(string), (_, __) => expectedStringResult);
 
-        var actual = ((int, float, string))provider.GetDefaultValue(typeof(ValueTuple<int, float, string>));
+        var actual = ((int, float, string?)?)provider.GetDefaultValue(typeof(ValueTuple<int, float, string>));
 
-        Assert.Equal(expectedIntResult, actual.Item1);
-        Assert.Equal(expectedFloatResult, actual.Item2);
-        Assert.Equal(expectedStringResult, actual.Item3);
+        Assert.Equal(expectedIntResult, actual!.Value.Item1);
+        Assert.Equal(expectedFloatResult, actual.Value.Item2);
+        Assert.Equal(expectedStringResult, actual.Value.Item3);
     }
 
     [Fact]
@@ -201,9 +201,9 @@ public class LookupOrFallbackDefaultValueProviderFixture
         provider.Register(typeof(int), (_, __) => unexpectedInt);
         provider.Deregister(typeof(ValueTuple<,>));
 
-        var actual = ((string, int))provider.GetDefaultValue(typeof((string, int)));
+        var actual = ((string, int)?)provider.GetDefaultValue(typeof((string, int)));
 
-        Assert.Equal((default(string), default(int)), actual);
+        Assert.Equal(("", 0), actual);
         Assert.NotEqual((unexpectedString, unexpectedInt), actual);
 
         
@@ -212,7 +212,7 @@ public class LookupOrFallbackDefaultValueProviderFixture
     /// <summary>
     /// Subclass of <see cref="LookupOrFallbackDefaultValueProvider"/> used as a test surrogate.
     /// </summary>
-    sealed class Provider : LookupOrFallbackDefaultValueProvider
+    private sealed class Provider : LookupOrFallbackDefaultValueProvider
 
     /* Unmerged change from project 'Moq.Tests(net6.0)'
     Before:
@@ -223,16 +223,16 @@ public class LookupOrFallbackDefaultValueProviderFixture
                 Func<Type, Mock, object> fallback;
     */
     {
-        Mock<object> mock;
-        Func<Type, Mock, object> fallback;
+        private readonly Mock<object> mock;
+        private readonly Func<Type, Mock, object>? fallback;
 
-        public Provider(Func<Type, Mock, object> fallback = null)
+        public Provider(Func<Type, Mock, object>? fallback = null)
         {
             mock = new Mock<object>();
             this.fallback = fallback;
         }
 
-        public object GetDefaultValue(Type type)
+        public object? GetDefaultValue(Type type)
         {
             return GetDefaultValue(type, mock);
         }
@@ -247,7 +247,7 @@ public class LookupOrFallbackDefaultValueProviderFixture
             base.Register(factoryKey, factory);
         }
 
-        protected override object GetFallbackDefaultValue(Type type, Mock mock)
+        protected override object? GetFallbackDefaultValue(Type type, Mock mock)
         {
             return fallback?.Invoke(type, mock)
                 ?? base.GetFallbackDefaultValue(type, mock);

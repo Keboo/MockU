@@ -291,7 +291,7 @@ public class StubExtensionsFixture
         */
     }
 
-    object GetValue() { return new object(); }
+    private object GetValue() { return new object(); }
 
     public interface IFoo
     {
@@ -303,7 +303,7 @@ public class StubExtensionsFixture
 
     public class Derived : Base
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 
     public abstract class Base : IBar
@@ -317,7 +317,7 @@ public class StubExtensionsFixture
         int Value { get; set; }
     }
 
-    class Bar : IBar
+    private class Bar : IBar
     {
         public int Value { get; set; }
     }
@@ -334,16 +334,16 @@ public class StubExtensionsFixture
 
     public class WithAutoProperty
     {
-        public virtual object Property { get; set; }
+        public virtual object? Property { get; set; }
     }
 
     public class OverridesOnlySetter : WithAutoProperty
     {
-        public override object Property { set => base.Property = value; }
+        public override object? Property { set => base.Property = value; }
     }
 
     public class OverridesOnlyGetter : WithAutoProperty
     {
-        public override object Property { get => base.Property; }
+        public override object? Property { get => base.Property; }
     }
 }

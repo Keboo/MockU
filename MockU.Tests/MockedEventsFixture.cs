@@ -170,9 +170,9 @@ public class MockedEventsFixture
         mock.Object.Added += (sender, args) =>
         {
             raised = true;
-            Assert.True(args is FooArgs);
-            Assert.Equal("foo", ((FooArgs)args).Args[0]);
-            Assert.Equal(5, ((FooArgs)args).Args[1]);
+            FooArgs fooArgs = Assert.IsType<FooArgs>(args);
+            Assert.Equal("foo", fooArgs.Args?[0]);
+            Assert.Equal(5, fooArgs.Args![1]);
         };
 
         mock.Object.Do("foo", 5);
@@ -181,7 +181,6 @@ public class MockedEventsFixture
     }
 
     [Fact]
-    [SuppressMessage("Assertions", "xUnit2004")]
     public void ShouldRaiseEventWithFuncThreeArgs()
     {
         var mock = new Mock<IAdder<string>>();
@@ -194,10 +193,10 @@ public class MockedEventsFixture
         mock.Object.Added += (sender, args) =>
         {
             raised = true;
-            Assert.True(args is FooArgs);
-            Assert.Equal("foo", ((FooArgs)args).Args[0]);
-            Assert.Equal(5, ((FooArgs)args).Args[1]);
-            Assert.Equal(true, ((FooArgs)args).Args[2]);
+            FooArgs fooArgs = Assert.IsType<FooArgs>(args);
+            Assert.Equal("foo", fooArgs.Args![0]);
+            Assert.Equal(5, fooArgs.Args[1]);
+            Assert.Equal(true, fooArgs.Args[2]);
         };
 
         mock.Object.Do("foo", 5, true);
@@ -206,7 +205,6 @@ public class MockedEventsFixture
     }
 
     [Fact]
-    [SuppressMessage("Assertions", "xUnit2004")]
     public void ShouldRaiseEventWithFuncFourArgs()
     {
         var mock = new Mock<IAdder<string>>();
@@ -219,11 +217,11 @@ public class MockedEventsFixture
         mock.Object.Added += (sender, args) =>
         {
             raised = true;
-            Assert.True(args is FooArgs);
-            Assert.Equal("foo", ((FooArgs)args).Args[0]);
-            Assert.Equal(5, ((FooArgs)args).Args[1]);
-            Assert.Equal(true, ((FooArgs)args).Args[2]);
-            Assert.Equal("bar", ((FooArgs)args).Args[3]);
+            FooArgs fooArgs = Assert.IsType<FooArgs>(args);
+            Assert.Equal("foo", fooArgs.Args?[0]);
+            Assert.Equal(5, fooArgs.Args![1]);
+            Assert.Equal(true, fooArgs.Args[2]);
+            Assert.Equal("bar", fooArgs.Args[3]);
         };
 
         mock.Object.Do("foo", 5, true, "bar");
@@ -260,7 +258,7 @@ public class MockedEventsFixture
         Assert.False(raised);
     }
 
-    bool raisedField = false;
+    private bool raisedField = false;
 
     [Fact]
     public void ShouldAttachAndDetachListenerMethod()
@@ -396,20 +394,6 @@ public class MockedEventsFixture
             () => mock.SetupSet(m => m.Value = It.IsAny<int>()).Raises(m => m.ClassEvent += null, EventArgs.Empty));
     }
 
-    //[Fact(Skip = "Events on non-virtual events not supported yet")]
-    //public void EventRaisingFailsOnNonVirtualEvent()
-    //{
-    //	var mock = new Mock<WithEvent>();
-    //
-    //	var raised = false;
-    //	mock.Object.ClassEvent += delegate { raised = true; };
-    //
-    //	// TODO: fix!!! We should go the GetInvocationList route here...
-    //	mock.Raise(x => x.ClassEvent += null, EventArgs.Empty);
-    //
-    //	Assert.True(raised);
-    //}
-
     [Fact]
     public void EventRaisingSucceedsOnVirtualEvent()
     {
@@ -431,7 +415,7 @@ public class MockedEventsFixture
 
         mock.Setup(m => m.Do("foo")).Raises<string>(m => m.Done += null, s => new DoneArgs { Value = s });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo");
@@ -448,7 +432,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5))
             .Raises(m => m.Done += null, (string s, int i) => new DoneArgs { Value = s + i });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5);
@@ -465,7 +449,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true))
             .Raises(m => m.Done += null, (string s, int i, bool b) => new DoneArgs { Value = s + i + b });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true);
@@ -482,7 +466,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true, "bar"))
             .Raises(m => m.Done += null, (string s, int i, bool b, string s1) => new DoneArgs { Value = s + i + b + s1 });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true, "bar");
@@ -499,7 +483,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true, "bar", 5))
             .Raises(m => m.Done += null, (string s, int i, bool b, string s1, int arg5) => new DoneArgs { Value = s + i + b + s1 + arg5 });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true, "bar", 5);
@@ -516,7 +500,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true, "bar", 5, 6))
             .Raises(m => m.Done += null, (string s, int i, bool b, string s1, int arg5, int arg6) => new DoneArgs { Value = s + i + b + s1 + arg5 + arg6 });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true, "bar", 5, 6);
@@ -533,7 +517,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true, "bar", 5, 6, 7))
             .Raises(m => m.Done += null, (string s, int i, bool b, string s1, int arg5, int arg6, int arg7) => new DoneArgs { Value = s + i + b + s1 + arg5 + arg6 + arg7 });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true, "bar", 5, 6, 7);
@@ -550,7 +534,7 @@ public class MockedEventsFixture
         mock.Setup(m => m.Do("foo", 5, true, "bar", 5, 6, 7, 8))
             .Raises(m => m.Done += null, (string s, int i, bool b, string s1, int arg5, int arg6, int arg7, int arg8) => new DoneArgs { Value = s + i + b + s1 + arg5 + arg6 + arg7 + arg8 });
 
-        DoneArgs args = null;
+        DoneArgs? args = null;
         mock.Object.Done += (sender, e) => args = e;
 
         mock.Object.Do("foo", 5, true, "bar", 5, 6, 7, 8);
@@ -563,7 +547,7 @@ public class MockedEventsFixture
     public void RaisesCustomEventWithLambda()
     {
         var mock = new Mock<IWithEvent>();
-        string message = null;
+        string? message = null;
         int? value = null;
 
         mock.Object.CustomEvent += (s, i) => { message = s; value = i; };
@@ -578,7 +562,7 @@ public class MockedEventsFixture
     public void RaisesCustomEventWithLambdaOnPropertySet()
     {
         var mock = new Mock<IWithEvent>();
-        string message = null;
+        string? message = null;
         int? value = null;
 
         mock.Object.CustomEvent += (s, i) => { message = s; value = i; };
@@ -591,9 +575,9 @@ public class MockedEventsFixture
     }
 
     [Fact]
-    public void ShouldSuccessfullyAttachToEventForwaredToAProtectedEvent()
+    public void ShouldSuccessfullyAttachToEventForwardedToAProtectedEvent()
     {
-        var mock = new Mock<FordawrdEventDoProtectedImplementation>();
+        var mock = new Mock<ForwardEventDoProtectedImplementation>();
         INotifyPropertyChanged observable = mock.Object;
 
         observable.PropertyChanged += (sender, args) => { };
@@ -628,7 +612,7 @@ public class MockedEventsFixture
     [Fact]
     public void When_raising_event_on_inner_mock_args_arrive_in_handler()
     {
-        object received = null;
+        object? received = null;
         var parentMock = new Mock<IParent> { DefaultValue = DefaultValue.Mock };
         parentMock.Object.Adder.Done += (_, actual) => received = actual;
 
@@ -641,7 +625,7 @@ public class MockedEventsFixture
     [Fact]
     public void When_raising_event_on_inner_mock_sender_will_be_root_mock()
     {
-        object sender = null;
+        object? sender = null;
         var parentMock = new Mock<IParent> { DefaultValue = DefaultValue.Mock };
         parentMock.Object.Adder.Done += (s, _) => sender = s;
 
@@ -853,7 +837,7 @@ public class MockedEventsFixture
     {
         event EventHandler InterfaceEvent;
         event CustomEvent CustomEvent;
-        object Value { get; set; }
+        object? Value { get; set; }
     }
 
     public class WithEvent : IWithEvent
@@ -861,23 +845,21 @@ public class MockedEventsFixture
         public event EventHandler InterfaceEvent = (s, e) => { };
         public event EventHandler ClassEvent = (s, e) => { };
         public event CustomEvent CustomEvent = (s, e) => { };
-        public virtual event EventHandler VirtualEvent = (s, e) => { };
+        public virtual event EventHandler? VirtualEvent = (s, e) => { };
 
         public void OnVirtualEvent() => VirtualEvent?.Invoke(this, new EventArgs());
 
-        public virtual object Value { get; set; }
-
-        
+        public virtual object? Value { get; set; }
     }
 
-    void OnRaised(object sender, EventArgs e)
+    private void OnRaised(object? sender, EventArgs e)
     {
         raisedField = true;
     }
 
     public class DoneArgs : EventArgs
     {
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     public interface IAdder<T>
@@ -898,11 +880,11 @@ public class MockedEventsFixture
 
     public class FooPresenter
     {
-        public event EventHandler Fired;
+        public event EventHandler? Fired;
 
         public FooPresenter(IFooView view)
         {
-            view.FooSelected += (s, e) => Fired(s, e);
+            view.FooSelected += (s, e) => Fired?.Invoke(s, e);
             view.Canceled += (s, e) => Canceled = true;
         }
 
@@ -911,8 +893,8 @@ public class MockedEventsFixture
 
     public class FooArgs : EventArgs
     {
-        public object Value { get; set; }
-        public object[] Args { get; set; }
+        public object? Value { get; set; }
+        public object[]? Args { get; set; }
     }
 
     public interface IFooView
@@ -937,13 +919,11 @@ public class MockedEventsFixture
         event EventHandler<EventArgs> JustAnEvent;
     }
 
-    public class FordawrdEventDoProtectedImplementation : INotifyPropertyChanged
-
-    
+    public class ForwardEventDoProtectedImplementation : INotifyPropertyChanged
     {
-        PropertyChangedEventHandler eventHandler;
+        private PropertyChangedEventHandler? eventHandler;
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
         {
             add { PropertyChanged += value; }
             remove { PropertyChanged -= value; }

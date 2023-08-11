@@ -257,7 +257,7 @@ public class MockRepositoryFixture
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-            mockRepository.DefaultValueProvider = null;
+            mockRepository.DefaultValueProvider = null!;
         });
     }
 
@@ -302,7 +302,7 @@ public class MockRepositoryFixture
             Value = value;
         }
 
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         public virtual void BaseMethod()
         {

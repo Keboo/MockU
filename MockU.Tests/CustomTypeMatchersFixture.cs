@@ -259,7 +259,7 @@ public class CustomTypeMatchersFixture
                 readonly Type[] types;
     */
     {
-        readonly Type[] types;
+        private readonly Type[] types;
 
         public Picky(params Type[] types)
         {
@@ -295,7 +295,7 @@ public class CustomTypeMatchersFixture
 
     public class ObjectStringOrdinalIgnoreCaseComparer : IEqualityComparer<object>
     {
-        static IEqualityComparer<string> InternalComparer => StringComparer.OrdinalIgnoreCase;
+        private static IEqualityComparer<string> InternalComparer => StringComparer.OrdinalIgnoreCase;
 
         public new bool Equals(object? x, object? y)
         {

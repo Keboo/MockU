@@ -394,7 +394,7 @@ public class MatchersFixture
         
     }
 
-    int GetToRange()
+    private int GetToRange()
     {
         return 5;
     }

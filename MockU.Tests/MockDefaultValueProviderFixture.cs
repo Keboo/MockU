@@ -260,7 +260,7 @@ public class MockDefaultValueProviderFixture
         */
     }
 
-    static object GetDefaultValueForProperty(string propertyName, Mock<IFoo> mock)
+    private static object GetDefaultValueForProperty(string propertyName, Mock<IFoo> mock)
     {
         var propertyGetter = typeof(IFoo).GetProperty(propertyName).GetGetMethod();
         return DefaultValueProvider.Mock.GetDefaultReturnValue(propertyGetter, mock);

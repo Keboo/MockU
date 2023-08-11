@@ -43,7 +43,7 @@ public class ParamArrayMatcherFixture
         */
     }
 
-    LambdaExpression ToExpression<T>(Expression<Action<T>> expr)
+    private LambdaExpression ToExpression<T>(Expression<Action<T>> expr)
     {
         return expr;
     }

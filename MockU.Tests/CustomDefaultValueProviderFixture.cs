@@ -98,7 +98,7 @@ public class CustomDefaultValueProviderFixture
         
     }
 
-    sealed class ConstantDefaultValueProvider : DefaultValueProvider
+    private sealed class ConstantDefaultValueProvider : DefaultValueProvider
 
     
     {

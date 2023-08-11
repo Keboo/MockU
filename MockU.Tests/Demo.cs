@@ -11,7 +11,7 @@ After:
         static string TALISKER = "Talisker";
 */
 {
-    static string TALISKER = "Talisker";
+    private static readonly string TALISKER = "Talisker";
 
     [Fact]
     public void FillingRemovesInventoryIfInStock()
@@ -86,9 +86,7 @@ After:
 
         public Order SelectedOrder { get; private set; }
 
-
-        
-        void DoOrderSelection(Order selectedOrder)
+        private void DoOrderSelection(Order selectedOrder)
         {
             // Do something when the view selects an order.
             SelectedOrder = selectedOrder;

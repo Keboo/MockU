@@ -491,7 +491,7 @@ public abstract partial class Mock : IFluentInterface
 
     #region Setup
 
-    internal static MethodCall Setup(Mock mock, LambdaExpression expression, Condition? condition)
+    internal static MethodCall? Setup(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -503,7 +503,7 @@ public abstract partial class Mock : IFluentInterface
         });
     }
 
-    internal static MethodCall SetupGet(Mock mock, LambdaExpression expression, Condition? condition)
+    internal static MethodCall? SetupGet(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -516,7 +516,7 @@ public abstract partial class Mock : IFluentInterface
         return Mock.Setup(mock, expression, condition);
     }
 
-    internal static MethodCall SetupSet(Mock mock, LambdaExpression expression, Condition? condition)
+    internal static MethodCall? SetupSet(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsAssignmentToPropertyOrIndexer(expression, nameof(expression));
@@ -581,7 +581,7 @@ public abstract partial class Mock : IFluentInterface
         return true;
     }
 
-    internal static MethodCall SetupAdd(Mock mock, LambdaExpression expression, Condition? condition)
+    internal static MethodCall? SetupAdd(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventAdd(expression, nameof(expression));
@@ -589,7 +589,7 @@ public abstract partial class Mock : IFluentInterface
         return Mock.Setup(mock, expression, condition);
     }
 
-    internal static MethodCall SetupRemove(Mock mock, LambdaExpression expression, Condition? condition)
+    internal static MethodCall? SetupRemove(Mock mock, LambdaExpression expression, Condition? condition)
     {
         Guard.NotNull(expression, nameof(expression));
         Guard.IsEventRemove(expression, nameof(expression));
@@ -597,7 +597,7 @@ public abstract partial class Mock : IFluentInterface
         return Mock.Setup(mock, expression, condition);
     }
 
-    internal static SequenceSetup SetupSequence(Mock mock, LambdaExpression expression)
+    internal static SequenceSetup? SetupSequence(Mock mock, LambdaExpression expression)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -609,7 +609,7 @@ public abstract partial class Mock : IFluentInterface
         });
     }
 
-    internal static StubbedPropertySetup SetupProperty(Mock mock, LambdaExpression expression, object? initialValue)
+    internal static StubbedPropertySetup? SetupProperty(Mock mock, LambdaExpression expression, object? initialValue)
     {
         Guard.NotNull(expression, nameof(expression));
 
@@ -631,15 +631,9 @@ public abstract partial class Mock : IFluentInterface
             targetMock.MutableSetups.Add(setup);
             return setup;
         });
-
-        
-
-        
-
-        
     }
 
-    private static TSetup SetupRecursive<TSetup>(Mock mock, LambdaExpression expression, Func<Mock, Expression, MethodExpectation, TSetup> setupLast, bool allowNonOverridableLastProperty = false)
+    private static TSetup? SetupRecursive<TSetup>(Mock mock, LambdaExpression expression, Func<Mock, Expression, MethodExpectation, TSetup?> setupLast, bool allowNonOverridableLastProperty = false)
         where TSetup : ISetup
     {
         Debug.Assert(mock != null);
@@ -648,15 +642,9 @@ public abstract partial class Mock : IFluentInterface
 
         var parts = expression.Split(allowNonOverridableLastProperty);
         return Mock.SetupRecursive(mock, originalExpression: expression, parts, setupLast);
-
-        
-
-        
-
-        
     }
 
-    private static TSetup SetupRecursive<TSetup>(Mock mock, LambdaExpression originalExpression, Stack<MethodExpectation> parts, Func<Mock, Expression, MethodExpectation, TSetup> setupLast)
+    private static TSetup? SetupRecursive<TSetup>(Mock mock, LambdaExpression originalExpression, Stack<MethodExpectation> parts, Func<Mock, Expression, MethodExpectation, TSetup?> setupLast)
         where TSetup : ISetup
     {
         var part = parts.Pop();
@@ -668,11 +656,11 @@ public abstract partial class Mock : IFluentInterface
         }
         else
         {
-            Mock innerMock = mock.MutableSetups.FindLastInnerMock(setup => setup.Matches(part));
-            if (innerMock == null)
+            Mock? innerMock = mock.MutableSetups.FindLastInnerMock(setup => setup.Matches(part));
+            if (innerMock is null)
             {
-                var returnValue = mock.GetDefaultValue(method, out innerMock, useAlternateProvider: DefaultValueProvider.Mock);
-                if (innerMock == null)
+                object? returnValue = mock.GetDefaultValue(method, out innerMock, useAlternateProvider: DefaultValueProvider.Mock);
+                if (innerMock is null)
                 {
                     throw new ArgumentException(
                         string.Format(
@@ -698,7 +686,7 @@ public abstract partial class Mock : IFluentInterface
 
     #region Raise
 
-    internal static void RaiseEvent<T>(Mock mock, Action<T> action, object[] arguments)
+    internal static void RaiseEvent<T>(Mock mock, Action<T> action, object?[] arguments)
     {
         Guard.NotNull(action, nameof(action));
 
@@ -707,16 +695,16 @@ public abstract partial class Mock : IFluentInterface
         Mock.RaiseEvent(mock, expression, parts, arguments);
     }
 
-    internal static Task RaiseEventAsync<T>(Mock mock, Action<T> action, object[] arguments)
+    internal static Task RaiseEventAsync<T>(Mock mock, Action<T> action, object?[] arguments)
     {
         Guard.NotNull(action, nameof(action));
 
         var expression = ExpressionReconstructor.Instance.ReconstructExpression(action, mock.ConstructorArguments);
         var parts = expression.Split();
-        return (Task)Mock.RaiseEvent(mock, expression, parts, arguments);
+        return (Task)Mock.RaiseEvent(mock, expression, parts, arguments)!;
     }
 
-    internal static object RaiseEvent(Mock mock, LambdaExpression expression, Stack<MethodExpectation> parts, object[] arguments)
+    internal static object? RaiseEvent(Mock mock, LambdaExpression expression, Stack<MethodExpectation> parts, object?[] arguments)
     {
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
@@ -725,11 +713,11 @@ public abstract partial class Mock : IFluentInterface
 
         if (parts.Count == 0)
         {
-            EventInfo @event;
+            EventInfo? @event;
             if (method.IsEventAddAccessor())
             {
                 var implementingMethod = method.GetImplementingMethod(mock.Object.GetType());
-                @event = implementingMethod.DeclaringType.GetEvents(bindingFlags).SingleOrDefault(e => e.GetAddMethod(true) == implementingMethod);
+                @event = implementingMethod?.DeclaringType?.GetEvents(bindingFlags).SingleOrDefault(e => e.GetAddMethod(true) == implementingMethod);
                 if (@event == null)
                 {
                     throw new ArgumentException(
@@ -742,7 +730,7 @@ public abstract partial class Mock : IFluentInterface
             else if (method.IsEventRemoveAccessor())
             {
                 var implementingMethod = method.GetImplementingMethod(mock.Object.GetType());
-                @event = implementingMethod.DeclaringType.GetEvents(bindingFlags).SingleOrDefault(e => e.GetRemoveMethod(true) == implementingMethod);
+                @event = implementingMethod?.DeclaringType?.GetEvents(bindingFlags).SingleOrDefault(e => e.GetRemoveMethod(true) == implementingMethod);
                 if (@event == null)
                 {
                     throw new ArgumentException(
@@ -830,7 +818,7 @@ public abstract partial class Mock : IFluentInterface
 
     #region Default Values
 
-    internal abstract Dictionary<Type, object> ConfiguredDefaultValues { get; }
+    internal abstract Dictionary<Type, object?> ConfiguredDefaultValues { get; }
 
     /// <summary>
     /// Defines the default return value for all mocked methods or properties with return type <typeparamref name= "TReturn" />.
@@ -845,13 +833,13 @@ public abstract partial class Mock : IFluentInterface
         ConfiguredDefaultValues[typeof(TReturn)] = value;
     }
 
-    internal object GetDefaultValue(MethodInfo method, out Mock candidateInnerMock, DefaultValueProvider useAlternateProvider = null)
+    internal object? GetDefaultValue(MethodInfo method, out Mock? candidateInnerMock, DefaultValueProvider? useAlternateProvider = null)
     {
         Debug.Assert(method != null);
         Debug.Assert(method.ReturnType != null);
         Debug.Assert(method.ReturnType != typeof(void));
 
-        if (ConfiguredDefaultValues.TryGetValue(method.ReturnType, out object configuredDefaultValue))
+        if (ConfiguredDefaultValues.TryGetValue(method.ReturnType, out object? configuredDefaultValue))
         {
             candidateInnerMock = null;
             return configuredDefaultValue;

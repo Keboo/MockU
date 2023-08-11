@@ -30,7 +30,6 @@ public class _181
 
 namespace MockU.Tests.Regressions
 {
-
     public class IssueReportsFixture
     {
         // @ GitHub
@@ -76,7 +75,7 @@ namespace MockU.Tests.Regressions
 
         public class Issue47ClassToMock
         {
-            AutoResetEvent reset = new AutoResetEvent(false);
+            private readonly AutoResetEvent reset = new AutoResetEvent(false);
             public virtual void M1()
             {
                 //we're inside the interceptor's stack now
@@ -298,10 +297,10 @@ namespace MockU.Tests.Regressions
             public void MockingDoesNotChangeVirtualnessAndFinalnessOfInheritedInterfaceMethod()
             {
                 var actualTypeMethod = typeof(ConcreteClass).GetMethod("Method");
-                Assert.True(actualTypeMethod.IsVirtual && actualTypeMethod.IsFinal);
+                Assert.True(actualTypeMethod?.IsVirtual == true && actualTypeMethod.IsFinal);
 
                 var mockedTypeMethod = new Mock<ConcreteClass>().Object.GetType().GetMethod("Method");
-                Assert.True(mockedTypeMethod.IsVirtual && mockedTypeMethod.IsFinal);
+                Assert.True(mockedTypeMethod?.IsVirtual == true && mockedTypeMethod.IsFinal);
             }
 
             public interface ISomeInterface
@@ -599,7 +598,7 @@ namespace MockU.Tests.Regressions
 
             }
 
-            static void Checker(ILogger log)
+            private static void Checker(ILogger log)
             {
                 log.Debug("some message");
             }
@@ -742,7 +741,7 @@ namespace MockU.Tests.Regressions
 
 
             {
-                readonly IDependency dependency;
+                private readonly IDependency dependency;
 
                 public Foo(IDependency dependency)
                 {
@@ -816,7 +815,7 @@ namespace MockU.Tests.Regressions
 
             public class Frobber
             {
-                List<ISharedType> internalStore;
+                private readonly List<ISharedType> internalStore;
 
                 public Frobber(params ISharedType[] inputs)
                 {
@@ -1114,7 +1113,7 @@ namespace MockU.Tests.Regressions
                     const int EXPECTED = int.MaxValue;
         */
         {
-            const int EXPECTED = int.MaxValue;
+            private const int EXPECTED = int.MaxValue;
 
             [Fact]
             public void Root1Test()
@@ -1404,7 +1403,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                T value;
+                private readonly T? value;
 
                 public BadlyHashed(T value)
                 {
@@ -1413,15 +1412,15 @@ namespace MockU.Tests.Regressions
 
                 public bool Equals(BadlyHashed<T> other)
                 {
-                    return value.Equals(other.value);
+                    return value?.Equals(other.value) == true;
                 }
 
-                public override bool Equals(object obj)
+                public override bool Equals(object? obj)
                 {
                     return obj is BadlyHashed<T> other && Equals(other);
                 }
 
-                public override int GetHashCode()
+                public override readonly int GetHashCode()
                 {
                     // This is legal: Equal objects must have equal hash codes,
                     // but objects with equal hash codes are not necessarily equal.
@@ -1616,7 +1615,7 @@ namespace MockU.Tests.Regressions
             {
                 var mock = new Mock<DoesNotImplementI>();
                 mock.As<I>().Setup(x => x.Foo()).Returns(42);
-                Assert.Equal(42, (mock.Object as I).Foo());
+                Assert.Equal(42, (mock.Object as I)?.Foo());
             }
 
             [Fact]
@@ -1725,7 +1724,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                bool _IsMale;
+                private bool _IsMale;
                 public virtual bool IsMale
                 {
                     get { return _IsMale; }
@@ -1734,7 +1733,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                bool _Antlers;
+                private bool _Antlers;
                 public virtual bool Antlers
                 {
                     get { return _Antlers; }
@@ -1822,7 +1821,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                bool _IsMale;
+                private bool _IsMale;
                 public virtual bool IsMale
                 {
                     get { return _IsMale; }
@@ -1831,7 +1830,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                bool _Antlers;
+                private bool _Antlers;
                 public virtual bool Antlers
                 {
                     get { return _Antlers; }
@@ -2091,7 +2090,7 @@ namespace MockU.Tests.Regressions
             }
 
             // Calls the mock until it returns default(int)
-            static void RegisterInvocations(IMock<ITest> m, System.Collections.Concurrent.ConcurrentQueue<int> invocationsQueue)
+            private static void RegisterInvocations(IMock<ITest> m, System.Collections.Concurrent.ConcurrentQueue<int> invocationsQueue)
             {
                 int result;
                 do
@@ -2196,19 +2195,15 @@ namespace MockU.Tests.Regressions
         #region 592
 
         public class Issue592 : IDisposable
-
-
         {
-            UnobservedTaskExceptionEventArgs _unobservedEventArgs;
+            private UnobservedTaskExceptionEventArgs? _unobservedEventArgs;
 
             public Issue592()
             {
                 TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
-
-
             }
 
-            void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+            private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
             {
                 _unobservedEventArgs = e;
             }
@@ -2603,7 +2598,7 @@ namespace MockU.Tests.Regressions
             {
                 var id = Guid.NewGuid();
                 var data = Mock.Of<IHaveGuid>(x => x.Id == id);
-                new Mock<IUseGuid>().Setup(x => x.Use(data.Id.Value));
+                new Mock<IUseGuid>().Setup(x => x.Use(data.Id!.Value));
             }
 
             [Fact]
@@ -2764,7 +2759,7 @@ namespace MockU.Tests.Regressions
         {
             public class Foo
             {
-                public virtual object Bar { get; internal set; }
+                public virtual object? Bar { get; internal set; }
             }
 
             [Fact]
@@ -2851,7 +2846,7 @@ namespace MockU.Tests.Regressions
         public class Issue874
         {
             [Fact]
-            public void MockDefaultValueProvider_will_Propagate_Callbase_to_nondelegates()
+            public void MockDefaultValueProvider_will_Propagate_CallBase_to_nondelegates()
             {
                 var mock = new Mock<IDictionary<string, IDictionary<string, string>>>()
                 {
@@ -2895,16 +2890,9 @@ namespace MockU.Tests.Regressions
             {
                 var ex = await GetVerificationErrorAsync();
                 Assert.Contains("exactly 3 times, but was 2 times", ex.Message);
-
-                /* Unmerged change from project 'Moq.Tests(net6.0)'
-                Before:
-                            private async Task<Exception> GetVerificationErrorAsync()
-                After:
-                            async Task<Exception> GetVerificationErrorAsync()
-                */
             }
 
-            async Task<Exception> GetVerificationErrorAsync()
+            private async Task<Exception> GetVerificationErrorAsync()
             {
                 var mock = new Mock<IFoo>();
 
@@ -3022,7 +3010,7 @@ namespace MockU.Tests.Regressions
             public class A : IA
             {
 #pragma warning disable CS0067
-                public virtual event Action E;
+                public virtual event Action? E;
 #pragma warning restore CS0067
             }
 
@@ -3030,8 +3018,8 @@ namespace MockU.Tests.Regressions
 
 
             {
-                Action ae;
-                Action be;
+                private Action? ae;
+                private Action? be;
 
                 event Action IA.E
                 {
@@ -3064,7 +3052,7 @@ namespace MockU.Tests.Regressions
                     readonly List<int> data;
         */
         {
-            readonly List<int> data;
+            private readonly List<int> data;
 
             public Issue897()
             {
@@ -3117,7 +3105,7 @@ namespace MockU.Tests.Regressions
                 */
             }
 
-            readonly Mock<IX> mock;
+            private readonly Mock<IX> mock;
 
             public Issue903()
             {
@@ -3174,28 +3162,28 @@ namespace MockU.Tests.Regressions
 
             }
 
-            void InvokeBoolMethod()
+            private void InvokeBoolMethod()
             {
                 mock.Object.Method<bool>(default(bool));
 
 
             }
 
-            void InvokeIntMethod()
+            private void InvokeIntMethod()
             {
                 mock.Object.Method<int>(default(int));
 
 
             }
 
-            void SetupBoolMethod(Action callback)
+            private void SetupBoolMethod(Action callback)
             {
                 mock.Setup(m => m.Method<object>((bool)It.IsAny<object>())).Callback(callback);
 
 
             }
 
-            void SetupIntMethod(Action callback)
+            private void SetupIntMethod(Action callback)
             {
                 mock.Setup(m => m.Method<object>((int)It.IsAny<object>())).Callback(callback);
             }
@@ -3216,7 +3204,7 @@ namespace MockU.Tests.Regressions
                     It.IsAny<EventId>(),
                     It.IsAny<object>(),
                     It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>())).Verifiable();
+                    It.IsAny<Func<object, Exception?, string>>())).Verifiable();
 
                 var logger = loggerMock.Object;
                 logger.Log<AttributeTargets>(
@@ -3238,7 +3226,7 @@ namespace MockU.Tests.Regressions
                     It.IsAny<EventId>(),
                     It.IsAny<It.IsAnyType>(),
                     It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>())).Verifiable();
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>())).Verifiable();
 
                 var logger = loggerMock.Object;
                 logger.Log<AttributeTargets>(
@@ -3296,16 +3284,9 @@ namespace MockU.Tests.Regressions
             public interface IContainer
             {
                 IContent Content { get; set; }
-
-                /* Unmerged change from project 'Moq.Tests(net6.0)'
-                Before:
-                            private const string toStringReturnValue = "some string here";
-                After:
-                            const string toStringReturnValue = "some string here";
-                */
             }
 
-            const string toStringReturnValue = "some string here";
+            private const string toStringReturnValue = "some string here";
 
             [Fact]
             public void Setup_ToString_before_Name()
@@ -3325,16 +3306,9 @@ namespace MockU.Tests.Regressions
                     contentMock.Setup(c => c.Name);
                     contentMock.Setup(c => c.ToString()).Returns(toStringReturnValue);
                 });
-
-                /* Unmerged change from project 'Moq.Tests(net6.0)'
-                Before:
-                            private void TestImpl(Action<Mock<IContent>> setup)
-                After:
-                            void TestImpl(Action<Mock<IContent>> setup)
-                */
             }
 
-            void TestImpl(Action<Mock<IContent>> setup)
+            private void TestImpl(Action<Mock<IContent>> setup)
             {
                 var contentMock = new Mock<IContent>();
                 var containerMock = new Mock<IContainer>();
@@ -3480,10 +3454,10 @@ namespace MockU.Tests.Regressions
             [Fact]
             public void MultiSetupNRE_Abbreviated()
             {
-                StubDataStore obj = null;
+                StubDataStore? obj = null;
                 var exampleMock = new Mock<IDataStore>(MockBehavior.Strict);
-                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj.Value == s))); // Binds correctly
-                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj.Value != s))); // Null Reference Exception
+                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj!.Value == s))); // Binds correctly
+                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj!.Value != s))); // Null Reference Exception
             }
 
             [Fact]
@@ -3492,10 +3466,10 @@ namespace MockU.Tests.Regressions
                 // Arrange
                 var exampleMock = new Mock<IDataStore>(MockBehavior.Strict);
 
-                StubDataStore obj = null;
-                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj.Value == s))) // Binds correctly
+                StubDataStore? obj = null;
+                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj!.Value == s))) // Binds correctly
                     .Returns(true).Verifiable();
-                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj.Value != s))) // Null Reference Exception
+                exampleMock.Setup(m => m.IsStored(It.Is<string>(s => obj!.Value != s))) // Null Reference Exception
                     .Returns(false).Verifiable();
 
                 // Act
@@ -3511,7 +3485,7 @@ namespace MockU.Tests.Regressions
 
             public class StubDataStore
             {
-                public string Value { get; set; }
+                public string? Value { get; set; }
             }
 
             public interface IDataStore
@@ -3561,7 +3535,7 @@ namespace MockU.Tests.Regressions
 
             public class DatabaseOptions
             {
-                public string ConnectionString { get; set; }
+                public string? ConnectionString { get; set; }
             }
         }
 
@@ -3602,7 +3576,7 @@ namespace MockU.Tests.Regressions
 
             public class MyObject
             {
-                public string Id { get; set; }
+                public string? Id { get; set; }
             }
 
             public interface IMockObject
@@ -3727,7 +3701,7 @@ namespace MockU.Tests.Regressions
 
 
             {
-                readonly MyClass _myMockObject;
+                private readonly MyClass _myMockObject;
 
                 public MyTestObject(MyClass myMockObject)
                 {
@@ -3814,7 +3788,7 @@ namespace MockU.Tests.Regressions
                             IGenericHidingEvents<bool> myHidingEvents;
             */
             {
-                IGenericHidingEvents<bool> myHidingEvents;
+                private readonly IGenericHidingEvents<bool> myHidingEvents;
 
                 public GenericHidingEventConsumer(IGenericHidingEvents<bool> theHidingEvents)
                 {
@@ -3824,7 +3798,7 @@ namespace MockU.Tests.Regressions
 
                 }
 
-                void HidingEventsOnCreated(object theSender, bool theE)
+                private void HidingEventsOnCreated(object? theSender, bool theE)
                 {
                     EventHandled = true;
                 }
@@ -3851,7 +3825,7 @@ namespace MockU.Tests.Regressions
             [Fact]
             public void Can_setup_method_called_by_default_impl()
             {
-                string receivedMsg = null;
+                string? receivedMsg = null;
 
                 var mock = new Mock<ILog>();
                 mock.Setup(p => p.Log(It.IsAny<string>()))
@@ -3932,7 +3906,7 @@ namespace MockU.Tests.Regressions
                 }
             }
 
-            static void DoWork(IHardware hw, byte[] send)
+            private static void DoWork(IHardware hw, byte[] send)
             {
                 hw.Transmit(1, send, new byte[8]);
             }
@@ -4076,7 +4050,7 @@ namespace MockU.Tests.Regressions
             public async Task Test()
             {
                 var mock = new Mock<IFoo>();
-                mock.Setup(x => x.Bar().Result).Returns((string)null);
+                mock.Setup(x => x.Bar().Result).Returns((string?)null);
 
                 var result = await mock.Object.Bar();
 
@@ -4234,9 +4208,9 @@ namespace MockU.Tests.Regressions
 
         public interface IFoo
         {
-            void DoThings(object arg);
-            T DoThings<T>(object arg);
-            object Property1 { get; set; }
+            void DoThings(object? arg);
+            T DoThings<T>(object? arg);
+            object? Property1 { get; set; }
         }
 
         [Fact]
@@ -4669,7 +4643,7 @@ namespace MockU.Tests.Regressions
 
 
             {
-                readonly IBar _bar;
+                private readonly IBar _bar;
                 public Baz(IBar bar)
                 {
                     _bar = bar;
@@ -4902,11 +4876,11 @@ namespace MockU.Tests.Regressions
 
             public class Foo
             {
-                public string Id { get; set; }
+                public string? Id { get; set; }
 
-                public override bool Equals(object obj)
+                public override bool Equals(object? obj)
                 {
-                    return obj is Foo && ((Foo)obj).Id == Id;
+                    return obj is Foo foo && foo.Id == Id;
                 }
 
                 public override int GetHashCode()
@@ -5115,7 +5089,7 @@ namespace MockU.Tests.Regressions
                     get { throw new NotImplementedException(); }
                 }
 
-                public string Name
+                public string? Name
                 {
                     get { throw new NotImplementedException(); }
                     set { throw new NotImplementedException(); }
@@ -5259,19 +5233,13 @@ namespace MockU.Tests.Regressions
 
             public class FooBar : IFoo, IBar
             {
-                public event EventHandler Foo;
-                public event EventHandler Bar;
+                public event EventHandler? Foo;
+                public event EventHandler? Bar;
 
                 public void RaiseMyEvents()
                 {
-                    if (Foo != null)
-                    {
-                        Foo(this, EventArgs.Empty);
-                    }
-                    if (Bar != null)
-                    {
-                        Bar(this, EventArgs.Empty);
-                    }
+                    Foo?.Invoke(this, EventArgs.Empty);
+                    Bar?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -5296,14 +5264,11 @@ namespace MockU.Tests.Regressions
 
             public class Foo
             {
-                public virtual event EventHandler MyEvent;
+                public virtual event EventHandler? MyEvent;
 
                 public void RaiseMyEvent()
                 {
-                    if (MyEvent != null)
-                    {
-                        MyEvent(this, EventArgs.Empty);
-                    }
+                    MyEvent?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -5371,7 +5336,7 @@ namespace MockU.Tests.Regressions
 
 
             {
-                IRepository repository;
+                private readonly IRepository repository;
 
                 public Service(IRepository repository)
                 {
@@ -5405,7 +5370,7 @@ namespace MockU.Tests.Regressions
 
             public class PropertyChangedBase : INotifyPropertyChanged
             {
-                public virtual event PropertyChangedEventHandler PropertyChanged = (s, e) => { };
+                public virtual event PropertyChangedEventHandler? PropertyChanged = (s, e) => { };
             }
 
             public class PropertyChangedInherited : PropertyChangedBase
@@ -5424,8 +5389,7 @@ namespace MockU.Tests.Regressions
             {
                 var mock = new Mock<ITest>();
 
-                ITest instance;
-                instance = mock.Object;
+                ITest _ = mock.Object;
             }
 
             public interface ITest
@@ -5482,7 +5446,7 @@ namespace MockU.Tests.Regressions
             public class ClassWithFinalizer
             {
                 public virtual int Foo { get; set; }
-                public virtual string Bar { get; set; }
+                public virtual string? Bar { get; set; }
 
                 ~ClassWithFinalizer()
                 {
@@ -5534,7 +5498,7 @@ namespace MockU.Tests.Regressions
 
 
             {
-                readonly IPerformOperation m_OperationPerformer;
+                private readonly IPerformOperation m_OperationPerformer;
 
                 public OperationUser(IPerformOperation operationPerformer)
                 {
@@ -5548,15 +5512,8 @@ namespace MockU.Tests.Regressions
             }
 
             public class HelperSetup
-
-            /* Unmerged change from project 'Moq.Tests(net6.0)'
-            Before:
-                            private Mock<IPerformOperation> m_OperationStub;
-            After:
-                            Mock<IPerformOperation> m_OperationStub;
-            */
             {
-                Mock<IPerformOperation> m_OperationStub;
+                private readonly Mock<IPerformOperation> m_OperationStub;
 
                 public HelperSetup()
                 {
@@ -5591,18 +5548,11 @@ namespace MockU.Tests.Regressions
 
                     Assert.Equal("25", intOperationResult);
                     Assert.Equal("test", stringOperationResult);
-
-                    /* Unmerged change from project 'Moq.Tests(net6.0)'
-                    Before:
-                                    private void SetupOperationStub<T>(Func<T, string> valueFunction)
-                    After:
-                                    void SetupOperationStub<T>(Func<T, string> valueFunction)
-                    */
                 }
 
-                void SetupOperationStub<T>(Func<T, string> valueFunction)
+                private void SetupOperationStub<T>(Func<T, string> valueFunction)
                 {
-                    m_OperationStub.Setup(m => m.Operation(It.IsAny<T>())).Returns(valueFunction);
+                    m_OperationStub.Setup(m => m.Operation(It.IsAny<T>()!)).Returns(valueFunction);
                 }
             }
         }
@@ -5684,19 +5634,19 @@ namespace MockU.Tests.Regressions
             public void TestRecursive()
             {
                 var mock = new Mock<ControllerContext>() { DefaultValue = DefaultValue.Mock };
-                mock.Setup(c => c.HttpContext.Response.Write("stuff"));
+                mock.Setup(c => c.HttpContext!.Response.Write("stuff"));
 
-                mock.Object.HttpContext.Response.Write("stuff");
+                mock.Object.HttpContext!.Response.Write("stuff");
                 mock.Object.HttpContext.Response.ShouldEncode = true;
 
                 Assert.Throws<MockException>(() => mock.VerifySet(
-                    c => c.HttpContext.Response.ShouldEncode = It.IsAny<bool>(),
+                    c => c.HttpContext!.Response.ShouldEncode = It.IsAny<bool>(),
                     Times.Never()));
             }
 
             public class ControllerContext
             {
-                public virtual HttpContext HttpContext { get; set; }
+                public virtual HttpContext? HttpContext { get; set; }
             }
 
             public abstract class HttpContext

@@ -5,21 +5,10 @@ using Xunit;
 namespace MockU.Tests;
 
 public class ReturnsValidationFixture
-
-/* Unmerged change from project 'Moq.Tests(net6.0)'
-Before:
-        private Mock<IType> mock;
-        private ISetup<IType, IType> setup;
-        private ISetup<IType, IType> setupNoArgs;
-After:
-        Mock<IType> mock;
-        ISetup<IType, IType> setup;
-        ISetup<IType, IType> setupNoArgs;
-*/
 {
-    Mock<IType> mock;
-    ISetup<IType, IType> setup;
-    ISetup<IType, IType> setupNoArgs;
+    private readonly Mock<IType> mock;
+    private readonly ISetup<IType, IType> setup;
+    private readonly ISetup<IType, IType> setupNoArgs;
 
     public ReturnsValidationFixture()
     {
@@ -57,7 +46,7 @@ After:
     [Fact]
     public void Returns_accepts_parameterless_delegate_for_method_without_parameters()
     {
-        Func<IType> delegateWithoutParameters = () => default;
+        Func<IType?> delegateWithoutParameters = () => default;
         setupNoArgs.Returns(delegateWithoutParameters);
 
         var ex = Record.Exception(() =>
@@ -71,7 +60,7 @@ After:
     [Fact]
     public void Returns_accepts_parameterless_delegate_even_for_method_having_parameters()
     {
-        Func<IType> delegateWithoutParameters = () => default;
+        Func<IType?> delegateWithoutParameters = () => default;
         setup.Returns(delegateWithoutParameters);
 
         var ex = Record.Exception(() =>
@@ -85,7 +74,7 @@ After:
     [Fact]
     public void Returns_does_not_accept_delegate_with_wrong_parameter_count()
     {
-        Func<object, object, object, IType> delegateWithWrongParameterCount = (arg1, arg2, arg3) => default;
+        Func<object, object, object, IType?> delegateWithWrongParameterCount = (arg1, arg2, arg3) => default;
 
         var ex = Record.Exception(() =>
         {
@@ -98,7 +87,7 @@ After:
     [Fact]
     public void Returns_accepts_delegate_with_wrong_parameter_types_but_setup_invocation_will_fail()
     {
-        Func<string, string, IType> delegateWithWrongParameterType = (arg1, arg2) => default;
+        Func<string, string, IType?> delegateWithWrongParameterType = (arg1, arg2) => default;
         setup.Returns(delegateWithWrongParameterType);
 
         var ex = Record.Exception(() =>
@@ -126,7 +115,7 @@ After:
     [Fact]
     public void Returns_accepts_delegate_with_wrong_parameter_types_and_setup_invocation_will_succeed_if_args_convertible()
     {
-        Func<string, string, IType> delegateWithWrongParameterType = (arg1, arg2) => default;
+        Func<string, string, IType?> delegateWithWrongParameterType = (arg1, arg2) => default;
         setup.Returns(delegateWithWrongParameterType);
 
         var ex = Record.Exception(() =>
@@ -140,7 +129,7 @@ After:
     [Fact]
     public void Returns_accepts_parameterless_extension_method_for_method_without_parameters()
     {
-        Func<IType> delegateWithoutParameters = new ReturnsValidationFixture().ExtensionMethodNoArgs;
+        Func<IType?> delegateWithoutParameters = new ReturnsValidationFixture().ExtensionMethodNoArgs;
         setupNoArgs.Returns(delegateWithoutParameters);
 
         var ex = Record.Exception(() =>
@@ -154,7 +143,7 @@ After:
     [Fact]
     public void Returns_accepts_parameterless_extension_method_even_for_method_having_parameters()
     {
-        Func<IType> delegateWithoutParameters = new ReturnsValidationFixture().ExtensionMethodNoArgs;
+        Func<IType?> delegateWithoutParameters = new ReturnsValidationFixture().ExtensionMethodNoArgs;
         setup.Returns(delegateWithoutParameters);
 
         var ex = Record.Exception(() =>
@@ -168,7 +157,7 @@ After:
     [Fact]
     public void Returns_does_not_accept_extension_method_with_wrong_parameter_count()
     {
-        Func<object, object, IType> delegateWithWrongParameterCount = new ReturnsValidationFixture().ExtensionMethod;
+        Func<object, object, IType?> delegateWithWrongParameterCount = new ReturnsValidationFixture().ExtensionMethod;
 
         var ex = Record.Exception(() =>
         {
@@ -181,7 +170,7 @@ After:
     [Fact]
     public void Returns_accepts_extension_method_with_correct_parameter_count()
     {
-        Func<object, object, IType> delegateWithCorrectParameterCount = new ReturnsValidationFixture().ExtensionMethod;
+        Func<object, object, IType?> delegateWithCorrectParameterCount = new ReturnsValidationFixture().ExtensionMethod;
         setup.Returns(delegateWithCorrectParameterCount);
 
         var ex = Record.Exception(() =>
@@ -194,20 +183,20 @@ After:
 
     public interface IType
     {
-        IType Method(object arg1, object arg2);
+        IType Method(object? arg1, object? arg2);
 
         IType MethodNoArgs();
     }
 }
 
-static class ReturnsValidationFixtureExtensions
+internal static class ReturnsValidationFixtureExtensions
 {
-    internal static ReturnsValidationFixture.IType ExtensionMethod(this ReturnsValidationFixture fixture, object arg1, object arg2)
+    internal static ReturnsValidationFixture.IType? ExtensionMethod(this ReturnsValidationFixture fixture, object? arg1, object? arg2)
     {
         return default;
     }
 
-    internal static ReturnsValidationFixture.IType ExtensionMethodNoArgs(this ReturnsValidationFixture fixture)
+    internal static ReturnsValidationFixture.IType? ExtensionMethodNoArgs(this ReturnsValidationFixture fixture)
     {
         return default;
     }

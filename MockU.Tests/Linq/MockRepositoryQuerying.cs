@@ -8,7 +8,7 @@ public class MockRepositoryQuerying
 
     
     {
-        MockRepository repository;
+        private readonly MockRepository repository;
 
         public GivenAStrictFactory()
         {
@@ -68,7 +68,7 @@ public class MockRepositoryQuerying
 
     
     {
-        MockRepository repository;
+        private readonly MockRepository repository;
 
         public Strict_mocks()
         {

@@ -60,7 +60,7 @@ public class MatcherObserverFixture
         }
     }
 
-    int CreateMatch()
+    private int CreateMatch()
     {
         return Match.Create(i => i != 0, () => It.Is<int>(i => i != 0));
     }
@@ -74,10 +74,8 @@ public class MatcherObserverFixture
     [Fact]
     public void IsActive_returns_true_when_MatcherObserver_instantiated()
     {
-        using (var observer = MatcherObserver.Activate())
-        {
-            Assert.True(MatcherObserver.IsActive(out _));
-        }
+        using var observer = MatcherObserver.Activate();
+        Assert.True(MatcherObserver.IsActive(out _));
     }
 
     [Fact]
@@ -93,10 +91,8 @@ public class MatcherObserverFixture
     [Fact]
     public void TryGetLastMatch_returns_false_after_no_invocations()
     {
-        using (var observer = MatcherObserver.Activate())
-        {
-            Assert.False(observer.TryGetLastMatch(out _));
-        }
+        using var observer = MatcherObserver.Activate();
+        Assert.False(observer.TryGetLastMatch(out _));
     }
 
     [Fact]
@@ -104,40 +100,34 @@ public class MatcherObserverFixture
     {
         var mock = Mock.Of<IMockable>();
 
-        using (var observer = MatcherObserver.Activate())
-        {
-            mock.Method(default, default);
+        using var observer = MatcherObserver.Activate();
+        mock.Method(default, default);
 
-            Assert.False(observer.TryGetLastMatch(out _));
-        }
+        Assert.False(observer.TryGetLastMatch(out _));
     }
 
     [Fact]
     public void TryGetLastMatch_returns_true_after_a_matcher_invocation()
     {
-        using (var observer = MatcherObserver.Activate())
-        {
-            _ = It.IsAny<int>();
+        using var observer = MatcherObserver.Activate();
+        _ = It.IsAny<int>();
 
-            Assert.True(observer.TryGetLastMatch(out _));
-        }
+        Assert.True(observer.TryGetLastMatch(out _));
     }
 
     [Fact]
     public void TryGetLastMatch_returns_right_matcher_after_several_matcher_invocations()
     {
-        using (var observer = MatcherObserver.Activate())
-        {
-            _ = It.IsAny<int>();
-            _ = It.IsRegex(".*");
+        using var observer = MatcherObserver.Activate();
+        _ = It.IsAny<int>();
+        _ = It.IsRegex(".*");
 
-            Assert.True(observer.TryGetLastMatch(out var last));
-            Assert.True(last.Matches("abc", typeof(string)));
-        }
+        Assert.True(observer.TryGetLastMatch(out var last));
+        Assert.True(last.Matches("abc", typeof(string)));
     }
 
     public interface IMockable
     {
-        void Method(int arg1, string arg2);
+        void Method(int arg1, string? arg2);
     }
 }

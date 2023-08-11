@@ -126,14 +126,14 @@ public class CSharpCompilerExpressionsFixture
             void Short(long arg);
         }
 
-        static void AssertConvert(Expression<Action<IX>> expression)
+        private static void AssertConvert(Expression<Action<IX>> expression)
         {
             var visitor = new FilteringVisitor(e => e?.NodeType == ExpressionType.Convert);
             visitor.Visit(expression.Body);
             Assert.True(visitor.Result.Any());
         }
 
-        static void AssertNoConvert(Expression<Action<IX>> expression)
+        private static void AssertNoConvert(Expression<Action<IX>> expression)
         {
             var visitor = new FilteringVisitor(e => e?.NodeType == ExpressionType.Convert);
             visitor.Visit(expression.Body);
@@ -141,10 +141,10 @@ public class CSharpCompilerExpressionsFixture
         }
     }
 
-    sealed class FilteringVisitor : ExpressionVisitor
+    private sealed class FilteringVisitor : ExpressionVisitor
     {
-        readonly Func<Expression?, bool> predicate;
-        readonly List<Expression?> result;
+        private readonly Func<Expression?, bool> predicate;
+        private readonly List<Expression?> result;
 
         public FilteringVisitor(Func<Expression?, bool> predicate)
         {

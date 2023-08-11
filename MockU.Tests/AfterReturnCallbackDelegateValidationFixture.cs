@@ -3,15 +3,8 @@ using Xunit;
 namespace MockU.Tests;
 
 public class AfterReturnCallbackDelegateValidationFixture
-
-/* Unmerged change from project 'Moq.Tests(net6.0)'
-Before:
-        private readonly ISetup<IFoo, bool> setup;
-After:
-        readonly ISetup<IFoo, bool> setup;
-*/
 {
-    readonly ISetup<IFoo, bool> setup;
+    private readonly ISetup<IFoo, bool> setup;
 
     public AfterReturnCallbackDelegateValidationFixture()
     {
@@ -22,14 +15,14 @@ After:
     public void Callback_before_Returns__delegate_may_not_be_null()
     {
         var setup = this.setup;
-        Assert.Throws<ArgumentNullException>(() => setup.Callback(null));
+        Assert.Throws<ArgumentNullException>(() => setup.Callback(null!));
     }
 
     [Fact]
     public void Callback_after_Returns__delegate_may_not_be_null()
     {
         var setup = this.setup.Returns(true);
-        Assert.Throws<ArgumentNullException>(() => setup.Callback(null));
+        Assert.Throws<ArgumentNullException>(() => setup.Callback(null!));
     }
 
     [Fact]

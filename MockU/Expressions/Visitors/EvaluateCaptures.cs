@@ -13,11 +13,6 @@ internal sealed class EvaluateCaptures : ExpressionVisitor
 {
     public static readonly ExpressionVisitor Rewriter = new EvaluateCaptures();
 
-    
-
-    
-
-    
     private EvaluateCaptures()
     {
     }

@@ -152,7 +152,7 @@ public class MockFixture
 
         Assert.Throws<ArgumentNullException>(() =>
         {
-            mock.DefaultValueProvider = null;
+            mock.DefaultValueProvider = null!;
         });
     }
 
@@ -172,7 +172,7 @@ public class MockFixture
     {
         var mock = new Mock<IComparable>();
 
-        Assert.Throws<ArgumentNullException>(() => mock.Setup(null));
+        Assert.Throws<ArgumentNullException>(() => mock.Setup(null!));
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class MockFixture
     {
         var mock = new Mock<IComparable>();
 
-        Assert.Throws<ArgumentNullException>(() => mock.Setup((Expression<Func<IComparable, string>>)null));
+        Assert.Throws<ArgumentNullException>(() => mock.Setup((Expression<Func<IComparable, string>>)null!));
     }
 
     [Fact]
@@ -215,7 +215,7 @@ public class MockFixture
         
     }
 
-    int GetValue(int value)
+    private int GetValue(int value)
     {
         return value * 2;
     }
@@ -754,7 +754,7 @@ public class MockFixture
         
     }
 
-    int IsMultipleOf(int value)
+    private int IsMultipleOf(int value)
     {
         return Match.Create<int>(i => i % value == 0);
     }
@@ -1036,7 +1036,7 @@ public class MockFixture
         */
     }
 
-    static Foo MakeFoo(IMock<IBar> barMock)
+    private static Foo MakeFoo(IMock<IBar> barMock)
     {
         return new Foo(barMock.Object);
     }
@@ -1071,7 +1071,7 @@ public class MockFixture
         string? Value { get; set; }
     }
 
-    interface IDo { void Do(); }
+    private interface IDo { void Do(); }
 
     public class Doer : IDo
     {
@@ -1081,8 +1081,10 @@ public class MockFixture
     }
 
     public sealed class FooSealed { }
-    class FooService : IFooService { }
-    interface IFooService { }
+
+    private class FooService : IFooService { }
+
+    private interface IFooService { }
 
     public class FooWithPrivateSetter
     {

@@ -20,59 +20,30 @@ internal sealed class EmptyDefaultValueProvider : LookupOrFallbackDefaultValuePr
 
     internal override DefaultValue Kind => DefaultValue.Empty;
 
-    
-
-    
-
-    
     private static object CreateArray(Type type, Mock mock)
     {
         var elementType = type.GetElementType();
         var lengths = new int[type.GetArrayRank()];
         return Array.CreateInstance(elementType, lengths);
-
-        
-
-        
-
-        
     }
 
     private static object CreateEnumerable(Type type, Mock mock)
     {
-        return new object[0];
-
-        
-
-        
-
-        
+        return Array.Empty<object>();
     }
 
     private static object CreateEnumerableOf(Type type, Mock mock)
     {
         var elementType = type.GetGenericArguments()[0];
         return Array.CreateInstance(elementType, 0);
-
-        
-
-        
-
-        
     }
 
     private static object CreateQueryable(Type type, Mock mock)
     {
-        return new object[0].AsQueryable();
-
-        
-
-        
-
-        
+        return Array.Empty<object>().AsQueryable();
     }
 
-    private static object CreateQueryableOf(Type type, Mock mock)
+    private static object? CreateQueryableOf(Type type, Mock mock)
     {
         var elementType = type.GetGenericArguments()[0];
         var array = Array.CreateInstance(elementType, 0);

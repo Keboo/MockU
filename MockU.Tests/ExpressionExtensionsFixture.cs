@@ -114,7 +114,7 @@ public class ExpressionExtensionsFixture
         */
     }
 
-    LambdaExpression ToExpression<T>(Expression<Func<T>> expression)
+    private LambdaExpression ToExpression<T>(Expression<Func<T>> expression)
     {
         return expression;
 
@@ -126,7 +126,7 @@ public class ExpressionExtensionsFixture
         */
     }
 
-    LambdaExpression ToExpression<T>(Expression<Action<T>> expression)
+    private LambdaExpression ToExpression<T>(Expression<Action<T>> expression)
     {
         return expression;
 
@@ -138,7 +138,7 @@ public class ExpressionExtensionsFixture
         */
     }
 
-    LambdaExpression ToExpression<T, TResult>(Expression<Func<T, TResult>> expression)
+    private LambdaExpression ToExpression<T, TResult>(Expression<Func<T, TResult>> expression)
     {
         return expression;
 
@@ -150,7 +150,7 @@ public class ExpressionExtensionsFixture
         */
     }
 
-    void Do<T>(T value) { }
+    private void Do<T>(T value) { }
 
 
     /* Unmerged change from project 'Moq.Tests(net6.0)'
@@ -161,8 +161,9 @@ public class ExpressionExtensionsFixture
             static void DoStatic(int value) { }
             static void DoStaticGeneric<T>(T value) { }
     */
-    static void DoStatic(int value) { }
-    static void DoStaticGeneric<T>(T value) { }
+    private static void DoStatic(int value) { }
+
+    private static void DoStaticGeneric<T>(T value) { }
 
     public interface IFoo
     {

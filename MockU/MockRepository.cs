@@ -223,7 +223,7 @@ public partial class MockRepository
     public Mock<T> Create<T>(MockBehavior behavior)
         where T : class
     {
-        return CreateMock<T>(behavior, new object[0]);
+        return CreateMock<T>(behavior, Array.Empty<object>());
     }
 
     /// <summary>
@@ -250,7 +250,7 @@ public partial class MockRepository
     /// var mock = factory.Create&lt;MyBase&gt;(MockBehavior.Strict, "Foo", 25, true);
     /// </code>
     /// </example>
-    public Mock<T> Create<T>(MockBehavior behavior, params object[] args)
+    public Mock<T> Create<T>(MockBehavior behavior, params object?[]? args)
         where T : class
     {
         return CreateMock<T>(behavior, args);
@@ -286,7 +286,7 @@ public partial class MockRepository
     /// <typeparam name="T">Type to mock.</typeparam>
     /// <param name="behavior">The behavior for the new mock.</param>
     /// <param name="args">Optional arguments for the construction of the mock.</param>
-    protected virtual Mock<T> CreateMock<T>(MockBehavior behavior, object[] args)
+    protected virtual Mock<T> CreateMock<T>(MockBehavior behavior, object?[]? args)
         where T : class
     {
         var mock = new Mock<T>(behavior, args);

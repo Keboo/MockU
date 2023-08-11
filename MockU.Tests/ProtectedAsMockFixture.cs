@@ -13,8 +13,8 @@ After:
         IProtectedAsMock<Foo, Fooish> protectedMock;
 */
 {
-    Mock<Foo> mock;
-    IProtectedAsMock<Foo, Fooish> protectedMock;
+    private readonly Mock<Foo> mock;
+    private readonly IProtectedAsMock<Foo, Fooish> protectedMock;
 
     public ProtectedAsMockFixture()
     {
@@ -477,7 +477,7 @@ After:
             
         }
 
-        int _virtualSet;
+        private int _virtualSet;
         public virtual int VirtualSet
         {
             get
@@ -498,7 +498,7 @@ After:
             
         }
 
-        int _virtualGet;
+        private int _virtualGet;
         public virtual int VirtualGet
         {
             protected get
@@ -560,7 +560,7 @@ After:
                 static ExpectedException expectedException = new ExpectedException();
     */
     {
-        static ExpectedException expectedException = new ExpectedException();
+        private static readonly ExpectedException expectedException = new ExpectedException();
         public static ExpectedException Instance => expectedException;
     }
 }

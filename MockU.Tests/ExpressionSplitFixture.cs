@@ -293,14 +293,14 @@ public class ExpressionSplitFixture
         */
     }
 
-    void AssertSplitFails(LambdaExpression expression, params LambdaExpression[] expected)
+    private void AssertSplitFails(LambdaExpression expression, params LambdaExpression[] expected)
     {
         Assert.Throws<ArgumentException>(() => expression.Split());
 
         
     }
 
-    void AssertSplitFails(LambdaExpression expression, bool allowNonOverridableLastProperty)
+    private void AssertSplitFails(LambdaExpression expression, bool allowNonOverridableLastProperty)
     {
         Assert.ThrowsAny<Exception>(() => expression.Split(allowNonOverridableLastProperty));
 
@@ -312,7 +312,7 @@ public class ExpressionSplitFixture
         */
     }
 
-    void AssertSplitYields(LambdaExpression expression, params LambdaExpression[] expected)
+    private void AssertSplitYields(LambdaExpression expression, params LambdaExpression[] expected)
     {
         Assert.Equal(expected, expression.Split().Select(e => e.Expression), ExpressionComparer.Default);
 
@@ -324,7 +324,7 @@ public class ExpressionSplitFixture
         */
     }
 
-    void AssertSplitYields(LambdaExpression expression, bool allowNonOverridableLastProperty, params LambdaExpression[] expected)
+    private void AssertSplitYields(LambdaExpression expression, bool allowNonOverridableLastProperty, params LambdaExpression[] expected)
     {
         Assert.Equal(expected, expression.Split(allowNonOverridableLastProperty).Select(e => e.Expression), ExpressionComparer.Default);
 
@@ -340,7 +340,7 @@ public class ExpressionSplitFixture
     ///   Helper method producing an assignment <see cref="BinaryExpression"/>.
     ///   Useful because C# does not allow assignments in literal expressions.
     /// </summary>
-    static LambdaExpression A<T, TResult>(Expression<Func<T, TResult>> left, Expression right)
+    private static LambdaExpression A<T, TResult>(Expression<Func<T, TResult>> left, Expression right)
     {
         return Expression.Lambda(
             Expression.Assign(
@@ -359,7 +359,7 @@ public class ExpressionSplitFixture
     /// <summary>
     ///   Helper method producing a <see cref="ConstantExpression"/> for the default value of <typeparamref name="T"/>.
     /// </summary>
-    static ConstantExpression D<T>()
+    private static ConstantExpression D<T>()
     {
         return Expression.Constant(default(T), typeof(T));
 
@@ -374,7 +374,7 @@ public class ExpressionSplitFixture
     /// <summary>
     ///   Helper method producing a <see cref="LambdaExpression"/>.
     /// </summary>
-    static LambdaExpression E<T, TResult>(Expression<Func<T, TResult>> expression)
+    private static LambdaExpression E<T, TResult>(Expression<Func<T, TResult>> expression)
     {
         return (LambdaExpression)IndexerReplacer.Instance.Visit(expression);
 
@@ -387,7 +387,7 @@ public class ExpressionSplitFixture
     /// calls into indexer access representations so we can use them in our unit
     /// tests without having to construct expression trees manually.
     /// </summary>
-    sealed class IndexerReplacer : ExpressionVisitor
+    private sealed class IndexerReplacer : ExpressionVisitor
     {
         public static readonly IndexerReplacer Instance = new IndexerReplacer();
 

@@ -3,6 +3,7 @@
 <#@ Assembly Name="System.Core" #>
 <#@ Import Namespace="System.Linq" #>
 
+#nullable enable
 using System;
 using System.ComponentModel;
 using MockU.Language.Flow;
@@ -50,7 +51,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax; typeCount++)
 		///     .Returns((<#= GetGenericList(typeCount, "int arg{0}") #>) => <#= GetGenericList(typeCount, "arg{0}", " + ") #>);
 		/// </code>
 		/// </example>
-		IReturnsResult<TMock> Returns<<#= typeList #>>(Func<<#= typeList #>, TResult> valueFunction);
+		IReturnsResult<TMock> Returns<<#= typeList #>>(Func<<#= typeList #>, TResult?> valueFunction);
 <#
 }
 #>

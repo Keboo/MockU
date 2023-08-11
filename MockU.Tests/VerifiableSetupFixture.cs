@@ -30,7 +30,7 @@ public class VerifiableSetupFixture
         
     }
 
-    void VerifyFailsFastWhenUpperBoundExceeded(Times times)
+    private void VerifyFailsFastWhenUpperBoundExceeded(Times times)
     {
         var mock = new Mock<IX>();
         mock.Setup(m => m.Method()).Verifiable(times);

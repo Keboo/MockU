@@ -25,16 +25,15 @@ namespace MockU;
 /// </remarks>
 [EditorBrowsable(EditorBrowsableState.Advanced)]
 public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvider
-
 {
-    private Dictionary<object, Func<Type, Mock, object>> factories;
+    private readonly Dictionary<object, Func<Type, Mock, object?>?> factories;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LookupOrFallbackDefaultValueProvider"/> class.
     /// </summary>
     protected LookupOrFallbackDefaultValueProvider()
     {
-        factories = new Dictionary<object, Func<Type, Mock, object>>()
+        factories = new Dictionary<object, Func<Type, Mock, object?>?>()
         {
             ["System.ValueTuple`1"] = CreateValueTupleOf,
             ["System.ValueTuple`2"] = CreateValueTupleOf,
@@ -60,7 +59,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
         // we need a way (below) to know when to delegate to an `IAwaitableFactory`, and when not to.
         // This is why we only reset the dictionary entry instead of removing it.
         factories[factoryKey] = null;
-        factories[factoryKey.FullName] = null;
+        factories[factoryKey.FullName!] = null;
     }
 
     /// <summary>
@@ -77,7 +76,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
     ///   </para>
     /// </param>
     /// <param name="factory">The factory function responsible for producing values for the given type.</param>
-    protected void Register(Type factoryKey, Func<Type, Mock, object> factory)
+    protected void Register(Type factoryKey, Func<Type, Mock, object?> factory)
     {
         Debug.Assert(factoryKey != null);
         Debug.Assert(factory != null);
@@ -86,7 +85,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
     }
 
     /// <inheritdoc/>
-    protected internal sealed override object GetDefaultParameterValue(ParameterInfo parameter, Mock mock)
+    protected internal sealed override object? GetDefaultParameterValue(ParameterInfo parameter, Mock mock)
     {
         Debug.Assert(parameter != null);
         Debug.Assert(parameter.ParameterType != typeof(void));
@@ -96,7 +95,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
     }
 
     /// <inheritdoc/>
-    protected internal sealed override object GetDefaultReturnValue(MethodInfo method, Mock mock)
+    protected internal sealed override object? GetDefaultReturnValue(MethodInfo method, Mock mock)
     {
         Debug.Assert(method != null);
         Debug.Assert(method.ReturnType != typeof(void));
@@ -106,7 +105,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
     }
 
     /// <inheritdoc/>
-    protected internal sealed override object GetDefaultValue(Type type, Mock mock)
+    protected internal sealed override object? GetDefaultValue(Type type, Mock mock)
     {
         Debug.Assert(type != null);
         Debug.Assert(type != typeof(void));
@@ -116,8 +115,8 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
                        : type.IsArray ? typeof(Array)
                        : type;
 
-        Func<Type, Mock, object> factory;
-        if (factories.TryGetValue(handlerKey, out factory) || factories.TryGetValue(handlerKey.FullName, out factory))
+        Func<Type, Mock, object?>? factory;
+        if (factories.TryGetValue(handlerKey, out factory) || factories.TryGetValue(handlerKey.FullName!, out factory))
         {
             if (factory != null)  // This prevents delegation to an `IAwaitableFactory` for deregistered awaitable types; see note above.
             {
@@ -140,7 +139,7 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
     /// </summary>
     /// <param name="type">The type of which to produce a value.</param>
     /// <param name="mock">The <see cref="Mock"/> on which an unexpected invocation has occurred.</param>
-    protected virtual object GetFallbackDefaultValue(Type type, Mock mock)
+    protected virtual object? GetFallbackDefaultValue(Type type, Mock mock)
     {
         Debug.Assert(type != null);
         Debug.Assert(type != typeof(void));
@@ -148,17 +147,12 @@ public abstract class LookupOrFallbackDefaultValueProvider : DefaultValueProvide
 
         return type.GetDefaultValue();
 
-        
-
-        
-
-        
     }
 
-    private object CreateValueTupleOf(Type type, Mock mock)
+    private object? CreateValueTupleOf(Type type, Mock mock)
     {
         var itemTypes = type.GetGenericArguments();
-        var items = new object[itemTypes.Length];
+        var items = new object?[itemTypes.Length];
         for (int i = 0, n = itemTypes.Length; i < n; ++i)
         {
             items[i] = GetDefaultValue(itemTypes[i], mock);

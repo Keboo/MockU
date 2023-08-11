@@ -55,7 +55,7 @@ public class MethodExpectationFixture
         */
     }
 
-    static MethodExpectation ToMethodExpectation<T>(Expression<Action<T>> expression)
+    private static MethodExpectation ToMethodExpectation<T>(Expression<Action<T>> expression)
     {
         Debug.Assert(expression != null);
         Debug.Assert(expression.Body is MethodCallExpression);

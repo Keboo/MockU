@@ -83,15 +83,15 @@ public class ExtensionsFixture
     {
         var isExtensionMethodMethod = typeof(MockU.Extensions).GetMethod(nameof(MockU.Extensions.IsExtensionMethod));
 
-        Assert.True(isExtensionMethodMethod.IsExtensionMethod());
+        Assert.True(isExtensionMethodMethod?.IsExtensionMethod());
     }
 
     [Fact]
     public void IsExtensionMethod_does_not_recognize_method_as_extension_method()
     {
-        var thisMethod = (MethodInfo)MethodBase.GetCurrentMethod();
+        var thisMethod = (MethodInfo?)MethodBase.GetCurrentMethod();
 
-        Assert.False(thisMethod.IsExtensionMethod());
+        Assert.False(thisMethod?.IsExtensionMethod());
     }
 
     [Theory]
@@ -106,21 +106,20 @@ public class ExtensionsFixture
     {
         var actual = GetParameterTypeList(methodName);
         Assert.Equal(expected, actual);
-
-        
     }
 
-    string GetParameterTypeList(string methodName)
+    private static string? GetParameterTypeList(string methodName)
     {
         var method = typeof(IMethods).GetMethod(methodName);
-        return method.GetParameterTypeList();
+        return method?.GetParameterTypeList();
     }
 
     [Fact]
     public void CanRead_returns_false_for_true_write_only_property()
     {
         var property = typeof(WithWriteOnlyProperty).GetProperty("Property");
-        Assert.False(property.CanRead(out var getter));
+        MethodInfo? getter = null;
+        Assert.False(property?.CanRead(out getter));
         Assert.Null(getter);
     }
 
@@ -128,16 +127,17 @@ public class ExtensionsFixture
     public void CanRead_identifies_getter_in_true_read_only_property()
     {
         var property = typeof(WithReadOnlyProperty).GetProperty("Property");
-        Assert.True(property.CanRead(out var getter));
-        Assert.Equal(typeof(WithReadOnlyProperty), getter.DeclaringType);
+        MethodInfo? getter = null;
+        Assert.True(property?.CanRead(out getter));
+        Assert.Equal(typeof(WithReadOnlyProperty), getter?.DeclaringType);
     }
 
     [Fact]
     public void CanRead_identifies_getter_when_declared_in_base_class()
     {
         var property = typeof(OverridesOnlySetter).GetProperty("Property");
-        Assert.False(property.CanRead);
-        Assert.True(property.CanRead(out var getter));
+        Assert.False(property?.CanRead);
+        Assert.True(property!.CanRead(out var getter));
         Assert.Equal(typeof(WithAutoProperty), getter.DeclaringType);
     }
 
@@ -145,7 +145,8 @@ public class ExtensionsFixture
     public void CanWrite_returns_false_for_true_read_only_property()
     {
         var property = typeof(WithReadOnlyProperty).GetProperty("Property");
-        Assert.False(property.CanWrite(out var setter));
+        MethodInfo? setter = null;
+        Assert.False(property?.CanWrite(out setter));
         Assert.Null(setter);
     }
 
@@ -153,16 +154,17 @@ public class ExtensionsFixture
     public void CanWrite_identifies_setter_in_true_write_only_property()
     {
         var property = typeof(WithWriteOnlyProperty).GetProperty("Property");
-        Assert.True(property.CanWrite(out var setter));
-        Assert.Equal(typeof(WithWriteOnlyProperty), setter.DeclaringType);
+        MethodInfo? setter = null;
+        Assert.True(property?.CanWrite(out setter));
+        Assert.Equal(typeof(WithWriteOnlyProperty), setter?.DeclaringType);
     }
 
     [Fact]
     public void CanWrite_identifies_setter_when_declared_in_base_class()
     {
         var property = typeof(OverridesOnlyGetter).GetProperty("Property");
-        Assert.False(property.CanWrite);
-        Assert.True(property.CanWrite(out var setter));
+        Assert.False(property?.CanWrite);
+        Assert.True(property!.CanWrite(out var setter));
         Assert.Equal(typeof(WithAutoProperty), setter.DeclaringType);
     }
 
@@ -179,27 +181,27 @@ public class ExtensionsFixture
 
     public class WithReadOnlyProperty
     {
-        public virtual object Property => null;
+        public virtual object? Property => null;
     }
 
     public class WithWriteOnlyProperty
     {
-        public virtual object Property { set { } }
+        public virtual object? Property { set { } }
     }
 
     public class WithAutoProperty
     {
-        public virtual object Property { get; set; }
+        public virtual object? Property { get; set; }
     }
 
     public class OverridesOnlyGetter : WithAutoProperty
     {
-        public override object Property { get => base.Property; }
+        public override object? Property { get => base.Property; }
     }
 
     public class OverridesOnlySetter : WithAutoProperty
     {
-        public override object Property { set => base.Property = value; }
+        public override object? Property { set => base.Property = value; }
     }
 }
 

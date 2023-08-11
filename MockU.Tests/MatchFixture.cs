@@ -196,7 +196,7 @@ public class MatchFixture
         }
     }
 
-    static Match GetMatch<T>(Func<T> func)
+    private static Match GetMatch<T>(Func<T> func)
     {
         using (var observer = MatcherObserver.Activate())
         {
@@ -207,7 +207,7 @@ public class MatchFixture
         }
     }
 
-    abstract class Order
+    private abstract class Order
     {
         public abstract decimal MetricTons { get; }
 

@@ -17,7 +17,7 @@ After:
         ISetup<IFoo> setup;
 */
 {
-    ISetup<IFoo> setup;
+    private readonly ISetup<IFoo> setup;
 
     public CallbackDelegateValidationFixture()
     {

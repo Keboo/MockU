@@ -9,9 +9,9 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupGet(m => m.Bar.Value).Returns(5);
+        mock.SetupGet(m => m.Bar!.Value).Returns(5);
 
-        Assert.Equal(5, mock.Object.Bar.Value);
+        Assert.Equal(5, mock.Object.Bar?.Value);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupGet(m => m.Bar.Value).Returns(5);
+        mock.SetupGet(m => m.Bar!.Value).Returns(5);
 
         var barMock = Mock.Get(mock.Object.Bar);
 
@@ -43,11 +43,11 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Do("ping")).Returns("ack");
-        mock.Setup(m => m.Bar.Baz.Do("ping")).Returns("ack");
+        mock.Setup(m => m.Bar!.Do("ping")).Returns("ack");
+        mock.Setup(m => m.Bar!.Baz.Do("ping")).Returns("ack");
 
-        Assert.Equal("ack", mock.Object.Bar.Do("ping"));
-        Assert.Equal("ack", mock.Object.Bar.Baz.Do("ping"));
+        Assert.Equal("ack", mock.Object.Bar?.Do("ping"));
+        Assert.Equal("ack", mock.Object.Bar!.Baz.Do("ping"));
         Assert.Equal(default, mock.Object.Bar.Do("foo"));
     }
 
@@ -56,7 +56,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Baz.Do());
+        mock.Setup(m => m.Bar!.Baz.Do());
 
         //Assert.Throws<MockVerificationException>(() => mock.VerifyAll());
 
@@ -65,7 +65,7 @@ public class RecursiveMocksFixture
 
         mock.Object.Bar.Baz.Do();
 
-        mock.Verify(m => m.Bar.Baz.Do());
+        mock.Verify(m => m.Bar!.Baz.Do());
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupSet(m => m.Bar.Value = 5);
+        mock.SetupSet(m => m.Bar!.Value = 5);
 
         Assert.NotNull(mock.Object.Bar);
         var ex = Assert.Throws<MockException>(() => mock.VerifyAll());
@@ -89,7 +89,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupSet(m => m.Bar.Value = It.IsAny<int>());
+        mock.SetupSet(m => m.Bar!.Value = It.IsAny<int>());
 
         Assert.NotNull(mock.Object.Bar);
         var ex = Assert.Throws<MockException>(() => mock.VerifyAll());
@@ -105,7 +105,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Do("ping")).Returns("ack");
+        mock.Setup(m => m.Bar!.Do("ping")).Returns("ack");
         mock.Setup(m => m.Do("ping")).Returns("ack");
 
         mock.Object.Do("ping");
@@ -120,7 +120,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Do("ping")).Returns("ack").Verifiable();
+        mock.Setup(m => m.Bar!.Do("ping")).Returns("ack").Verifiable();
         mock.Setup(m => m.Do("ping")).Returns("ack");
 
         mock.Object.Do("ping");
@@ -135,10 +135,10 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>() { DefaultValue = DefaultValue.Mock };
 
-        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar.Do("ping")));
+        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar!.Do("ping")));
 
-        mock.Object.Bar.Do("ping");
-        mock.Verify(m => m.Bar.Do("ping"));
+        mock.Object.Bar?.Do("ping");
+        mock.Verify(m => m.Bar!.Do("ping"));
     }
 
     [Fact]
@@ -146,10 +146,10 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>() { DefaultValue = DefaultValue.Mock };
 
-        Assert.Throws<MockException>(() => mock.VerifyGet(m => m.Bar.Value));
+        Assert.Throws<MockException>(() => mock.VerifyGet(m => m.Bar!.Value));
 
-        var value = mock.Object.Bar.Value;
-        mock.VerifyGet(m => m.Bar.Value);
+        var value = mock.Object.Bar?.Value;
+        mock.VerifyGet(m => m.Bar!.Value);
     }
 
     [Fact]
@@ -157,10 +157,10 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>() { DefaultValue = DefaultValue.Mock };
 
-        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar.Value = It.IsAny<int>()));
+        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar!.Value = It.IsAny<int>()));
 
-        mock.Object.Bar.Value = 5;
-        mock.VerifySet(m => m.Bar.Value = It.IsAny<int>());
+        mock.Object.Bar!.Value = 5;
+        mock.VerifySet(m => m.Bar!.Value = It.IsAny<int>());
     }
 
     [Fact]
@@ -168,14 +168,14 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Do("ping")).Returns("ack").Verifiable();
+        mock.Setup(m => m.Bar!.Do("ping")).Returns("ack").Verifiable();
 
-        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar.Do("ping")));
+        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar!.Do("ping")));
 
-        var result = mock.Object.Bar.Do("ping");
+        var result = mock.Object.Bar?.Do("ping");
 
         Assert.Equal("ack", result);
-        mock.Verify(m => m.Bar.Do("ping"));
+        mock.Verify(m => m.Bar!.Do("ping"));
     }
 
     [Fact]
@@ -183,13 +183,13 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Baz.Do());
+        mock.Setup(m => m.Bar!.Baz.Do());
 
-        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar.Baz.Do()));
+        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar!.Baz.Do()));
 
-        mock.Object.Bar.Baz.Do();
+        mock.Object.Bar?.Baz.Do();
 
-        mock.Verify(m => m.Bar.Baz.Do());
+        mock.Verify(m => m.Bar!.Baz.Do());
     }
 
     [Fact]
@@ -197,15 +197,15 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupGet(m => m.Bar.Value).Returns(5);
+        mock.SetupGet(m => m.Bar!.Value).Returns(5);
 
-        Assert.Throws<MockException>(() => mock.VerifyGet(m => m.Bar.Value));
+        Assert.Throws<MockException>(() => mock.VerifyGet(m => m.Bar!.Value));
 
-        var result = mock.Object.Bar.Value;
+        var result = mock.Object.Bar?.Value;
 
         Assert.Equal(5, result);
 
-        mock.VerifyGet(m => m.Bar.Value);
+        mock.VerifyGet(m => m.Bar!.Value);
     }
 
     [Fact]
@@ -213,15 +213,15 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.Bar.Value).Returns(5);
+        mock.Setup(m => m.Bar!.Value).Returns(5);
 
-        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar.Value));
+        Assert.Throws<MockException>(() => mock.Verify(m => m.Bar!.Value));
 
-        var result = mock.Object.Bar.Value;
+        var result = mock.Object.Bar?.Value;
 
         Assert.Equal(5, result);
 
-        mock.Verify(m => m.Bar.Value);
+        mock.Verify(m => m.Bar!.Value);
     }
 
     [Fact]
@@ -229,13 +229,13 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupSet(m => m.Bar.Value = It.IsAny<int>());
+        mock.SetupSet(m => m.Bar!.Value = It.IsAny<int>());
 
-        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar.Value = It.IsAny<int>()));
+        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar!.Value = It.IsAny<int>()));
 
-        mock.Object.Bar.Value = 5;
+        mock.Object.Bar!.Value = 5;
 
-        mock.VerifySet(m => m.Bar.Value = It.IsAny<int>());
+        mock.VerifySet(m => m.Bar!.Value = It.IsAny<int>());
     }
 
     [Fact]
@@ -243,13 +243,13 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.SetupSet(m => m.Bar.Value = 5);
+        mock.SetupSet(m => m.Bar!.Value = 5);
 
-        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar.Value = 5));
+        Assert.Throws<MockException>(() => mock.VerifySet(m => m.Bar!.Value = 5));
 
-        mock.Object.Bar.Value = 5;
+        mock.Object.Bar!.Value = 5;
 
-        mock.VerifySet(m => m.Bar.Value = 5);
+        mock.VerifySet(m => m.Bar!.Value = 5);
     }
 
     [Fact]
@@ -257,7 +257,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<Foo>();
 
-        Assert.Throws<ArgumentException>(() => mock.Setup(m => m.BarField.Do("ping")));
+        Assert.Throws<ArgumentException>(() => mock.Setup(m => m.BarField!.Do("ping")));
     }
 
     [Fact]
@@ -265,7 +265,7 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        Assert.Throws<ArgumentException>(() => mock.Setup(m => m.Bar.Value.ToString()));
+        Assert.Throws<ArgumentException>(() => mock.Setup(m => m.Bar!.Value.ToString()));
     }
 
     [Fact]
@@ -273,9 +273,9 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m[0].Do("ping")).Returns("ack");
+        mock.Setup(m => m[0]!.Do("ping")).Returns("ack");
 
-        var result = mock.Object[0].Do("ping");
+        var result = mock.Object[0]?.Do("ping");
 
         Assert.Equal("ack", result);
     }
@@ -285,9 +285,9 @@ public class RecursiveMocksFixture
     {
         var mock = new Mock<IFoo>();
 
-        mock.Setup(m => m.GetBar().Do("ping")).Returns("ack");
+        mock.Setup(m => m.GetBar()!.Do("ping")).Returns("ack");
 
-        var result = mock.Object.GetBar().Do("ping");
+        var result = mock.Object.GetBar()?.Do("ping");
 
         Assert.Equal("ack", result);
     }
@@ -296,28 +296,28 @@ public class RecursiveMocksFixture
     public void FullMethodInvocationsSupportedInsideFluent()
     {
         var fooMock = new Mock<IFoo>(MockBehavior.Strict);
-        fooMock.Setup(f => f.Bar.GetBaz("hey").Value).Returns(5);
+        fooMock.Setup(f => f.Bar!.GetBaz("hey").Value).Returns(5);
 
-        Assert.Equal(5, fooMock.Object.Bar.GetBaz("hey").Value);
+        Assert.Equal(5, fooMock.Object.Bar?.GetBaz("hey").Value);
     }
 
     [Fact]
     public void FullMethodInvocationInsideFluentCanUseMatchers()
     {
         var fooMock = new Mock<IFoo>(MockBehavior.Strict);
-        fooMock.Setup(f => f.Bar.GetBaz(It.IsAny<string>()).Value).Returns(5);
+        fooMock.Setup(f => f.Bar!.GetBaz(It.IsAny<string>()).Value).Returns(5);
 
-        Assert.Equal(5, fooMock.Object.Bar.GetBaz("foo").Value);
+        Assert.Equal(5, fooMock.Object.Bar?.GetBaz("foo").Value);
     }
 
     [Fact]
     public void Param_array_args_in_setup_expression_parts_are_compared_by_structural_equality_not_reference_equality()
     {
         var mock = new Mock<IFoo>();
-        mock.Setup(m => m.GetBar(1).Value).Returns(1);
-        mock.Setup(m => m.GetBar(1).OtherValue).Returns(2);
-        Assert.Equal(1, mock.Object.GetBar(1).Value);
-        Assert.Equal(2, mock.Object.GetBar(1).OtherValue);
+        mock.Setup(m => m.GetBar(1)!.Value).Returns(1);
+        mock.Setup(m => m.GetBar(1)!.OtherValue).Returns(2);
+        Assert.Equal(1, mock.Object.GetBar(1)?.Value);
+        Assert.Equal(2, mock.Object.GetBar(1)?.OtherValue);
     }
 
     public class Verify_can_tell_apart_different_arguments_in_intermediate_part_of_fluent_expressions
@@ -388,9 +388,9 @@ public class RecursiveMocksFixture
 
             var foo = new Mock<IFoo>();
             foo.Setup(f => f.Bar).Returns(bar.Object);
-            foo.Setup(f => f.Bar.Baz);
+            foo.Setup(f => f.Bar!.Baz);
 
-            Assert.Equal(42, foo.Object.Bar.Value);
+            Assert.Equal(42, foo.Object.Bar?.Value);
             bar.VerifyGet(b => b.Value, Times.Once);
         }
 
@@ -407,24 +407,24 @@ public class RecursiveMocksFixture
             // that Moq won't execute user-provided callbacks to figure out a setup's
             // return value (as this could have side effects without Moq's control).
 
-            foo.Setup(f => f.Bar.Baz);
+            foo.Setup(f => f.Bar!.Baz);
             //              ^^^^^
             // ... and because Moq can't query the above setup to figure out there's
             // already an inner mock attached, it will create a fresh setup instead,
             // effectively "cutting off" the above `IBar` mock.
 
-            Assert.NotEqual(42, foo.Object.Bar.Value);
+            Assert.NotEqual(42, foo.Object.Bar?.Value);
             bar.VerifyGet(b => b.Value, Times.Never);
         }
     }
 
     public class Foo : IFoo
     {
-        public IBar BarField;
-        public IBar Bar { get; set; }
-        public IBar GetBar() { return null; }
-        public IBar GetBar(params int[] indices) { return null; }
-        public IBar this[int index] { get { return null; } set { } }
+        public IBar? BarField;
+        public IBar? Bar { get; set; }
+        public IBar? GetBar() { return null; }
+        public IBar? GetBar(params int[] indices) { return null; }
+        public IBar? this[int index] { get { return null; } set { } }
 
         public string Do(string command)
         {
@@ -434,11 +434,11 @@ public class RecursiveMocksFixture
 
     public interface IFoo
     {
-        IBar Bar { get; set; }
-        IBar this[int index] { get; set; }
+        IBar? Bar { get; set; }
+        IBar? this[int index] { get; set; }
         string Do(string command);
-        IBar GetBar();
-        IBar GetBar(params int[] indices);
+        IBar? GetBar();
+        IBar? GetBar(params int[] indices);
     }
 
     public interface IBar

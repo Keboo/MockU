@@ -112,7 +112,7 @@ public class MatchExpressionFixture
         */
     }
 
-    Expression<Action<IX>> GetExpression()
+    private Expression<Action<IX>> GetExpression()
     {
         var x = Expression.Parameter(typeof(IX), "x");
         return Expression.Lambda<Action<IX>>(
@@ -131,7 +131,7 @@ public class MatchExpressionFixture
         */
     }
 
-    Expression<Action<IX>> GetItIsAnyExpression()
+    private Expression<Action<IX>> GetItIsAnyExpression()
     {
         var x = Expression.Parameter(typeof(IX), "x");
         return Expression.Lambda<Action<IX>>(
@@ -149,7 +149,7 @@ public class MatchExpressionFixture
         */
     }
 
-    Expression<Action<IX>> GetItIsAnyMatchExpression()
+    private Expression<Action<IX>> GetItIsAnyMatchExpression()
     {
         Match itIsAnyMatch;
         using (var observer = MatcherObserver.Activate())
@@ -169,7 +169,7 @@ public class MatchExpressionFixture
         
     }
 
-    static MatchExpression FindMatchExpression(Expression expression)
+    private static MatchExpression FindMatchExpression(Expression expression)
     {
         switch (expression.NodeType)
         {

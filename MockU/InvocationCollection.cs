@@ -4,44 +4,13 @@ using System.Diagnostics;
 namespace MockU;
 
 internal sealed class InvocationCollection : IInvocationList
-
-/* Unmerged change from project 'Moq(netstandard2.0)'
-Before:
-        private Invocation[] invocations;
-After:
-        Invocation[] invocations;
-*/
-
-/* Unmerged change from project 'Moq(netstandard2.1)'
-Before:
-        private Invocation[] invocations;
-After:
-        Invocation[] invocations;
-*/
-
-/* Unmerged change from project 'Moq(net6.0)'
-Before:
-        private Invocation[] invocations;
-After:
-        Invocation[] invocations;
-*/
 {
-    private Invocation[] invocations;
+    private Invocation[]? invocations;
 
-    
-
-    
-
-    
     private int capacity = 0;
     private int count = 0;
 
-    
-
-    
-
-    
-    private readonly object invocationsLock = new object();
+    private readonly object invocationsLock = new();
     private readonly Mock owner;
 
     public InvocationCollection(Mock owner)
@@ -62,7 +31,7 @@ After:
         }
     }
 
-    public IInvocation this[int index]
+    public IInvocation? this[int index]
     {
         get
         {
@@ -73,7 +42,7 @@ After:
                     throw new IndexOutOfRangeException();
                 }
 
-                return invocations[index];
+                return invocations?[index];
             }
         }
     }
@@ -89,7 +58,7 @@ After:
                 capacity = targetCapacity;
             }
 
-            invocations[count] = invocation;
+            invocations![count] = invocation;
             count++;
         }
     }
@@ -114,12 +83,12 @@ After:
         {
             if (count == 0)
             {
-                return new Invocation[0];
+                return Array.Empty<Invocation>();
             }
 
             var result = new Invocation[count];
 
-            Array.Copy(invocations, result, count);
+            Array.Copy(invocations!, result, count);
 
             return result;
         }
@@ -131,14 +100,14 @@ After:
         {
             if (count == 0)
             {
-                return new Invocation[0];
+                return Array.Empty<Invocation>();
             }
 
             var result = new List<Invocation>(count);
 
             for (var i = 0; i < count; i++)
             {
-                var invocation = invocations[i];
+                var invocation = invocations![i];
                 if (predicate(invocation))
                 {
                     result.Add(invocation);
@@ -152,7 +121,7 @@ After:
     public IEnumerator<IInvocation> GetEnumerator()
     {
         // Take local copies of collection and count so they are isolated from changes by other threads.
-        Invocation[] collection;
+        Invocation[]? collection;
         int count;
 
         lock (invocationsLock)
@@ -163,7 +132,7 @@ After:
 
         for (var i = 0; i < count; i++)
         {
-            yield return collection[i];
+            yield return collection![i];
         }
     }
 

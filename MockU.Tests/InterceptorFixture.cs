@@ -46,18 +46,18 @@ public class InterceptorFixture
         
     }
 
-    static object CreateProxy(Type type, IInterceptor interceptor)
+    private static object CreateProxy(Type type, IInterceptor interceptor)
     {
-        return ProxyFactory.Instance.CreateProxy(type, interceptor, Type.EmptyTypes, new object[0]);
+        return ProxyFactory.Instance.CreateProxy(type, interceptor, Type.EmptyTypes, Array.Empty<object>());
 
         
     }
 
-    sealed class Echo : IInterceptor
+    private sealed class Echo : IInterceptor
 
     
     {
-        readonly object returnValue;
+        private readonly object returnValue;
 
         public Echo(object returnValue)
         {

@@ -53,7 +53,7 @@ public class CallbacksFixture
     public void CallbackCalledWithOneArgument()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg = null;
+        string? callbackArg = null;
         mock.Setup(x => x.Submit(It.IsAny<string>())).Callback((string s) => callbackArg = s);
 
         mock.Object.Submit("blah");
@@ -64,8 +64,8 @@ public class CallbacksFixture
     public void CallbackCalledWithTwoArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2) => { callbackArg1 = s1; callbackArg2 = s2; });
 
@@ -78,9 +78,9 @@ public class CallbacksFixture
     public void CallbackCalledWithThreeArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; });
 
@@ -94,10 +94,10 @@ public class CallbacksFixture
     public void CallbackCalledWithFourArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; });
 
@@ -112,11 +112,11 @@ public class CallbacksFixture
     public void CallbackCalledWithFiveArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; });
 
@@ -132,12 +132,12 @@ public class CallbacksFixture
     public void CallbackCalledWithSixArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; });
 
@@ -154,13 +154,13 @@ public class CallbacksFixture
     public void CallbackCalledWithSevenArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
-        string callbackArg7 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
+        string? callbackArg7 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6, string s7) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; callbackArg7 = s7; });
 
@@ -178,14 +178,14 @@ public class CallbacksFixture
     public void CallbackCalledWithEightArguments()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
-        string callbackArg7 = null;
-        string callbackArg8 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
+        string? callbackArg7 = null;
+        string? callbackArg8 = null;
         mock.Setup(x => x.Submit(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6, string s7, string s8) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; callbackArg7 = s7; callbackArg8 = s8; });
 
@@ -204,7 +204,7 @@ public class CallbacksFixture
     public void CallbackCalledWithOneArgumentForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
+        string? callbackArg1 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>()))
             .Callback((string s1) => callbackArg1 = s1)
             .Returns("foo");
@@ -217,8 +217,8 @@ public class CallbacksFixture
     public void CallbackCalledWithTwoArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2) => { callbackArg1 = s1; callbackArg2 = s2; })
             .Returns("foo");
@@ -232,9 +232,9 @@ public class CallbacksFixture
     public void CallbackCalledWithThreeArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; })
             .Returns("foo");
@@ -249,10 +249,10 @@ public class CallbacksFixture
     public void CallbackCalledWithFourArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; })
             .Returns("foo");
@@ -268,11 +268,11 @@ public class CallbacksFixture
     public void CallbackCalledWithFiveArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; })
             .Returns("foo");
@@ -289,12 +289,12 @@ public class CallbacksFixture
     public void CallbackCalledWithSixArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; })
             .Returns("foo");
@@ -312,13 +312,13 @@ public class CallbacksFixture
     public void CallbackCalledWithSevenArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
-        string callbackArg7 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
+        string? callbackArg7 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6, string s7) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; callbackArg7 = s7; })
             .Returns("foo");
@@ -337,14 +337,14 @@ public class CallbacksFixture
     public void CallbackCalledWithEightArgumentsForNonVoidMethod()
     {
         var mock = new Mock<IFoo>();
-        string callbackArg1 = null;
-        string callbackArg2 = null;
-        string callbackArg3 = null;
-        string callbackArg4 = null;
-        string callbackArg5 = null;
-        string callbackArg6 = null;
-        string callbackArg7 = null;
-        string callbackArg8 = null;
+        string? callbackArg1 = null;
+        string? callbackArg2 = null;
+        string? callbackArg3 = null;
+        string? callbackArg4 = null;
+        string? callbackArg5 = null;
+        string? callbackArg6 = null;
+        string? callbackArg7 = null;
+        string? callbackArg8 = null;
         mock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Callback((string s1, string s2, string s3, string s4, string s5, string s6, string s7, string s8) => { callbackArg1 = s1; callbackArg2 = s2; callbackArg3 = s3; callbackArg4 = s4; callbackArg5 = s5; callbackArg6 = s6; callbackArg7 = s7; callbackArg8 = s8; })
             .Returns("foo");
@@ -408,7 +408,7 @@ public class CallbacksFixture
     public void CallbackCanBeImplementedByExtensionMethod()
     {
         var mock = new Mock<IFoo>();
-        string receivedArgument = null;
+        string? receivedArgument = null;
         Action<string> innerCallback = param => { receivedArgument = param; };
 
         // Delegate parameter currying can confuse Moq (used by extension delegates)
@@ -457,7 +457,7 @@ public class CallbacksFixture
     [Fact]
     public void CallbackWithRefParameterCannotModifyNonRefParameter()
     {
-        var _ = default(string);
+        string _ = "";
         var value = "input";
 
         var mock = new Mock<IFoo>();
@@ -541,7 +541,7 @@ public class CallbacksFixture
     {
     }
 
-    void TraceMe(Base b)
+    private void TraceMe(Base b)
     {
     }
 
@@ -579,7 +579,7 @@ public class CallbacksFixture
     public delegate void ExecuteRVHandler(ref string arg1, string arg2);
 }
 
-static class Extensions
+internal static class Extensions
 {
     public static void ExtensionCallbackHelper(this Action<string> inner, string param)
     {

@@ -551,7 +551,7 @@ internal class ProtectedMock<T> : IProtectedMock<T>
         ParameterInfo[]? methodParams = method?.GetParameters();
         for (int i = 0; i < args.Length; i++)
         {
-            yield return ToExpressionArg(methodParams?[i].ParameterType, args[i]);
+            yield return ToExpressionArg(methodParams[i].ParameterType, args[i]);
         }
     }
 }

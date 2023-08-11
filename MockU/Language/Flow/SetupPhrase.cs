@@ -281,9 +281,9 @@ internal abstract class SetupPhrase : ICallbackResult, IVerifies, IThrowsResult
 
     public void Verifiable(Times times) => Verifiable(times, null);
 
-    public void Verifiable(Func<Times> times, string failMessage) => Verifiable(times(), failMessage);
+    public void Verifiable(Func<Times> times, string? failMessage) => Verifiable(times(), failMessage);
 
-    public void Verifiable(Times times, string failMessage)
+    public void Verifiable(Times times, string? failMessage)
     {
         Setup.MarkAsVerifiable();
         Setup.SetExpectedInvocationCount(times);

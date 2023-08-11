@@ -130,7 +130,7 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///     var mock = new Mock&lt;MyProvider&gt;(someArgument, 25);
     ///   </code>
     /// </example>
-    public Mock(params object?[] args)
+    public Mock(params object?[]? args)
         : this(MockBehavior.Default, args)
     {
     }
@@ -1351,9 +1351,9 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     ///     Assert.Equal("moq", presenter.SelectedOrder.ProductName);
     ///   </code>
     /// </example>
-    public void Raise(Action<T> eventExpression, EventArgs args)
+    public void Raise(Action<T> eventExpression, EventArgs? args)
     {
-        RaiseEvent(this, eventExpression, new object[] { Object, args });
+        RaiseEvent(this, eventExpression, new object?[] { Object, args });
     }
 
     /// <summary>

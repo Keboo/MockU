@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -51,107 +52,26 @@ internal sealed class MethodExpectation : Expectation
         }
 
         return new MethodExpectation(expression, method, arguments, exactGenericTypeArguments: true);
-
-        /* Unmerged change from project 'Moq(netstandard2.0)'
-        Before:
-                private static readonly Expression[] noArguments = new Expression[0];
-                private static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        After:
-                static readonly Expression[] noArguments = new Expression[0];
-                static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        */
-
-        /* Unmerged change from project 'Moq(netstandard2.1)'
-        Before:
-                private static readonly Expression[] noArguments = new Expression[0];
-                private static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        After:
-                static readonly Expression[] noArguments = new Expression[0];
-                static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        */
-
-        /* Unmerged change from project 'Moq(net6.0)'
-        Before:
-                private static readonly Expression[] noArguments = new Expression[0];
-                private static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        After:
-                static readonly Expression[] noArguments = new Expression[0];
-                static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
-        */
     }
 
-    private static readonly E[] noArguments = new E[0];
-    private static readonly IMatcher[] noArgumentMatchers = new IMatcher[0];
+    private static readonly E[] noArguments = Array.Empty<E>();
+    private static readonly IMatcher[] noArgumentMatchers = Array.Empty<IMatcher>();
 
-    
-
-    
-
-    
     private LambdaExpression expression;
     public readonly MethodInfo Method;
     public readonly IReadOnlyList<E> Arguments;
 
-    /* Unmerged change from project 'Moq(netstandard2.0)'
-    Before:
-            private readonly IMatcher[] argumentMatchers;
-            private IAwaitableFactory awaitableFactory;
-            private MethodInfo methodImplementation;
-            private Expression[] partiallyEvaluatedArguments;
-    After:
-            readonly IMatcher[] argumentMatchers;
-            IAwaitableFactory awaitableFactory;
-            MethodInfo methodImplementation;
-            Expression[] partiallyEvaluatedArguments;
-    */
-
-    /* Unmerged change from project 'Moq(netstandard2.1)'
-    Before:
-            private readonly IMatcher[] argumentMatchers;
-            private IAwaitableFactory awaitableFactory;
-            private MethodInfo methodImplementation;
-            private Expression[] partiallyEvaluatedArguments;
-    After:
-            readonly IMatcher[] argumentMatchers;
-            IAwaitableFactory awaitableFactory;
-            MethodInfo methodImplementation;
-            Expression[] partiallyEvaluatedArguments;
-    */
-
-    /* Unmerged change from project 'Moq(net6.0)'
-    Before:
-            private readonly IMatcher[] argumentMatchers;
-            private IAwaitableFactory awaitableFactory;
-            private MethodInfo methodImplementation;
-            private Expression[] partiallyEvaluatedArguments;
-    After:
-            readonly IMatcher[] argumentMatchers;
-            IAwaitableFactory awaitableFactory;
-            MethodInfo methodImplementation;
-            Expression[] partiallyEvaluatedArguments;
-    */
     private readonly IMatcher[] argumentMatchers;
-    private IAwaitableFactory awaitableFactory;
-    private MethodInfo methodImplementation;
-    private E[] partiallyEvaluatedArguments;
+    private IAwaitableFactory? awaitableFactory;
+    private MethodInfo? methodImplementation;
+    private E[]? partiallyEvaluatedArguments;
 #if DEBUG
-
-    
-
-    
-
-    
-    private Type proxyType;
+    private Type? proxyType;
 #endif
 
-    
-
-    
-
-    
     private readonly bool exactGenericTypeArguments;
 
-    public MethodExpectation(LambdaExpression expression, MethodInfo method, IReadOnlyList<E> arguments = null, bool exactGenericTypeArguments = false, bool skipMatcherInitialization = false, bool allowNonOverridable = false)
+    public MethodExpectation(LambdaExpression expression, MethodInfo method, IReadOnlyList<E>? arguments = null, bool exactGenericTypeArguments = false, bool skipMatcherInitialization = false, bool allowNonOverridable = false)
     {
         Debug.Assert(expression != null);
         Debug.Assert(method != null);
@@ -185,7 +105,7 @@ internal sealed class MethodExpectation : Expectation
         this.awaitableFactory = awaitableFactory;
     }
 
-    public override bool HasResultExpression(out IAwaitableFactory awaitableFactory)
+    public override bool HasResultExpression([NotNullWhen(true)] out IAwaitableFactory? awaitableFactory)
     {
         return (awaitableFactory = this.awaitableFactory) != null;
     }
@@ -197,14 +117,14 @@ internal sealed class MethodExpectation : Expectation
         arguments = Arguments;
     }
 
-    public override bool IsMatch(Invocation invocation)
+    public override bool IsMatch(Invocation? invocation)
     {
-        if (invocation.Method != Method && !IsOverride(invocation))
+        if (invocation?.Method != Method && !IsOverride(invocation))
         {
             return false;
         }
 
-        var arguments = invocation.Arguments;
+        var arguments = invocation!.Arguments;
         var parameterTypes = invocation.Method.GetParameterTypes();
         for (int i = 0, n = argumentMatchers.Length; i < n; ++i)
         {
@@ -224,23 +144,17 @@ internal sealed class MethodExpectation : Expectation
         for (int i = 0, n = argumentMatchers.Length; i < n; ++i)
         {
             argumentMatchers[i].SetupEvaluatedSuccessfully(arguments[i], parameterTypes[i]);
-
-            
-
-            
-
-            
         }
     }
 
-    private bool IsOverride(Invocation invocation)
+    private bool IsOverride(Invocation? invocation)
     {
-        Debug.Assert(invocation.Method != Method);
+        Debug.Assert(invocation?.Method != Method);
 
         var method = Method;
-        var invocationMethod = invocation.Method;
+        var invocationMethod = invocation?.Method;
 
-        var proxyType = invocation.ProxyType;
+        var proxyType = invocation?.ProxyType;
 #if DEBUG
         // The following `if` block is a sanity check to ensure this `InvocationShape` always
         // runs against the same proxy type. This is important because we're caching the result
@@ -279,7 +193,7 @@ internal sealed class MethodExpectation : Expectation
         return true;
     }
 
-    public override bool Equals(Expectation obj)
+    public override bool Equals(Expectation? obj)
     {
         if (obj is not MethodExpectation other) return false;
 
@@ -338,27 +252,6 @@ internal sealed class MethodExpectation : Expectation
         }
 
         return true;
-
-        /* Unmerged change from project 'Moq(netstandard2.0)'
-        Before:
-                private static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        After:
-                static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        */
-
-        /* Unmerged change from project 'Moq(netstandard2.1)'
-        Before:
-                private static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        After:
-                static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        */
-
-        /* Unmerged change from project 'Moq(net6.0)'
-        Before:
-                private static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        After:
-                static Expression[] PartiallyEvaluateArguments(IReadOnlyList<Expression> arguments)
-        */
     }
 
     private static E[] PartiallyEvaluateArguments(IReadOnlyList<E> arguments)

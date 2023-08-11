@@ -228,9 +228,9 @@ public class QueryableMocksFixture
 
     public class Dto
     {
-        public string Value { get; set; }
-        public string ProtectedValue { get; protected set; }
-        public virtual string ProtectedVirtualValue { get; protected set; }
+        public string? Value { get; set; }
+        public string? ProtectedValue { get; protected set; }
+        public virtual string? ProtectedVirtualValue { get; protected set; }
     }
 
     public interface IFoo
@@ -264,7 +264,7 @@ public class Foo
     {
     }
 
-    public virtual string Value { get; private set; }
+    public virtual string? Value { get; private set; }
 }
 
 public class FooFixture

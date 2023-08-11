@@ -22,7 +22,7 @@ internal static class Guard
         }
     }
 
-    public static void ImplementsInterface(Type interfaceType, Type type, string paramName = null)
+    public static void ImplementsInterface(Type interfaceType, Type type, string? paramName = null)
     {
         Debug.Assert(interfaceType != null);
         Debug.Assert(interfaceType.IsInterface);
@@ -86,7 +86,7 @@ internal static class Guard
                     string.Format(
                         CultureInfo.CurrentCulture,
                         method.IsExtensionMethod() ? Resources.UnsupportedExtensionMethod : Resources.UnsupportedStaticMember,
-                        $"{method.DeclaringType.GetFormattedName()}.{method.Name}")));
+                        $"{method.DeclaringType?.GetFormattedName()}.{method.Name}")));
         }
         else if (!method.CanOverride())
         {
@@ -98,7 +98,7 @@ internal static class Guard
                     string.Format(
                         CultureInfo.CurrentCulture,
                         Resources.UnsupportedNonOverridableMember,
-                        $"{method.DeclaringType.GetFormattedName()}.{method.Name}")));
+                        $"{method.DeclaringType?.GetFormattedName()}.{method.Name}")));
         }
     }
 
@@ -109,7 +109,7 @@ internal static class Guard
             throw new ArgumentException(string.Format(
                 CultureInfo.CurrentCulture,
                 Resources.MethodNotVisibleToProxyFactory,
-                method.DeclaringType.Name,
+                method.DeclaringType?.Name,
                 method.Name,
                 messageIfNotVisible));
         }
@@ -220,7 +220,7 @@ internal static class Guard
             throw new ArgumentException(string.Format(
                 CultureInfo.CurrentCulture,
                 Resources.PropertyGetNotFound,
-                property.DeclaringType.Name, property.Name));
+                property.DeclaringType?.Name, property.Name));
         }
     }
 
@@ -231,7 +231,7 @@ internal static class Guard
             throw new ArgumentException(string.Format(
                 CultureInfo.CurrentCulture,
                 Resources.PropertySetNotFound,
-                property.DeclaringType.Name, property.Name));
+                property.DeclaringType?.Name, property.Name));
         }
     }
 }

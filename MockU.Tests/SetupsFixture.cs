@@ -16,7 +16,7 @@ public class SetupsFixture
     [Fact]
     public void Setup_adds_one_setup_with_same_expression_to_Setups()
     {
-        Expression<Func<object, string>> setupExpression = m => m.ToString();
+        Expression<Func<object, string?>> setupExpression = m => m.ToString();
 
         var mock = new Mock<object>();
         mock.Setup(setupExpression);

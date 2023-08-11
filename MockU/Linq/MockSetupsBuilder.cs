@@ -126,15 +126,9 @@ After:
         }
 
         return base.VisitUnary(node);
-
-        
-
-        
-
-        
     }
 
-    private static Expression ConvertToSetup(Expression left, Expression right)
+    private static Expression? ConvertToSetup(Expression left, Expression right)
     {
         switch (left.NodeType)
         {
@@ -149,12 +143,6 @@ After:
         }
 
         return null;
-
-        
-
-        
-
-        
     }
 
     /// <summary>
@@ -180,12 +168,6 @@ After:
                 v.MockObjectParameter),
             // value:
             Expression.Convert(right, typeof(object)));  // explicit boxing operation required for value types
-
-        
-
-        
-
-        
     }
 
     /// <summary>
@@ -193,18 +175,12 @@ After:
     ///   stores a reference to it, and finally replaces it with a new <see cref="ParameterExpression"/>.
     /// </summary>
     private sealed class ReplaceMockObjectWithParameter : ExpressionVisitor
-
-    
-
-    
-
-    
     {
-        private ParameterExpression mockObjectParameter;
+        private ParameterExpression? mockObjectParameter;
 
-        public Expression MockObject { get; private set; }
+        public Expression? MockObject { get; private set; }
 
-        public ParameterExpression MockObjectParameter => mockObjectParameter;
+        public ParameterExpression? MockObjectParameter => mockObjectParameter;
 
         protected override Expression VisitMember(MemberExpression node)
         {

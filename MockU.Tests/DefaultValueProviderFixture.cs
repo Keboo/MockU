@@ -9,12 +9,11 @@ namespace MockU.Tests;
 /// </summary>
 public class DefaultValueProviderFixture
 {
-    static readonly MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action))!;
-    static readonly ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action))!.GetParameters()[0];
-    static readonly MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func))!;
-
-    readonly DefaultValueProvider defaultValueProvider;
-    readonly Mock<IFoo> fooMock;
+    private static readonly MethodInfo fooActionMethod = typeof(IFoo).GetMethod(nameof(IFoo.Action))!;
+    private static readonly ParameterInfo fooActionMethodParameter = typeof(IFoo).GetMethod(nameof(IFoo.Action))!.GetParameters()[0];
+    private static readonly MethodInfo fooFuncMethod = typeof(IFoo).GetMethod(nameof(IFoo.Func))!;
+    private readonly DefaultValueProvider defaultValueProvider;
+    private readonly Mock<IFoo> fooMock;
 
     public DefaultValueProviderFixture()
     {
@@ -54,7 +53,7 @@ public class DefaultValueProviderFixture
         
     }
 
-    sealed class DefaultValueProviderStub : DefaultValueProvider
+    private sealed class DefaultValueProviderStub : DefaultValueProvider
     {
         protected internal override object GetDefaultValue(Type type, Mock mock)
         {

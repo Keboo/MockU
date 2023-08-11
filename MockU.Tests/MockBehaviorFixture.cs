@@ -271,12 +271,12 @@ public class MockBehaviorFixture
 
         public string[] GetArray()
         {
-            return new string[0];
+            return Array.Empty<string>();
         }
 
         public string[][] GetArrayTwoDimensions()
         {
-            return new string[0][];
+            return Array.Empty<string[]>();
         }
 
         public List<string> GetList()
@@ -286,12 +286,12 @@ public class MockBehaviorFixture
 
         public IEnumerable<string> GetEnumerable()
         {
-            return new string[0];
+            return Array.Empty<string>();
         }
 
         public IEnumerable GetEnumerableObjects()
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public Guid GetGuid()
@@ -301,12 +301,12 @@ public class MockBehaviorFixture
 
         public IQueryable<string> GetQueryable()
         {
-            return new string[0].AsQueryable();
+            return Array.Empty<string>().AsQueryable();
         }
 
         public IQueryable GetQueryableObjects()
         {
-            return new object[0].AsQueryable();
+            return Array.Empty<object>().AsQueryable();
         }
     }
 }

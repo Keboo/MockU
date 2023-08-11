@@ -300,7 +300,7 @@ internal sealed partial class MethodCall : SetupWithOutParameterSupport
             // and instead of in `Throws(TException)`, we ended up in `Throws(Delegate)` or `Throws(Func)`,
             // which likely isn't what the user intended.
             // So here we do what we would've done in `Throws(TException)`:
-            returnOrThrow = new ThrowException(default);
+            returnOrThrow = new ThrowException(default!);
         }
         else
         {
