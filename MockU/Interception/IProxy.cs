@@ -8,8 +8,8 @@ namespace MockU.Interception;
 // NOTE: This type is actually specific to our DynamicProxy implementation of `ProxyFactory`.
 // It is directly related to `InterfaceProxy`, see the comment there.
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IProxy
+internal interface IProxy
 {
     /// <summary/>
-    object Interceptor { get; }
+    IInterceptor Interceptor { get; set; }
 }

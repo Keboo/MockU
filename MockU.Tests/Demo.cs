@@ -1,15 +1,10 @@
+using System.Reflection;
+
 using Xunit;
 
 namespace MockU.Tests;
 
 public class Demo
-
-/* Unmerged change from project 'Moq.Tests(net6.0)'
-Before:
-        private static string TALISKER = "Talisker";
-After:
-        static string TALISKER = "Talisker";
-*/
 {
     private static readonly string TALISKER = "Talisker";
 
@@ -53,6 +48,7 @@ After:
     [Fact]
     public void TestPresenterSelection()
     {
+        SourceGeneratorProxyFactory.Items[typeof(IOrdersView)] = () => new IOrdersViewMock();
         var mockView = new Mock<IOrdersView>();
         var presenter = new OrdersPresenter(mockView.Object);
 
@@ -69,12 +65,12 @@ After:
 
     public class OrderEventArgs : EventArgs
     {
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
     }
 
     public interface IOrdersView
     {
-        event EventHandler<OrderEventArgs> OrderSelected;
+        event EventHandler<OrderEventArgs>? OrderSelected;
     }
 
     public class OrdersPresenter
@@ -84,9 +80,9 @@ After:
             view.OrderSelected += (sender, args) => DoOrderSelection(args.Order);
         }
 
-        public Order SelectedOrder { get; private set; }
+        public Order? SelectedOrder { get; private set; }
 
-        private void DoOrderSelection(Order selectedOrder)
+        private void DoOrderSelection(Order? selectedOrder)
         {
             // Do something when the view selects an order.
             SelectedOrder = selectedOrder;
@@ -117,6 +113,30 @@ After:
             {
                 warehouse.Remove(ProductName, Quantity);
                 IsFilled = true;
+            }
+        }
+    }
+
+    internal class IOrdersViewMock : IOrdersView, IProxy
+    {
+        public IInterceptor Interceptor { get; set; } = null!;
+
+        private event EventHandler<OrderEventArgs>? _OrderSelected;
+        public virtual event EventHandler<OrderEventArgs>? OrderSelected
+        {
+            add
+            {
+                var interceptor = (IInterceptor)((IProxy)this).Interceptor;
+                var invocation = new Invocation(GetType(), (MethodInfo)MethodBase.GetCurrentMethod(), value);
+                interceptor.Intercept(invocation);
+                _OrderSelected += value;
+            }
+            remove
+            {
+                var interceptor = (IInterceptor)((IProxy)this).Interceptor;
+                var invocation = new Invocation(GetType(), (MethodInfo)MethodBase.GetCurrentMethod(), value);
+                interceptor.Intercept(invocation);
+                _OrderSelected -= value;
             }
         }
     }

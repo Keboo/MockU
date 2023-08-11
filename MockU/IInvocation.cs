@@ -20,7 +20,7 @@ public interface IInvocation
     /// <summary>
     ///   Gets the setup that matched this invocation (or <see langword="null"/> if there was no matching setup).
     /// </summary>
-    ISetup MatchingSetup { get; }
+    ISetup? MatchingSetup { get; }
 
     /// <summary>
     ///   Gets whether this invocation was successfully verified by any of the various <c>`Verify`</c> methods.

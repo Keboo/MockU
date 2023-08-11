@@ -280,12 +280,6 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
     public override string ToString()
     {
         return Name;
-
-        
-
-        
-
-        
     }
 
     private void InitializeInstance()
@@ -313,7 +307,7 @@ public partial class Mock<T> : Mock, IMock<T> where T : class
             InitializeInstance();
         }
 
-        return instance;
+        return instance!;
     }
 
     internal override Type MockedType => typeof(T);

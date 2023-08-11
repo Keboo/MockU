@@ -4,68 +4,16 @@ using System.Text;
 
 namespace MockU;
 
-internal abstract class Invocation : IInvocation
-
-/* Unmerged change from project 'Moq(netstandard2.0)'
-Before:
-        private object[] arguments;
-        private MethodInfo method;
-        private MethodInfo methodImplementation;
-        private readonly Type proxyType;
-        private object result;
-        private Setup matchingSetup;
-        private bool verified;
-After:
-        object[] arguments;
-        MethodInfo method;
-        MethodInfo methodImplementation;
-        readonly Type proxyType;
-        object result;
-        Setup matchingSetup;
-        bool verified;
-*/
-
-/* Unmerged change from project 'Moq(netstandard2.1)'
-Before:
-        private object[] arguments;
-        private MethodInfo method;
-        private MethodInfo methodImplementation;
-        private readonly Type proxyType;
-        private object result;
-        private Setup matchingSetup;
-        private bool verified;
-After:
-        object[] arguments;
-        MethodInfo method;
-        MethodInfo methodImplementation;
-        readonly Type proxyType;
-        object result;
-        Setup matchingSetup;
-        bool verified;
-*/
-
-/* Unmerged change from project 'Moq(net6.0)'
-Before:
-        private object[] arguments;
-        private MethodInfo method;
-        private MethodInfo methodImplementation;
-        private readonly Type proxyType;
-        private object result;
-        private Setup matchingSetup;
-        private bool verified;
-After:
-        object[] arguments;
-        MethodInfo method;
-        MethodInfo methodImplementation;
-        readonly Type proxyType;
-        object result;
-        Setup matchingSetup;
-        bool verified;
-*/
+internal class Invocation : IInvocation
 {
     private MethodInfo? methodImplementation;
     private object? result;
-    private Setup matchingSetup;
+    private Setup? matchingSetup;
+
+    public Invocation(Type proxyType, MethodInfo method)
+        : this(proxyType, method, Array.Empty<object>())
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Invocation"/> class.
@@ -73,7 +21,7 @@ After:
     /// <param name="proxyType">The <see cref="Type"/> of the concrete proxy object on which a method is being invoked.</param>
     /// <param name="method">The method being invoked.</param>
     /// <param name="arguments">The arguments with which the specified <paramref name="method"/> is being invoked.</param>
-    protected Invocation(Type proxyType, MethodInfo method, params object?[] arguments)
+    public Invocation(Type proxyType, MethodInfo method, params object?[] arguments)
     {
         Debug.Assert(proxyType != null);
         Debug.Assert(arguments != null);
@@ -89,7 +37,7 @@ After:
     /// </summary>
     public MethodInfo Method { get; }
 
-    public MethodInfo MethodImplementation
+    public MethodInfo? MethodImplementation
     {
         get
         {
@@ -113,7 +61,7 @@ After:
 
     IReadOnlyList<object?> IInvocation.Arguments => Arguments;
 
-    public ISetup MatchingSetup => matchingSetup;
+    public ISetup? MatchingSetup => matchingSetup;
 
     public Type ProxyType { get; }
 
@@ -155,7 +103,11 @@ After:
     ///   Calls the <see langword="base"/> method implementation
     ///   and returns its return value (or <see langword="null"/> for <see langword="void"/> methods).
     /// </summary>
-    protected internal abstract object CallBase();
+    protected internal virtual object CallBase()
+    {
+        //TODO:
+        throw new NotSupportedException();
+    }
 
     internal void MarkAsMatchedBy(Setup setup)
     {
@@ -221,11 +173,11 @@ After:
     /// </summary>
     private readonly struct ExceptionResult
     {
-        public ExceptionResult(Exception? exception)
+        public ExceptionResult(Exception exception)
         {
             Exception = exception;
         }
 
-        public Exception? Exception { get; }
+        public Exception Exception { get; }
     }
 }
