@@ -27,7 +27,7 @@
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="TypeNameFormatter.Sources" Version="1.1.1" PrivateAssets="All" />
     <PackageVersion Include="xunit" Version="2.6.1" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3">
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
